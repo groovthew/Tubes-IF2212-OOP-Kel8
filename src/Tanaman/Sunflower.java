@@ -4,7 +4,7 @@ public class Sunflower extends Plant {
     private int sun;
 
     public Sunflower(int sun, int interval) {
-        super("Sunflower", 50, 100, 0, 0, 0, 10);
+        super("Sunflower", 50, 0, 0, 50, 0, 10);
         this.sun = 25;
     }
 
