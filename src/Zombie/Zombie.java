@@ -21,6 +21,13 @@ public abstract class Zombie extends Character {
         this.is_slowed = false;
     }
 
+    public Zombie(String name, int health, int attack_damage, int attack_speed, int walking_speed){
+        super(name, health, attack_damage, attack_speed);
+        this.walking_speed = walking_speed;
+        this.isAquatic = false;
+        this.is_slowed = false;
+    }
+
     //getter
     public int getWalkingSpeed(){ return walking_speed;}
     public boolean getIsAquatic(){ return isAquatic;}
