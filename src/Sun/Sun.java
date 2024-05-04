@@ -1,4 +1,4 @@
-package Main;
+package Sun;
 
 public class Sun {
     private int totalSun;
@@ -6,6 +6,7 @@ public class Sun {
     public Sun(int totalSun) {
         this.totalSun = 25;
     }
+
 
     public int getTotalSun() {
         return totalSun;

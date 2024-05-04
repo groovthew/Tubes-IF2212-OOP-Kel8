@@ -30,6 +30,7 @@ public class Inventory <T extends Plant> implements Grid {
 
     @Override
     public void addPlant(T plant) {
+        container.add(plant);
     }
 
     @Override
@@ -40,5 +41,20 @@ public class Inventory <T extends Plant> implements Grid {
     @Override
     public void switchPlant() {
 
+    }
+    @Override
+    public void addPlant() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addPlant'");
+    }
+    @Override
+    public void removeZombie() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeZombie'");
+    }
+    @Override
+    public boolean hasZombie() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasZombie'");
     }
 }
