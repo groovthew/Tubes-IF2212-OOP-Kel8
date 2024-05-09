@@ -40,7 +40,7 @@ public class Inventory {
     container.add(plant);
   }
 
-  public void showInventory() {
+  public void displayInventory() {
     System.out.println("Inventory:");
     for (int i = 0; i < container.size(); i++) {
         Plant plant = container.get(i);
@@ -53,7 +53,7 @@ public class Inventory {
     inventory.addPlantToInventory(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
     inventory.addPlantToInventory(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
     inventory.addPlantToInventory(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
-    inventory.showInventory();
+    inventory.displayInventory();
 }
 
 
