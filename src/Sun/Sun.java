@@ -44,9 +44,8 @@ public class Sun implements ProduceSun{
 
     public static void main(String[] args) {
         Sun sun = new Sun(0);
-        sun.startProducingSun(); // Memulai produksi matahari
+        sun.startProducingSun(); 
         
-        // Loop untuk mencetak jumlah total matahari secara berulang
         while (true) {
             // Tunggu beberapa saat agar produksi matahari dimulai sebelum mencetak total matahari
             try {
