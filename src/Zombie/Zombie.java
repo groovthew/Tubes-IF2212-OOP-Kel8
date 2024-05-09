@@ -1,6 +1,8 @@
 package Zombie;
 
 import Main.Character;
+import Tanaman.Peashooter;
+import Tanaman.Plant;   
 
 public abstract class Zombie extends Character {
     private int walking_speed;
@@ -35,4 +37,22 @@ public abstract class Zombie extends Character {
 
     //setter
     public void setWalkingSpeed(int walking_speed){ this.walking_speed = walking_speed;}
+
+    // abstract method
+    public void attack(Plant plant){
+        while(plant.getHealth() != 0 && this.getHealth() != 0){
+            int remainingHealth = plant.getHealth();
+            remainingHealth -= this.getAttackDamage();
+            plant.setHealth(remainingHealth);
+        }
+    }
+
+    public static void main(String[] args) {
+        NormalZombie zombie1 = new NormalZombie(null, 0, 0, 0);
+        Peashooter plant1 = new Peashooter(null, 0, 0, 0, 0, 0, 0);
+
+        System.out.println(plant1.getHealth());
+        zombie1.attack(plant1);
+        System.out.println(plant1.getHealth());
+    }
 }

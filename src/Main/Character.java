@@ -22,4 +22,9 @@ public abstract class Character {
     public int getAttackSpeed(){ return attack_speed;}
     public int getX() { return x;}
     public int getY() { return y;}
+
+    //setter
+    public void setHealth(int health){
+        this.health = health;
+    }
 }
