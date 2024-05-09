@@ -2,6 +2,8 @@ package Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import Tanaman.Peashooter;
 import Tanaman.Plant;
 import Zombie.Zombie;
 
@@ -57,5 +59,10 @@ public class Map {
             }
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        Map map = new Map(6,8);
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 1, 1);
     }
 }
