@@ -2,6 +2,9 @@ package Map;
 import java.util.Random;
 import java.util.Scanner;
 
+import Tanaman.Peashooter;
+import Zombie.NormalZombie;
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -13,7 +16,7 @@ public class Main {
                 while (!Thread.currentThread().isInterrupted()) {
                     // Simulate adding zombies every 5 seconds
                     Thread.sleep(5000);
-                    gameMap.addZombie(new Zombie("Standard Zombie", 100));
+                    gameMap.addZombie(new NormalZombie(null, 0, 0, 0));
                 }
             } catch (InterruptedException e) {
                 System.out.println("Zombie adding thread interrupted.");
@@ -42,7 +45,7 @@ public class Main {
                     System.out.println("Enter coordinates (x y):");
                     int x = scanner.nextInt();
                     int y = scanner.nextInt();
-                    gameMap.addPlant(new Plant(name, cost), x, y);
+                    gameMap.addPlant(new Peashooter(name, y, y, y, cost, x, y), x, y);
                     gameMap.displayMap(); // Display the updated game map
                 } else if (command.equalsIgnoreCase("display")) {
                     gameMap.displayMap(); // Display the current game map
