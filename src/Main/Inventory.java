@@ -1,6 +1,7 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import Tanaman.*;
 
 public class Inventory {
@@ -20,7 +21,7 @@ public class Inventory {
     return deck;
   }
 
-  public void swapInventory(int x, int y) {
+  public void swapPlants(int x, int y) {
     Plant plant = container.get(x);
     container.set(x, container.get(y));
     container.set(y, plant);
@@ -36,9 +37,18 @@ public class Inventory {
     deck.getDeck().add(container.get(i));
   }
 
-  public void addPlantToInventory(Plant plant) {
+  public void addPlant(Plant plant) {
     container.add(plant);
   }
+  
+  public void removePlant(int index) {
+    if (index >= 1 && index < container.size()) {
+        container.remove(index - 1);
+        System.out.println("Tanaman " + index + " berhasil dihapus dari inventory.");
+    } else {
+        System.out.println("Tanaman tidak valid.");
+    }
+}
 
   public void displayInventory() {
     System.out.println("Inventory:");
@@ -50,9 +60,16 @@ public class Inventory {
 
   public static void main(String[] args) {
     Inventory inventory = new Inventory();
-    inventory.addPlantToInventory(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
-    inventory.addPlantToInventory(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
-    inventory.addPlantToInventory(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
+    inventory.addPlant(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
+    inventory.addPlant(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
+    inventory.addPlant(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
+    inventory.displayInventory();
+
+    System.out.println("Pilih Tanaman yang ingin dihapus: ");
+    Scanner delete = new Scanner(System.in);
+    int deletePlant = delete.nextInt();
+
+    inventory.removePlant(deletePlant);
     inventory.displayInventory();
 }
 
