@@ -6,7 +6,7 @@ import Tanaman.Plant;
 import Tanaman.Sunflower;
 import Zombie.Zombie;
 
-package Grid;
+
 
 public class Map {
     private List<Plant> plants = new ArrayList<>();

@@ -8,13 +8,11 @@ public abstract class Character {
     private int x;
     private int y;
 
-    public Character(String name, int health, int attack_damage, int attack_speed, int x, int y){
+    public Character(String name, int health, int attack_damage, int attack_speed){
         this.name = name;
         this.health = health;
         this.attack_damage = attack_damage;
         this.attack_speed = attack_speed;
-        this.x = x;
-        this.y = y;
     }
 
     //getter

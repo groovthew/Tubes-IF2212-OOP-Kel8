@@ -1,4 +1,4 @@
-package Grid;
+import Grid.Grid;
 
 public abstract class Tile implements Grid {
 
