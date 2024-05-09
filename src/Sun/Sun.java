@@ -6,6 +6,7 @@ public class Sun implements ProduceSun{
     
     public Sun(int totalSun) {
         this.totalSun = totalSun;
+        startProducingSun();
     }
 
 
