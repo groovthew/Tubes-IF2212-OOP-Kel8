@@ -22,10 +22,10 @@ public class Map {
     }
 
     public boolean addPlant(Plant plant) {
-        if (currentSuns >= plant.cost && plant.x >= 0 && plant.x < width && plant.y >= 0 && plant.y < height) {
+        if (currentSuns >= plant.getCost() && plant.getX() >= 0 && plant.getX() < width && plant.getY() >= 0 && plant.getY() < height) {
             plants.add(plant);
-            currentSuns -= plant.cost;  // Deduct the current suns based on the cost of the plant 
-            System.out.println("Plant added at (" + plant.x + ", " + plant.y + ")");
+            currentSuns -= plant.getCost();  // Deduct the current suns based on the cost of the plant 
+            System.out.println("Plant added at (" + plant.getX() + ", " + plant.getY() + ")");
             return true;
         }
         System.out.println("Not enough suns or invalid position.");
@@ -33,7 +33,7 @@ public class Map {
     }
 
     public void removePlant(int x, int y) {
-        plants.removeIf(plant -> plant.x == x && plant.y == y);
+        plants.removeIf(plant -> plant.getX() == x && plant.getY() == y);
         System.out.println("Plant removed from (" + x + ", " + y + ")");
     }
 
@@ -84,7 +84,7 @@ public class Map {
             } else if (plant instanceof Peashooter) {
                 plantSymbol = "P";  // Specific symbol for Peashooters
             }
-            grid[plant.x][plant.y] = plantSymbol;
+            grid[plant.getX()][plant.getY()] = plantSymbol;
         }
 
         // Place zombies on the grid
@@ -104,7 +104,7 @@ public class Map {
 
     public Plant getPlant(int x, int y) {
         for (Plant plant : plants) {
-            if (plant.x == x && plant.y == y) {
+            if (plant.getX() == x && plant.getY() == y) {
                 return plant;
             }
         }
