@@ -10,7 +10,7 @@ public class Plant extends Character{
     private int cooldown;
 
     // Method
-    public Plant(String name, int health, int attack_damage, int attack_speed, int x, int y, int cost, int range, int cooldown) {
+    public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
         super(name, health, attack_damage, attack_speed);
         this.cost = cost;
         this.range = range;

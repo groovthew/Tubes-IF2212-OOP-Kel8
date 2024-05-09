@@ -1,4 +1,4 @@
-package Grid;
+
 
 public  interface Grid {
     void addPlant();
