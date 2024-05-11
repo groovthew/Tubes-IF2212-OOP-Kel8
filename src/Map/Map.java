@@ -1,3 +1,5 @@
+package Map;
+
 // package Map;
 // import java.util.ArrayList;
 // import java.util.
@@ -91,7 +93,7 @@ class Tile {
             plants.add(plant);
             System.out.println("Added " + plant.getName() + " to " + (isWater ? "water" : "land") + " tile.");
         } else {
-            System.out.println("Cannot place " + plant.getName() + " on this type of tile.");
+            System.out.println("Cannot place " + plant.getName() + " on this type of tile."); // Nanti dibuat exception
         }
     }
 

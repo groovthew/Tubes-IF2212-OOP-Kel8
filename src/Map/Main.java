@@ -1,22 +1,25 @@
 package Map;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 import Tanaman.Peashooter;
 import Zombie.NormalZombie;
+import Map.Tile;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Map gameMap = new Map(5, 5);
         Random random = new Random();
+        Tile tile = new Tile(false, new ArrayList<>(), null);
 
         Thread zombieAdder = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
                     // Simulate adding zombies every 5 seconds
                     Thread.sleep(5000);
-                    gameMap.addZombie(new NormalZombie(null, 0, 0, 0));
+                    tile.addZombie(new NormalZombie(null, 0, 0, 0));
                 }
             } catch (InterruptedException e) {
                 System.out.println("Zombie adding thread interrupted.");

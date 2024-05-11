@@ -58,20 +58,20 @@ public class Inventory {
     }
   }
 
-  public static void main(String[] args) {
-    Inventory inventory = new Inventory();
-    inventory.addPlant(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
-    inventory.addPlant(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
-    inventory.addPlant(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
-    inventory.displayInventory();
+//   public static void main(String[] args) {
+//     Inventory inventory = new Inventory();
+//     inventory.addPlant(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
+//     inventory.addPlant(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
+//     inventory.addPlant(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
+//     inventory.displayInventory();
 
-    System.out.println("Pilih Tanaman yang ingin dihapus: ");
-    Scanner delete = new Scanner(System.in);
-    int deletePlant = delete.nextInt();
+//     System.out.println("Pilih Tanaman yang ingin dihapus: ");
+//     Scanner delete = new Scanner(System.in);
+//     int deletePlant = delete.nextInt();
 
-    inventory.removePlant(deletePlant);
-    inventory.displayInventory();
-}
+//     inventory.removePlant(deletePlant);
+//     inventory.displayInventory();
+// }
 
 
 }
