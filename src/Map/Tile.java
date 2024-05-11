@@ -29,6 +29,10 @@ public class Tile {
         zombieslist.remove(z);
     }
 
+    public void addZombie(Zombie zombie) {
+        zombieslist.add(zombie);
+    }
+
     public List<Zombie> getZombiesList() {
         return zombieslist;
     }
@@ -50,5 +54,4 @@ public class Tile {
             hasPlant = false;
         }
     }
-
 }

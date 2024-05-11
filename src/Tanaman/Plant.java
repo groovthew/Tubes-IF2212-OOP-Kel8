@@ -9,6 +9,7 @@ public class Plant extends Character{
     private int cost;
     private int range;
     private int cooldown;
+    private boolean isAquatic = false;
 
     // Method
     public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
@@ -23,6 +24,9 @@ public class Plant extends Character{
     public int getRange(){ return range;}
     public int getCooldown(){ return cooldown;}
 
+    public boolean getIsAquatic() {
+        return isAquatic;
+    }
     public void attack(Zombie zombie){
         while(zombie.getHealth() != 0 && this.getHealth() != 0){
             int remainingHealth = zombie.getHealth();

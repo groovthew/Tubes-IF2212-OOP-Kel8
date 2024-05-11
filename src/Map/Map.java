@@ -89,7 +89,7 @@ class Tile {
     }
 
     public void addPlant(Plant plant) {
-        if ((isWater && plant.canPlaceOnWater()) || !isWater && !isSpawnArea) {
+        if ((isWater && plant.getIsAquatic()) || !isWater && !isSpawnArea) {
             plants.add(plant);
             System.out.println("Added " + plant.getName() + " to " + (isWater ? "water" : "land") + " tile.");
         } else {
@@ -181,7 +181,7 @@ public class Map {
 
     public static void main(String[] args) {
         Map map = new Map(11, 6);
-        map.addPlant(new Peashooter(), 5, 3); // Example to add a Peashooter
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 5, 3); // Example to add a Peashooter
         map.spawnZombies();
         map.displayMap();
     }
