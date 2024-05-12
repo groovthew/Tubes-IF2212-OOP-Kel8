@@ -113,6 +113,9 @@ class Tile {
     public List<Zombie> getZombies() {
         return zombies;
     }
+    public List<Plant> getPlants(){
+        return plants;
+    }
 }
 
 public class Map {
@@ -145,7 +148,7 @@ public class Map {
     public void spawnZombies() {
         for (int i = 0; i < tiles.length; i++) {
             if (random.nextDouble() < 0.3) { // Randomly decide to spawn a zombie
-                Zombie zombie = new NormalZombie(null, i, i, i); // Simplify, usually you would vary type
+                Zombie zombie = new PoleVaultingZombie(null, i, i, i); // Simplify, usually you would vary type
                 tiles[i][tiles[0].length - 1].addZombie(zombie);
             }
         }
@@ -153,36 +156,128 @@ public class Map {
 
     public void moveZombies() {
         Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                boolean zombieReachedBase = false; // Flag to check if zombies reach the base
+    
+                // Iterate over each row
                 for (int i = 0; i < tiles.length; i++) {
-                    for (int j = tiles[i].length - 1; j > 0; j--) {
-                        List<Zombie> movingZombies = new ArrayList<>(tiles[i][j].getZombies());
-                        for (Zombie zombie : movingZombies) {
-                            tiles[i][j].getZombies().remove(zombie);
-                            tiles[i][j-1].addZombie(zombie);
+                    // Iterate from the second column to the first
+                    for (int j = 1; j < tiles[i].length; j++) {
+                        List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
+                        if (!zombiesToMove.isEmpty()) {
+                            // Move all zombies from current tile to the left tile
+                            tiles[i][j - 1].getZombies().addAll(zombiesToMove);
+                            tiles[i][j].getZombies().clear(); // Clear the current tile of zombies
                         }
                     }
+    
+                    // Check if zombies have reached the base (column 0)
+                    if (!tiles[i][0].getZombies().isEmpty()) {
+                        zombieReachedBase = true;
+                    }
+                }
+    
+                System.out.println("Zombie moved.");
+                displayMap(); // Display the map after moving zombies
+    
+                // If zombies reached the base column, stop the timer and handle game over logic
+                if (zombieReachedBase) {
+                    System.out.println("Zombie have reached the base!");
+                    timer.cancel(); // Stop the timer to halt further moves
+                    // Implement any additional game over logic here
                 }
             }
-        }, 5000, 5000); // Move zombies every 5 seconds
+        };
+    
+        timer.schedule(task, 5000, 5000); // Schedule the task to run every 5 seconds
     }
 
     public void displayMap() {
+        // Iterate through each row
         for (int i = 0; i < tiles.length; i++) {
+            // Iterate through each column in the row
             for (int j = 0; j < tiles[i].length; j++) {
-                String tileContent = tiles[i][j].getZombies().isEmpty() ? " " : "Z";
-                System.out.print("[" + tileContent + "]");
+                // Determine the content of the tile for display based on the presence of zombies or plants
+                String tileContent = " "; // Default empty tile
+                if (!tiles[i][j].getZombies().isEmpty()) {
+                    // Display 'Z' if there are any zombies on the tile
+                    Zombie firstZombie = tiles[i][j].getZombies().get(0);
+                    int zombieCount = tiles[i][j].getZombies().size();
+                    tileContent = getZombieSymbol(firstZombie)+ zombieCount;
+                } else if (!tiles[i][j].getPlants().isEmpty()) {
+                    // Display the first plant's symbol if there are plants and no zombies on the tile
+                    Plant firstPlant = tiles[i][j].getPlants().get(0);
+                    tileContent = getPlantSymbol(firstPlant); // A method to get symbol based on plant type
+                }
+                // Print the content of the tile
+                System.out.print(String.format("[%3s]", tileContent)); // Padded for alignment
             }
+            // Move to the next line after printing all columns in the current row
             System.out.println();
         }
     }
+    
+    // Helper method to return the symbol for a given plant instance
+    private String getPlantSymbol(Plant plant) {
+        if (plant instanceof Peashooter) {
+            return "P";
+        } else if (plant instanceof Sunflower) {
+            return "S";
+        } else if (plant instanceof Chomper) {
+            return "M";
+        } else if (plant instanceof SnowPea) {
+            return "R";
+        } else if (plant instanceof Squash) {
+            return "Q";
+        } else if (plant instanceof SunShroom) {
+            return "N";
+        } else if (plant instanceof TallNut) {
+            return "T";
+        } else if (plant instanceof Jalapeno) {
+            return "J";
+        } else if (plant instanceof Lilypad) {
+            return "L";
+        } else if (plant instanceof WallNut) {
+            return "W";
+        }
+        return null;
+    }
+    private String getZombieSymbol(Zombie zombie) {
+        if (zombie instanceof BucketHead) {
+            return "B";
+        } else if (zombie instanceof ConeHeadZombie) {
+            return "C";
+        } else if (zombie instanceof DolphinRiderZombie) {
+            return "D";
+        } else if (zombie instanceof DuckyTubeZombie) {
+            return "DT";
+        }else if (zombie instanceof FootballZombie) {
+            return "F";
+        }else if (zombie instanceof NewsPaperZombie) {
+            return "N";
+        }else if (zombie instanceof NormalZombie) {
+            return "Z";
+        }else if (zombie instanceof PoleVaultingZombie) {
+            return "P";
+        }else if (zombie instanceof ScreenDoorZombie) {
+            return "S";
+        }else if (zombie instanceof YetiZombie) {
+            return "Y";
+        }
+        return null;
 
+    }
     public static void main(String[] args) {
-        Map map = new Map(11, 6);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 5, 3); // Example to add a Peashooter
+        Map map = new Map(6, 11);
+        map.addPlant(new Jalapeno(null, 0, 0, 0, 0, 0, 0), 5, 1);
+        map.addPlant(new WallNut(null, 0, 0, 0, 0, 0), 4, 1); // Example to add a Peashooter
         map.spawnZombies();
-        map.displayMap();
+        for(int i = 0; i < 2; i++){
+            map.moveZombies();
+            map.displayMap();
+        }
+        
     }
 }
