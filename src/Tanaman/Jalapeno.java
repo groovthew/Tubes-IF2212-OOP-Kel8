@@ -1,6 +1,6 @@
 package Tanaman;
 
-import Map.Tile;
+// import Map.Tile;
 import Zombie.Zombie;
 
 public class Jalapeno extends Plant {
@@ -8,14 +8,14 @@ public class Jalapeno extends Plant {
         super("Jalapeno", 100, 0, 0, 150, 0, 20);
     }
 
-    public void clearZombieTile(Tile tile, Zombie zombie)  {
-        if (tile.getHasZombie()) {
-            tile.removeZombie(zombie);
-            System.out.println("Zombie cleared from tile!");
-        } else{
-            System.out.println("There are no zombie in the tile."); // Exception
-        }
-    }
+    // public void clearZombieTile(Tile tile, Zombie zombie)  {
+    //     if (tile.getHasZombie()) {
+    //         tile.removeZombie(zombie);
+    //         System.out.println("Zombie cleared from tile!");
+    //     } else{
+    //         System.out.println("There are no zombie in the tile."); // Exception
+    //     }
+    // }
 
     // public static void main(String[] args) {
     //     // Membuat objek Tile

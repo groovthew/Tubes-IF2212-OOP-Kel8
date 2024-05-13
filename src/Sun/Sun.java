@@ -1,8 +1,11 @@
 package Sun;
 
+import java.util.Random;
+
 public class Sun implements ProduceSun{
     private int totalSun;
     private boolean makingSun;
+    private Thread sunProductionThread;
     
     public Sun(int totalSun) {
         this.totalSun = totalSun;
@@ -26,20 +29,27 @@ public class Sun implements ProduceSun{
 
     @Override
     public void startProducingSun() {
-        makingSun = true;
-        new Thread(() -> {
-            while (makingSun) {
-                try {
-                    Thread.sleep((long) (Math.random() * 6000 + 5000));
-                    increaseSun();
-                } catch (InterruptedException e){}
-            }
-        }).start();
+        if (!makingSun) {
+            makingSun = true;
+            sunProductionThread = new Thread(() -> {
+                Random random = new Random();
+                while (makingSun) {
+                    try {
+                        Thread.sleep((random.nextInt(6) + 5) * 1000);
+                        increaseSun();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            sunProductionThread.start();
+        }
     }
 
     @Override
     public void stopProducingSun() {
         makingSun = false;
+        sunProductionThread.interrupt();
     }
 
     public static void main(String[] args) {
@@ -49,15 +59,14 @@ public class Sun implements ProduceSun{
         while (true) {
             // Tunggu beberapa saat agar produksi matahari dimulai sebelum mencetak total matahari
             try {
-                Thread.sleep((long) (Math.random() * 6000 + 5000)); // Tunggu antara 5-10 detik
+                Thread.sleep(6000); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             
             // Cetak jumlah total matahari
-            System.out.println("Total sun: " + sun.getAmount());
+            System.out.println("Sun: " + sun.getAmount());
         }
-    }
-    
+    }   
 }
 

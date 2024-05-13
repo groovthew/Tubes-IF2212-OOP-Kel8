@@ -1,57 +1,57 @@
-package Map;
+// package Map;
 
-import java.util.List;
-import java.util.ArrayList;
-import Tanaman.*;
-import Zombie.*;
+// import java.util.List;
+// import java.util.ArrayList;
+// import Tanaman.*;
+// import Zombie.*;
 
-public class Tile {
-    private boolean hasPlant;
-    private List<Zombie> zombieslist;
-    private Plant placePlant;
-    private boolean isZombie;
+// public class Tile {
+//     private boolean hasPlant;
+//     private List<Zombie> zombieslist;
+//     private Plant placePlant;
+//     private boolean isZombie;
 
-    public Tile(boolean hasPlant, List<Zombie> zombielist, Plant placePlant) {
-        this.hasPlant = false;
-        this.zombieslist =  new ArrayList<>();
-        this.placePlant = null;
-    }
+//     public Tile(boolean hasPlant, List<Zombie> zombielist, Plant placePlant) {
+//         this.hasPlant = false;
+//         this.zombieslist =  new ArrayList<>();
+//         this.placePlant = null;
+//     }
     
-    public boolean IsHasPlant() {
-        return hasPlant;
-    }
+//     public boolean IsHasPlant() {
+//         return hasPlant;
+//     }
 
-    public boolean getHasZombie() {
-        return isZombie;
-    }
+//     public boolean getHasZombie() {
+//         return isZombie;
+//     }
 
-    public void removeZombie(Zombie z) {
-        zombieslist.remove(z);
-    }
+//     public void removeZombie(Zombie z) {
+//         zombieslist.remove(z);
+//     }
 
-    public void addZombie(Zombie zombie) {
-        zombieslist.add(zombie);
-    }
+//     public void addZombie(Zombie zombie) {
+//         zombieslist.add(zombie);
+//     }
 
-    public List<Zombie> getZombiesList() {
-        return zombieslist;
-    }
+//     public List<Zombie> getZombiesList() {
+//         return zombieslist;
+//     }
 
-    public Plant getPlacedPlant() {
-        return placePlant;
-    }
+//     public Plant getPlacedPlant() {
+//         return placePlant;
+//     }
 
-    public void Planting(Plant p) {
-        if (!hasPlant) {
-            placePlant = p;
-            hasPlant = true;
-        }
-    }
+//     public void Planting(Plant p) {
+//         if (!hasPlant) {
+//             placePlant = p;
+//             hasPlant = true;
+//         }
+//     }
 
-    public void Digging() {
-        if (hasPlant) {
-            placePlant = null;
-            hasPlant = false;
-        }
-    }
-}
+//     public void Digging() {
+//         if (hasPlant) {
+//             placePlant = null;
+//             hasPlant = false;
+//         }
+//     }
+// }
