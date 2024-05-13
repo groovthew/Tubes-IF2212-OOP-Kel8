@@ -260,7 +260,7 @@ public class Map {
         }else if (zombie instanceof NormalZombie) {
             return "Z";
         }else if (zombie instanceof PoleVaultingZombie) {
-            return "P";
+            return "PV";
         }else if (zombie instanceof ScreenDoorZombie) {
             return "S";
         }else if (zombie instanceof YetiZombie) {
