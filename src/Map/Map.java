@@ -218,6 +218,28 @@ public class Map {
             System.out.println();
         }
     }
+
+    public void attack() {
+        for (int i = 0; i < tiles.length; i++) { // iterate over each row
+            List<Plant> plantsInRow = new ArrayList<>();
+            List<Zombie> zombiesInRow = new ArrayList<>();
+    
+            for (int j = 0; j < tiles[i].length; j++) { // iterate over each column in the row
+                plantsInRow.addAll(tiles[i][j].getPlants());
+                zombiesInRow.addAll(tiles[i][j].getZombies());
+            }
+    
+            // If there are both plants and zombies in the row, they attack each other
+            if (!plantsInRow.isEmpty() && !zombiesInRow.isEmpty()) {
+                for (Plant plant : plantsInRow) {
+                    for (Zombie zombie : zombiesInRow) {
+                        plant.attack(zombie); // plant attacks zombie
+                        zombie.attack(plant); // zombie attacks plant
+                    }
+                }
+            }
+        }
+    }
     
     // Helper method to return the symbol for a given plant instance
     private String getPlantSymbol(Plant plant) {
@@ -271,8 +293,7 @@ public class Map {
     }
     public static void main(String[] args) {
         Map map = new Map(6, 11);
-        map.addPlant(new Jalapeno(null, 0, 0, 0, 0, 0, 0), 5, 1);
-        map.addPlant(new WallNut(null, 0, 0, 0, 0, 0), 4, 1); // Example to add a Peashooter
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 2, 1);
         map.spawnZombies();
         for(int i = 0; i < 2; i++){
             map.moveZombies();
