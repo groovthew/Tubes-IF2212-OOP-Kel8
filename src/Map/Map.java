@@ -74,8 +74,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Tanaman.*;  // Assuming specific plant classes are under this package
-import Zombie.*; // Assuming specific zombie classes are under this package
+import Tanaman.*; 
+import Zombie.*; 
 
 class Tile {
     private List<Plant> plants = new ArrayList<>();
@@ -147,8 +147,8 @@ public class Map {
 
     public void spawnZombies() {
         for (int i = 0; i < tiles.length; i++) {
-            if (random.nextDouble() < 0.3) { // Randomly decide to spawn a zombie
-                Zombie zombie = new PoleVaultingZombie(null, i, i, i); // Simplify, usually you would vary type
+            if (random.nextDouble() < 0.3) { 
+                Zombie zombie = new PoleVaultingZombie(null, i, i, i); 
                 tiles[i][tiles[0].length - 1].addZombie(zombie);
             }
         }
@@ -159,89 +159,73 @@ public class Map {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                boolean zombieReachedBase = false; // Flag to check if zombies reach the base
+                boolean zombieReachedBase = false; 
     
-                // Iterate over each row
                 for (int i = 0; i < tiles.length; i++) {
-                    // Iterate from the second column to the first
                     for (int j = 1; j < tiles[i].length; j++) {
                         List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
                         if (!zombiesToMove.isEmpty()) {
-                            // Move all zombies from current tile to the left tile
                             tiles[i][j - 1].getZombies().addAll(zombiesToMove);
-                            tiles[i][j].getZombies().clear(); // Clear the current tile of zombies
+                            tiles[i][j].getZombies().clear();
                         }
                     }
-    
-                    // Check if zombies have reached the base (column 0)
                     if (!tiles[i][0].getZombies().isEmpty()) {
                         zombieReachedBase = true;
                     }
                 }
     
                 System.out.println("Zombie moved.");
-                displayMap(); // Display the map after moving zombies
-    
-                // If zombies reached the base column, stop the timer and handle game over logic
+                displayMap(); 
+
                 if (zombieReachedBase) {
                     System.out.println("Zombie have reached the base!");
-                    timer.cancel(); // Stop the timer to halt further moves
-                    // Implement any additional game over logic here
+                    timer.cancel(); 
                 }
             }
         };
     
-        timer.schedule(task, 5000, 5000); // Schedule the task to run every 5 seconds
+        timer.schedule(task, 5000, 5000); 
     }
 
     public void displayMap() {
-        // Iterate through each row
         for (int i = 0; i < tiles.length; i++) {
-            // Iterate through each column in the row
             for (int j = 0; j < tiles[i].length; j++) {
-                // Determine the content of the tile for display based on the presence of zombies or plants
                 String tileContent = " "; // Default empty tile
                 if (!tiles[i][j].getZombies().isEmpty()) {
-                    // Display 'Z' if there are any zombies on the tile
                     Zombie firstZombie = tiles[i][j].getZombies().get(0);
                     int zombieCount = tiles[i][j].getZombies().size();
                     tileContent = getZombieSymbol(firstZombie)+ zombieCount;
                 } else if (!tiles[i][j].getPlants().isEmpty()) {
-                    // Display the first plant's symbol if there are plants and no zombies on the tile
                     Plant firstPlant = tiles[i][j].getPlants().get(0);
-                    tileContent = getPlantSymbol(firstPlant); // A method to get symbol based on plant type
+                    tileContent = getPlantSymbol(firstPlant);
                 }
-                // Print the content of the tile
-                System.out.print(String.format("[%3s]", tileContent)); // Padded for alignment
+                System.out.print(String.format("[%3s]", tileContent));
             }
-            // Move to the next line after printing all columns in the current row
             System.out.println();
         }
     }
 
     public void attack() {
-        for (int i = 0; i < tiles.length; i++) { // iterate over each row
+        for (int i = 0; i < tiles.length; i++) { 
             List<Plant> plantsInRow = new ArrayList<>();
             List<Zombie> zombiesInRow = new ArrayList<>();
     
-            for (int j = 0; j < tiles[i].length; j++) { // iterate over each column in the row
+            for (int j = 0; j < tiles[i].length; j++) {
                 plantsInRow.addAll(tiles[i][j].getPlants());
                 zombiesInRow.addAll(tiles[i][j].getZombies());
             }
     
-            // If there are both plants and zombies in the row, they attack each other
             if (!plantsInRow.isEmpty() && !zombiesInRow.isEmpty()) {
                 for (Plant plant : plantsInRow) {
                     for (Zombie zombie : zombiesInRow) {
-                        plant.attack(zombie); // plant attacks zombie
-                        zombie.attack(plant); // zombie attacks plant
+                        plant.attack(zombie); 
+                        zombie.attack(plant); 
                     }
                 }
             }
         }
     }
     
-    // Helper method to return the symbol for a given plant instance
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {
             return "P";
@@ -294,6 +278,7 @@ public class Map {
     public static void main(String[] args) {
         Map map = new Map(6, 11);
         map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 2, 1);
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 1, 2);
         map.spawnZombies();
         for(int i = 0; i < 2; i++){
             map.moveZombies();
