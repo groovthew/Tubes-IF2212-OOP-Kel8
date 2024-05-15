@@ -46,9 +46,8 @@ public abstract class Zombie extends Character {
             plant.setHealth(remainingHealth);
         }
     }
-
     public static void main(String[] args) {
-        NormalZombie zombie1 = new NormalZombie(null, 0, 0, 0);
+        NormalZombie zombie1 = new NormalZombie(null);
         Peashooter plant1 = new Peashooter(null, 0, 0, 0, 0, 0, 0);
 
         System.out.println(plant1.getHealth());
