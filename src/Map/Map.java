@@ -34,8 +34,6 @@ class Tile {
         if (isSpawnArea) {
             zombies.add(zombie);
             System.out.println("Zombie spawned on tile.");
-        } else {
-            System.out.println("Cannot spawn zombie here.");
         }
     }
 
@@ -196,25 +194,25 @@ public class Map {
     // Helper method to return the symbol for a given plant instance
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {
-            return "P";
+            return "PS";
         } else if (plant instanceof Sunflower) {
-            return "S";
+            return "SF";
         } else if (plant instanceof Chomper) {
-            return "M";
+            return "CH";
         } else if (plant instanceof SnowPea) {
-            return "R";
+            return "SP";
         } else if (plant instanceof Squash) {
-            return "Q";
+            return "SQ";
         } else if (plant instanceof SunShroom) {
-            return "N";
+            return "SS";
         } else if (plant instanceof TallNut) {
-            return "T";
+            return "TN";
         } else if (plant instanceof Jalapeno) {
-            return "J";
+            return "JP";
         } else if (plant instanceof Lilypad) {
-            return "L";
+            return "LL";
         } else if (plant instanceof WallNut) {
-            return "W";
+            return "WN";
         }
         return null;
     }
