@@ -48,20 +48,6 @@ public class Tile {
         return plants;
     }
 
-    public int getPlantHealth() {
-        if (!plants.isEmpty()) {
-            return plants.get(0).getHealth();
-        } else {
-            return -1;
-        }
-    }
-
-    public void setPlantHealth(int health) {
-        if (!plants.isEmpty()) {
-            plants.get(0).setHealth(health);
-        }
-    }
-
     public void removeAllZombies() {
         zombies.clear();
         System.out.println("Semua Zombie telah mati.");

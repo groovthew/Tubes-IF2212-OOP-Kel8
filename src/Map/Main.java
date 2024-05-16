@@ -19,7 +19,7 @@ public class Main {
                 while (!Thread.currentThread().isInterrupted()) {
                     // Simulate adding zombies every 5 seconds
                     Thread.sleep(5000);
-                    tile.addZombie(new NormalZombie("Normal Zombie"));
+                    tile.addZombie(new NormalZombie());
                 }
             } catch (InterruptedException e) {
                 System.out.println("Zombie adding thread interrupted.");

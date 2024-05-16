@@ -39,17 +39,5 @@ public abstract class Zombie extends Character {
 
     //setter
     public void setWalkingSpeed(int walking_speed){ this.walking_speed = walking_speed;}
-
-    public void attack(){
-        if (tile.getPlants() != null && tile.getZombies().contains(this)) {
-            while(tile.getPlantHealth() != 0 && this.getHealth() != 0){
-                int remainingHealth = tile.getPlantHealth();
-                remainingHealth -= this.getAttackDamage();
-                tile.setPlantHealth(remainingHealth);
-            }
-            if (tile.getPlantHealth() == 0) {
-                tile.getPlants().remove(0);
-            }
-        }
-    }
+    
 }

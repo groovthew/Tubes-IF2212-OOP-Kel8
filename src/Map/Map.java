@@ -47,13 +47,6 @@ public class Map {
     public void addPlant(Plant plant, int i, int j) {
         if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 9)) {
             tiles[i][j].addPlant(plant);
-        } else {
-            if (!(plant instanceof Lilypad)){
-                throw new IllegalArgumentException("Cannot place plant on this tile.");
-            }
-            else{
-                tiles[i][j].addPlant(plant);
-            }
         }
     }
     public void spawnZombies() {
@@ -236,9 +229,9 @@ public class Map {
     }
     public static void main(String[] args) {
         Map map = new Map(6, 11);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 1, 3);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 2, 0);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 3, 2);
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 0, 1);
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 0, 0);
+        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 0, 2);
         map.spawnZombies();
         map.moveZombies();
         map.displayMap();
