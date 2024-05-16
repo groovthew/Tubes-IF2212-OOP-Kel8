@@ -57,7 +57,7 @@ public class Lilypad extends Plant {
 
         System.out.println("Total Health: " + lilypad.totalHealth());
 
-        // zombie1.attack(plant1);
+        zombie1.attack(plant1);
         lilypad.decreaseHealth(zombie1.getAttackDamage());
 
         System.out.println("Total Health: " + lilypad.totalHealth());
