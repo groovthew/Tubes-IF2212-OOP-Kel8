@@ -48,7 +48,12 @@ public class Map {
         if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 9)) {
             tiles[i][j].addPlant(plant);
         } else {
-            System.out.println("Invalid position for plant placement.");
+            if (!(plant instanceof Lilypad)){
+                throw new IllegalArgumentException("Cannot place plant on this tile.");
+            }
+            else{
+                tiles[i][j].addPlant(plant);
+            }
         }
     }
     public void spawnZombies() {
@@ -159,7 +164,7 @@ public class Map {
                 for (Plant plant : plantsInRow) {
                     for (Zombie zombie : zombiesInRow) {
                         plant.attack(zombie); 
-                        zombie.attack(plant); 
+                        //zombie.attack(plant); 
                     }
                 }
             }

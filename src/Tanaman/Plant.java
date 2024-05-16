@@ -10,6 +10,7 @@ public class Plant extends Character{
     private int range;
     private int cooldown;
     private boolean isAquatic = false;
+    private Plant plant;
 
     // Method
     public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
@@ -23,6 +24,11 @@ public class Plant extends Character{
     public int getCost(){ return cost;}
     public int getRange(){ return range;}
     public int getCooldown(){ return cooldown;}
+    public Plant getPlant() {return plant;}
+
+    public void setHealth(Plant plant) {
+        this.plant = plant;
+    }
 
     public boolean getIsAquatic() {
         return isAquatic;

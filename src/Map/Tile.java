@@ -1,5 +1,6 @@
 package Map;
 
+<<<<<<< HEAD
 import java.util.List;
 import java.util.ArrayList;
 import Tanaman.*;
@@ -54,48 +55,67 @@ public class Tile {
 //     private List<Zombie> zombieslist;
 //     private Plant placePlant;
 //     private boolean isZombie;
+=======
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-//     public Tile(boolean hasPlant, List<Zombie> zombielist, Plant placePlant) {
-//         this.hasPlant = false;
-//         this.zombieslist =  new ArrayList<>();
-//         this.placePlant = null;
-//     }
-    
-//     public boolean IsHasPlant() {
-//         return hasPlant;
-//     }
+import Tanaman.*;  // Assuming specific plant classes are under this package
+import Zombie.*; // Assuming specific zombie classes are under this package
+>>>>>>> 83f8ed203db26ac0fed32833d8c15c3dd30d1fe0
 
-//     public boolean getHasZombie() {
-//         return isZombie;
-//     }
+public class Tile {
+    private List<Plant> plants = new ArrayList<>();
+    private List<Zombie> zombies = new ArrayList<>();
+    private boolean isWater;
+    private boolean isSpawnArea;
 
-//     public void removeZombie(Zombie z) {
-//         zombieslist.remove(z);
-//     }
+    public Tile(boolean isWater, boolean isSpawnArea) {
+        this.isWater = isWater;
+        this.isSpawnArea = isSpawnArea;
+    }
 
-//     public void addZombie(Zombie zombie) {
-//         zombieslist.add(zombie);
-//     }
+    public void addPlant(Plant plant) {
+        if ((isWater && plant.getIsAquatic()) || !isWater && !isSpawnArea) {
+            plants.add(plant);
+            System.out.println("Added " + plant.getName() + " to " + (isWater ? "water" : "land") + " tile.");
+        } else {
+            System.out.println("Cannot place " + plant.getName() + " on this type of tile."); // Nanti dibuat exception
+        }
+    }
 
-//     public List<Zombie> getZombiesList() {
-//         return zombieslist;
-//     }
+    public void addZombie(Zombie zombie) {
+        if (isSpawnArea) {
+            zombies.add(zombie);
+            System.out.println("Zombie spawned on tile.");
+        }
+    }
 
-//     public Plant getPlacedPlant() {
-//         return placePlant;
-//     }
+    public boolean isWater() {
+        return isWater;
+    }
 
-//     public void Planting(Plant p) {
-//         if (!hasPlant) {
-//             placePlant = p;
-//             hasPlant = true;
-//         }
-//     }
+    public List<Zombie> getZombies() {
+        return zombies;
+    }
+    public List<Plant> getPlants(){
+        return plants;
+    }
 
-//     public void Digging() {
-//         if (hasPlant) {
-//             placePlant = null;
-//             hasPlant = false;
-//         }
-//     }
-// }
+    public int getPlantHealth() {
+        if (!plants.isEmpty()) {
+            return plants.get(0).getHealth();
+        } else {
+            return -1;
+        }
+    }
+
+    public void setPlantHealth(int health) {
+        if (!plants.isEmpty()) {
+            plants.get(0).setHealth(health);
+        }
+    }
+}
