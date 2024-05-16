@@ -1,12 +1,7 @@
 package Map;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import Tanaman.*;  // Assuming specific plant classes are under this package
 import Zombie.*; // Assuming specific zombie classes are under this package
 
@@ -35,6 +30,11 @@ public class Tile {
             zombies.add(zombie);
             System.out.println("Zombie spawned on tile.");
         }
+    }
+
+    public void removeZombie(Zombie zombie) {
+        zombies.remove(zombie);
+        System.out.println("Zombie removed from tile.");
     }
 
     public boolean isWater() {
