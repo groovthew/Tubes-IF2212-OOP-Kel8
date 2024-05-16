@@ -1,7 +1,7 @@
 package Zombie;
 
 public class YetiZombie extends Zombie{
-    public YetiZombie(String name){
+    public YetiZombie(){
         super("Yeti", 500, 200, 1);
     }
 }
