@@ -10,7 +10,6 @@ public abstract class Zombie extends Character {
     private boolean isAquatic;
     private boolean is_slowed;
     private Tile tile;
-    
 
     public Zombie(String name, int health, int attack_damage, int attack_speed){
         super(name, health, attack_damage, attack_speed);
@@ -41,13 +40,15 @@ public abstract class Zombie extends Character {
     //setter
     public void setWalkingSpeed(int walking_speed){ this.walking_speed = walking_speed;}
 
-    // abstract method
     public void attack(){
         if (tile.getPlants() != null && tile.getZombies().contains(this)) {
-            while(tile.getPlant().getHealth() != 0 && this.getHealth() != 0){
-                int remainingHealth = tile.getPlants().getHealth();
+            while(tile.getPlantHealth() != 0 && this.getHealth() != 0){
+                int remainingHealth = tile.getPlantHealth();
                 remainingHealth -= this.getAttackDamage();
-                tile.getPlants().setHealth(remainingHealth);
+                tile.setPlantHealth(remainingHealth);
+            }
+            if (tile.getPlantHealth() == 0) {
+                tile.getPlants().remove(0);
             }
         }
     }

@@ -47,4 +47,18 @@ public class Tile {
     public List<Plant> getPlants(){
         return plants;
     }
+
+    public int getPlantHealth() {
+        if (!plants.isEmpty()) {
+            return plants.get(0).getHealth();
+        } else {
+            return -1;
+        }
+    }
+
+    public void setPlantHealth(int health) {
+        if (!plants.isEmpty()) {
+            plants.get(0).setHealth(health);
+        }
+    }
 }
