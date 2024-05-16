@@ -1,37 +1,48 @@
 package Tanaman;
 
 // import Map.Tile;
-import Zombie.Zombie;
+import Zombie.*;
+import java.util.List;
+import java.util.ArrayList;
+import Map.Tile;
 
 public class Jalapeno extends Plant {
     public Jalapeno (String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
         super("Jalapeno", 100, 0, 0, 150, 0, 20);
     }
 
-    // public void clearZombieTile(Tile tile, Zombie zombie)  {
-    //     if (tile.getHasZombie()) {
-    //         tile.removeZombie(zombie);
-    //         System.out.println("Zombie cleared from tile!");
-    //     } else{
-    //         System.out.println("There are no zombie in the tile."); // Exception
-    //     }
-    // }
+    public void clearZombieTile(List<Tile> row) {
+        for (Tile tile : row) {
+            tile.removeAllZombies();
+        }
+    }
 
     // public static void main(String[] args) {
-    //     // Membuat objek Tile
-    //     Tile tile = new Tile(false, new ArrayList<>(), null);
+    //     // Create a row of tiles
+    //     List<Tile> row = new ArrayList<>();
+    //     for (int i = 0; i < 5; i++) {
+    //         row.add(new Tile(false, true));
+    //     }
 
-    //     // Menambahkan zombie ke daftar zombie pada tile
-    //     Zombie zombie = new Zombie();
-    //     tile.getZombiesList().add(zombie);
+    //     // Add zombies to the tiles
+    //     for (Tile tile : row) {
+    //         tile.addZombie(new NormalZombie("Normal Zombie"));
+    //     }
 
-    //     // Memeriksa apakah ada zombie di tile
-    //     System.out.println("Is there a zombie in the tile? " + tile.getHasZombie());
+    //     // Display zombies before clearing
+    //     System.out.println("Zombies before Jalapeno clears the row:");
+    //     for (int i = 0; i < row.size(); i++) {
+    //         System.out.println("Tile " + (i + 1) + " has " + row.get(i).getZombies().size() + " zombies.");
+    //     }
 
-    //     // Menghapus zombie dari tile
-    //     tile.removeZombie();
+    //     // Create Jalapeno and clear the row
+    //     Jalapeno jalapeno = new Jalapeno("Jalapeno", 100, 0, 0, 150, 0, 20);
+    //     jalapeno.clearZombieTile(row);
 
-    //     // Memeriksa kembali apakah masih ada zombie di tile setelah dihapus
-    //     System.out.println("Is there still a zombie in the tile? " + tile.getHasZombie());
+    //     // Display zombies after clearing
+    //     System.out.println("Zombies after Jalapeno clears the row:");
+    //     for (int i = 0; i < row.size(); i++) {
+    //         System.out.println("Tile " + (i + 1) + " has " + row.get(i).getZombies().size() + " zombies.");
+    //     }
     // }
 }   

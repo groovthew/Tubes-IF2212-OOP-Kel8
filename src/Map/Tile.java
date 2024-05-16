@@ -1,14 +1,9 @@
 package Map;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import Tanaman.*;  // Assuming specific plant classes are under this package
-import Zombie.*; // Assuming specific zombie classes are under this package
+import Tanaman.*;  
+import Zombie.*; 
 
 public class Tile {
     private List<Plant> plants = new ArrayList<>();
@@ -60,5 +55,10 @@ public class Tile {
         if (!plants.isEmpty()) {
             plants.get(0).setHealth(health);
         }
+    }
+
+    public void removeAllZombies() {
+        zombies.clear();
+        System.out.println("Semua Zombie telah mati.");
     }
 }
