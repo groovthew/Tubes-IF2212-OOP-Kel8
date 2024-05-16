@@ -1,7 +1,7 @@
 package Zombie;
 
 public class ScreenDoorZombie extends Zombie {
-    public ScreenDoorZombie(String name){
+    public ScreenDoorZombie(){
         super("Screen Door Zombie", 300, 125, 1);
         
     }
