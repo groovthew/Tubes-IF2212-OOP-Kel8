@@ -2,12 +2,15 @@ package Zombie;
 
 import Main.Character;
 import Tanaman.Peashooter;
-import Tanaman.Plant;   
+import Tanaman.Plant;
+import Map.Tile;
 
 public abstract class Zombie extends Character {
     private int walking_speed;
     private boolean isAquatic;
     private boolean is_slowed;
+    private Tile tile;
+    
 
     public Zombie(String name, int health, int attack_damage, int attack_speed){
         super(name, health, attack_damage, attack_speed);
@@ -39,19 +42,13 @@ public abstract class Zombie extends Character {
     public void setWalkingSpeed(int walking_speed){ this.walking_speed = walking_speed;}
 
     // abstract method
-    public void attack(Plant plant){
-        while(plant.getHealth() != 0 && this.getHealth() != 0){
-            int remainingHealth = plant.getHealth();
-            remainingHealth -= this.getAttackDamage();
-            plant.setHealth(remainingHealth);
+    public void attack(){
+        if (tile.getPlants() != null && tile.getZombies().contains(this)) {
+            while(tile.getPlant().getHealth() != 0 && this.getHealth() != 0){
+                int remainingHealth = tile.getPlants().getHealth();
+                remainingHealth -= this.getAttackDamage();
+                tile.getPlants().setHealth(remainingHealth);
+            }
         }
-    }
-    public static void main(String[] args) {
-        NormalZombie zombie1 = new NormalZombie(null);
-        Peashooter plant1 = new Peashooter(null, 0, 0, 0, 0, 0, 0);
-
-        System.out.println(plant1.getHealth());
-        zombie1.attack(plant1);
-        System.out.println(plant1.getHealth());
     }
 }

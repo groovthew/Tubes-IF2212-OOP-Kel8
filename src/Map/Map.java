@@ -10,45 +10,6 @@ import java.util.TimerTask;
 import Tanaman.*;  // Assuming specific plant classes are under this package
 import Zombie.*; // Assuming specific zombie classes are under this package
 
-class Tile {
-    private List<Plant> plants = new ArrayList<>();
-    private List<Zombie> zombies = new ArrayList<>();
-    private boolean isWater;
-    private boolean isSpawnArea;
-
-    public Tile(boolean isWater, boolean isSpawnArea) {
-        this.isWater = isWater;
-        this.isSpawnArea = isSpawnArea;
-    }
-
-    public void addPlant(Plant plant) {
-        if ((isWater && plant.getIsAquatic()) || !isWater && !isSpawnArea) {
-            plants.add(plant);
-            System.out.println("Added " + plant.getName() + " to " + (isWater ? "water" : "land") + " tile.");
-        } else {
-            System.out.println("Cannot place " + plant.getName() + " on this type of tile."); // Nanti dibuat exception
-        }
-    }
-
-    public void addZombie(Zombie zombie) {
-        if (isSpawnArea) {
-            zombies.add(zombie);
-            System.out.println("Zombie spawned on tile.");
-        }
-    }
-
-    public boolean isWater() {
-        return isWater;
-    }
-
-    public List<Zombie> getZombies() {
-        return zombies;
-    }
-    public List<Plant> getPlants(){
-        return plants;
-    }
-}
-
 public class Map {
     private Tile[][] tiles;
     private Random random = new Random();
@@ -86,7 +47,12 @@ public class Map {
         if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 9)) {
             tiles[i][j].addPlant(plant);
         } else {
-            System.out.println("Invalid position for plant placement.");
+            if (!(plant instanceof Lilypad)){
+                throw new IllegalArgumentException("Cannot place plant on this tile.");
+            }
+            else{
+                tiles[i][j].addPlant(plant);
+            }
         }
     }
     public void spawnZombies() {
@@ -145,27 +111,6 @@ public class Map {
         timer.schedule(task, 5000, 5000); // Schedule the task to run every 5 seconds
     }
 
-    public void attack() {
-        for (int i = 0; i < tiles.length; i++) { // iterate over each row
-            List<Plant> plantsInRow = new ArrayList<>();
-            List<Zombie> zombiesInRow = new ArrayList<>();
-    
-            for (int j = 0; j < tiles[i].length; j++) { // iterate over each column in the row
-                plantsInRow.addAll(tiles[i][j].getPlants());
-                zombiesInRow.addAll(tiles[i][j].getZombies());
-            }
-    
-            // If there are both plants and zombies in the row, they attack each other
-            if (!plantsInRow.isEmpty() && !zombiesInRow.isEmpty()) {
-                for (Plant plant : plantsInRow) {
-                    for (Zombie zombie : zombiesInRow) {
-                        plant.attack(zombie); // plant attacks zombie
-                        zombie.attack(plant); // zombie attacks plant
-                    }
-                }
-            }
-        }
-    }
     public void displayMap() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
