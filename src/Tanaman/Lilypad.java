@@ -55,12 +55,12 @@ public class Lilypad extends Plant {
 
         NormalZombie zombie1 = new NormalZombie("Normal Zombie");
 
-        System.out.println("Total Health before attack: " + lilypad.totalHealth());
+        System.out.println("Total Health: " + lilypad.totalHealth());
 
         zombie1.attack(plant1);
         lilypad.decreaseHealth(zombie1.getAttackDamage());
 
-        System.out.println("Total Health after attack: " + lilypad.totalHealth());
+        System.out.println("Total Health: " + lilypad.totalHealth());
     }
 }
 
