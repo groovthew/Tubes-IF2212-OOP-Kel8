@@ -164,7 +164,6 @@ public class Map {
                 for (Plant plant : plantsInRow) {
                     for (Zombie zombie : zombiesInRow) {
                         plant.attack(zombie); 
-                        //zombie.attack(plant); 
                     }
                 }
             }
