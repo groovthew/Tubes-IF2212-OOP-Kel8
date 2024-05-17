@@ -10,7 +10,7 @@ public class Sunflower extends Plant implements ProduceSun{
     private boolean makinSun;
 
     public Sunflower(String name, int health, int attack_damage, int attacks_speed, int cost, int range, int cooldown) {
-        super("Sunflower", 50, 0, 0, 50, 0, 10);
+        super("Sunflower", 50, 0, 0, 50, 0, 10, false);
         Sun sun = new Sun(0);
         this.sunTotal = sun.getTotalSun();
         startProducingSun();

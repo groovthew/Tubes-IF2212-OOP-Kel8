@@ -6,7 +6,7 @@ public class SunShroom extends Plant {
     // private int amount;
 
     public SunShroom(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
-        super("Sun-Shroom", 100, 0, 0, 15, 0, 5);
+        super("Sun-Shroom", 100, 0, 0, 15, 0, 5, false);
     }
 
     // @Override

@@ -13,11 +13,12 @@ public class Plant extends Character{
     private Plant plant;
 
     // Method
-    public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
+    public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown, boolean isAquatic) {
         super(name, health, attack_damage, attack_speed);
         this.cost = cost;
         this.range = range;
         this.cooldown = cooldown;
+        this.isAquatic = isAquatic;
     }
 
     //getter
