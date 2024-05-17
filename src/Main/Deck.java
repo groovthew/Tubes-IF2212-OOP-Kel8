@@ -69,16 +69,16 @@ public class Deck {
     public static void main(String[] args) {
         try {
             Inventory inventory = new Inventory();
-            Plant plant1 = new Plant("Peashooter", 50, 20, 1, 50, 1, 5);
-            Plant plant2 = new Plant("Sunflower", 30, 0, 0, 25, 1, 7);
-            Plant plant3 = new Plant("Walnut", 150, 0, 0, 50, 1, 10);
-            Plant plant4 = new Plant("SnowPea", 100, 25, 4, 175, -1, 10);
-            Plant plant5 = new Plant("Chomper", 1000, 1000, 0, 150, 0, 10);
-            Plant plant6 = new Plant("Squash", 100, 5000, 0, 50, 1, 20);
-            Plant plant7 = new Plant("Jalapeno", 100, 0, 0, 150, 0, 20);
-            Plant plant8 = new Plant("Tall-nut", 2000, 0, 0, 100, 0, 20);
-            Plant plant9 = new Plant("Lilypad", 100, 25, 4, 100, -1, 10);
-            Plant plant10 = new Plant("Sunshroom", 100, 0, 0, 15, 0, 5);
+            Plant plant1 = new Plant("Peashooter", 50, 20, 1, 50, 1, 5, false);
+            Plant plant2 = new Plant("Sunflower", 30, 0, 0, 25, 1, 7, false);
+            Plant plant3 = new Plant("Walnut", 150, 0, 0, 50, 1, 10, false);
+            Plant plant4 = new Plant("SnowPea", 100, 25, 4, 175, -1, 10, false);
+            Plant plant5 = new Plant("Chomper", 1000, 1000, 0, 150, 0, 10, false);
+            Plant plant6 = new Plant("Squash", 100, 5000, 0, 50, 1, 20, false);
+            Plant plant7 = new Plant("Jalapeno", 100, 0, 0, 150, 0, 20, false);
+            Plant plant8 = new Plant("Tall-nut", 2000, 0, 0, 100, 0, 20, false);
+            Plant plant9 = new Plant("Lilypad", 100, 25, 4, 100, -1, 10, true);
+            Plant plant10 = new Plant("Sunshroom", 100, 0, 0, 15, 0, 5, false);
 
             inventory.addPlantToInventory(plant1);
             inventory.addPlantToInventory(plant2);
