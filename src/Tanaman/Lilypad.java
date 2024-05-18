@@ -6,7 +6,7 @@ public class Lilypad extends Plant {
     Plant plant;
     Plant plantOnTop;
     public Lilypad(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
-        super("Lilypad", 100, 0, 0, 25, 0, 10);
+        super("Lilypad", 100, 0, 0, 25, 0, 10, true);
     }
 
     public Plant getPlantOnTop() {
@@ -42,25 +42,6 @@ public class Lilypad extends Plant {
         } else {
             this.setHealth(lilypadHealth);
         }
-    }
-
-    public static void main (String[] args) {
-        // Lilypad lilypad = new Lilypad("Lilypad", 100, 0, 0, 25, 0, 10);
-        // System.out.println("Cost of plant:  " + lilypad.getCost());
-        // System.out.println("Name of plant: " + lilypad.getName());
-        // System.out.println("iS AQUATIC?" + lilypad.getIsAquatic());
-        Peashooter plant1 = new Peashooter("Peashooter", 50, 20, 1, 50, 1, 5);
-        Lilypad lilypad = new Lilypad("Lilypad", 100, 0, 0, 25, 0, 10);
-        lilypad.setPlantOnTop(plant1);
-
-        NormalZombie zombie1 = new NormalZombie();
-
-        System.out.println("Total Health: " + lilypad.totalHealth());
-
-        zombie1.attack(plant1);
-        lilypad.decreaseHealth(zombie1.getAttackDamage());
-
-        System.out.println("Total Health: " + lilypad.totalHealth());
     }
 }
 
