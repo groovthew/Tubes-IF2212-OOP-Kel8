@@ -169,6 +169,7 @@ public class Map {
     // }
 
     public void displayMap() {
+        System.out.println();
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 String tileContent = "   ";  

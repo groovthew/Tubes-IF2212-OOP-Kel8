@@ -10,6 +10,7 @@ import Tanaman.*;
 import Zombie.*;
 import Main.Deck;
 import Main.Inventory;
+import Main.Help;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
@@ -39,7 +40,7 @@ public class Main {
                     break;
                 case "help":
                     // Implement help functionality
-                    System.out.println("Displaying Help...");
+                    Help.displayHelp();
                     break;
                 case "exit":
                     System.out.println("Exiting game. Goodbye!");
