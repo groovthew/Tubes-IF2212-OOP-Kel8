@@ -1,16 +1,15 @@
 package Map;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 import Exceptions.CantBePlantedException;
-import Map.Map;
 import Tanaman.*;
 import Zombie.*;
 import Main.Deck;
 import Main.Inventory;
 import Main.Help;
+import java.util.Scanner;
 
 public class Main {
     static String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
@@ -42,7 +41,7 @@ public class Main {
                 case "deck":
                     manageDeck();
                     if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
-                        System.out.println("Deck telah terisi penuh:");
+                        System.out.println(red + "Deck telah terisi penuh:" + reset);
                     }
                     break;
                 case "help":
@@ -54,7 +53,7 @@ public class Main {
                     scanner.close();
                     return;
                 default:
-                    System.out.println("Invalid choice. Please choose again.");
+                    System.out.println(red + "Invalid choice. Please choose again." + reset);
             }
         }
     }
@@ -93,7 +92,7 @@ public class Main {
         System.out.println("|             DECK              |              HELP            |");
         System.out.println("|             EXIT              |                              |" + reset);
         System.out.println(green + "================================================================" + reset);
-        System.out.print("Enter your choice: ");
+        System.out.print(blue + "Enter your choice: " + reset);
     }
 
     public static void manageInventory() {
@@ -214,7 +213,7 @@ public class Main {
 
         zombieAdder.start();  // Start the zombie adding thread
 
-        System.out.println("ENTER COMMAND");
+        System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println(green + "==============================================" + reset);
             System.out.println(yellow + "|   PLAY     |     DISPLAY    |     QUIT     |" + reset);
             System.out.println( green+ "==============================================" + reset);
@@ -238,6 +237,10 @@ public class Main {
 
                 if (command.equalsIgnoreCase("display")) {
                     gameMap.displayMap();
+                    System.out.println(green + "==============================================" + reset);
+                    System.out.println(yellow + "|                    BACK                    |" + reset);
+                    System.out.println( green+ "==============================================" + reset);
+                    
                 }
 
                 if (command.equalsIgnoreCase("quit")){

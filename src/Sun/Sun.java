@@ -6,25 +6,26 @@ public class Sun implements ProduceSun{
     private int totalSun;
     private boolean makingSun;
     private Thread sunProductionThread;
+    private SunListener listener;
     
     public Sun(int totalSun) {
         this.totalSun = totalSun;
-        startProducingSun();
     }
 
+    public void setSunListener(SunListener listener) {
+        this.listener = listener;
+    }
 
-    public int getTotalSun() {
+    @Override
+    public int getAmount() {
         return totalSun;
     }
 
     public void increaseSun() {
         totalSun += 25;
-    }
-
-
-    @Override
-    public int getAmount() {
-        return totalSun;
+        if (listener != null) {
+            listener.onSunProduced();
+        }
     }
 
     @Override
@@ -51,22 +52,5 @@ public class Sun implements ProduceSun{
         makingSun = false;
         sunProductionThread.interrupt();
     }
-
-    public static void main(String[] args) {
-        Sun sun = new Sun(0);
-        sun.startProducingSun(); 
-        
-        while (true) {
-            // Tunggu beberapa saat agar produksi matahari dimulai sebelum mencetak total matahari
-            try {
-                Thread.sleep(6000); 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            
-            // Cetak jumlah total matahari
-            System.out.println("Sun: " + sun.getAmount());
-        }
-    }   
 }
 

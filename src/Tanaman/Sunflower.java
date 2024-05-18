@@ -4,58 +4,55 @@ import java.util.Random;
 
 import Sun.ProduceSun;
 import Sun.Sun;
+import Sun.SunListener;
 
 public class Sunflower extends Plant implements ProduceSun{
     private int sunTotal;
-    private boolean makinSun;
+    private boolean makingSun;
+    private SunListener listener;
 
     public Sunflower(String name, int health, int attack_damage, int attacks_speed, int cost, int range, int cooldown) {
         super("Sunflower", 50, 0, 0, 50, 0, 10, false);
-        Sun sun = new Sun(0);
-        this.sunTotal = sun.getTotalSun();
-        startProducingSun();
+        this.sunTotal = 0;
+    }
+
+    public void setSunListener(SunListener listener) {
+        this.listener = listener;
     }
 
     public void increaseSun(){
         sunTotal += 25;
-        makinSun = true;
+        makingSun = true;
+        if (listener != null) {
+            listener.onSunProduced();
+        }
     }
 
+    @Override
     public int getAmount(){
-        return this.sunTotal;
+        return sunTotal;
     }
 
+    @Override
     public void startProducingSun(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(10000); // Konversi interval detik ke milidetik
-                        synchronized (this) {
-                            increaseSun(); // Menambahkan nilai sebesar 25
-                            System.out.println("Sun : " + getAmount());
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        Thread thread = new Thread(() -> {
+            Random random = new Random();
+            while (true) {
+                try {
+                    Thread.sleep((random.nextInt(6) + 5) * 1000);
+                    synchronized (this) {
+                        increaseSun();
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
         thread.start();
     }
 
+    @Override
     public void stopProducingSun(){
-        makinSun = false;
-    }
-
-    // public boolean isIncrease(){
-    //     return
-    // }
-
-    public static void main(String[] args) {
-        Sunflower sunflower1 = new Sunflower(null, 0, 0, 0, 0, 0, 0);
-        Sun sun = new Sun(0);
-        
+        makingSun = false;
     }
 }
