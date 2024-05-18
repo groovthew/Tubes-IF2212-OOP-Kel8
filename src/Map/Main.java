@@ -50,7 +50,7 @@ public class Main {
                     Help.displayHelp();
                     break;
                 case "exit":
-                    System.out.println("Exiting game. Goodbye!");
+                    System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
                     scanner.close();
                     return;
                 default:
@@ -88,20 +88,20 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.println(green + "========================GAME MENU=========================" + reset);
-        System.out.println(yellow + "|           START            |          INVENTORY        |");
-        System.out.println("|           DECK             |            HELP           |");
-        System.out.println("|           EXIT             |                           |" + reset);
-        System.out.println(green + "==========================================================" + reset);
+        System.out.println(green + "===========================GAME MENU============================" + reset);
+        System.out.println(yellow + "|             START             |           INVENTORY          |");
+        System.out.println("|             DECK              |              HELP            |");
+        System.out.println("|             EXIT              |                              |" + reset);
+        System.out.println(green + "================================================================" + reset);
         System.out.print("Enter your choice: ");
     }
 
     public static void manageInventory() {
         while (true) {
-            System.out.println(green + "======================INVENTORY MENU======================" + reset);
-            System.out.println(yellow + "|      DISPLAY INVENTORY     |      SWAP INVENTORY       |");
-            System.out.println("|            BACK            |                           |" + reset);
-            System.out.println(green + "==========================================================" + reset); 
+            System.out.println(green + "=========================INVENTORY MENU=========================" + reset);
+            System.out.println(yellow + "|        DISPLAY INVENTORY      |        SWAP INVENTORY        |");
+            System.out.println("|              BACK             |                              |" + reset);
+            System.out.println(green + "================================================================" + reset); 
 
             System.out.print("Enter your choice: ");
             String inventoryChoice = scanner.nextLine();
@@ -128,11 +128,11 @@ public class Main {
 
     public static void manageDeck() {
         while (true) {
-            System.out.println(green + "========================DECK MENU=========================" + reset);
-            System.out.println(yellow + "|          SWAP DECK         |        REMOVE DECK        |");
-            System.out.println("|          ADD PLANT         |        DISPLAY DECK       |"); 
-            System.out.println("|            BACK            |                           |" + reset);
-            System.out.println(green + "==========================================================" + reset);
+            System.out.println(green + "===========================DECK MENU============================" + reset);
+            System.out.println(yellow + "|            SWAP DECK          |          REMOVE DECK         |");
+            System.out.println("|            ADD PLANT          |          DISPLAY DECK        |"); 
+            System.out.println("|              BACK             |                              |" + reset);
+            System.out.println(green + "================================================================" + reset);
             System.out.print("Pilih menu yang diinginkan: ");
             String deckChoice = scanner.nextLine();
     
@@ -215,9 +215,9 @@ public class Main {
         zombieAdder.start();  // Start the zombie adding thread
 
         System.out.println("ENTER COMMAND");
-            System.out.println("==============================================");
-            System.out.println("|   PLAY     |     DISPLAY    |     QUIT     |");
-            System.out.println("==============================================");
+            System.out.println(green + "==============================================" + reset);
+            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     QUIT     |" + reset);
+            System.out.println( green+ "==============================================" + reset);
 
         while (true) {
             long startTime = System.currentTimeMillis();
@@ -234,6 +234,15 @@ public class Main {
                 if (command.equalsIgnoreCase("play")) {
                     Map map = new Map(6, 11);
                     map.initiateMap();
+                }
+
+                if (command.equalsIgnoreCase("display")) {
+                    gameMap.displayMap();
+                }
+
+                if (command.equalsIgnoreCase("quit")){
+                    zombieAdder.interrupt();
+                    break;
                 }
             }
         }
