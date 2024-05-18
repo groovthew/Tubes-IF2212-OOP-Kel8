@@ -212,11 +212,12 @@ public class Main {
 
         zombieAdder.start();  // Start the zombie adding thread
 
+        System.out.println("ENTER COMMAND");
+            System.out.println("==============================================");
+            System.out.println("|   PLAY     |     DISPLAY    |     QUIT     |");
+            System.out.println("==============================================");
+
         while (true) {
-            System.out.println("You have 10 seconds to enter 'addPlant' command (addPlant, display, quit):");
-            System.out.println("==============================================");
-            System.out.println("|   ADDPLANT    |     DISPLAY   |    QUIT     |");
-            System.out.println("==============================================");
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
                 try {
