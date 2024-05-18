@@ -22,6 +22,7 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Deck deck = new Deck();
     private static Inventory inventory = new Inventory();
+    
     public static void main(String[] args) {
         Menu printer = new Menu();
         printer.openingAct();
