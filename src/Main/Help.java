@@ -17,7 +17,7 @@ public class Help {
         System.out.println("==================================================");
         System.out.println();
         System.out.println("============== Deskripsi Permainan ===============");
-        System.out.println("Plants vs. Zombies adalah permainan strategi      ");
+        System.out.println("Michael vs Lalapan adalah permainan strategi      ");
         System.out.println("di mana pemain harus melindungi rumah mereka      ");
         System.out.println("dari serangan zombie dengan menanam berbagai      ");
         System.out.println("jenis tanaman.                                    ");
@@ -36,9 +36,9 @@ public class Help {
         System.out.println("   - addPlant [jenisTanaman] [koordinatX] [koordinatY]");
         System.out.println("     Menambah tanaman di koordinat yang ditentukan.");
         System.out.println("   - displayMap - Menampilkan peta permainan.     ");
-        System.out.println("2. inventory - Menampilkan dan mengelola inventaris:");
-        System.out.println("   - displayInventory - Menampilkan isi inventaris.");
-        System.out.println("   - swapInventory - Menukar item di inventaris.  ");
+        System.out.println("2. inventory - Menampilkan dan mengelola inventory:");
+        System.out.println("   - displayInventory - Menampilkan isi inventory.");
+        System.out.println("   - swapInventory - Menukar item di inventory.  ");
         System.out.println("3. deck - Mengelola deck tanaman Anda:            ");
         System.out.println("   - swapDeck - Menukar deck.                     ");
         System.out.println("   - addPlant - Menambah tanaman ke deck.         ");
