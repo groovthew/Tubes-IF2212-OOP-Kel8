@@ -46,7 +46,7 @@ public class Map {
                 if (!tiles[i][j].getZombies().isEmpty()) {
                     Zombie zombie = tiles[i][j].getZombies().get(0);
                     if (j == 0) {
-                        System.out.println("Zombie has reached the base!");
+                        System.out.println("NT, ZOMBIE SUDAH SAMPAI BASE!");
                         continueSpawning = false;
                         return;
                     }
@@ -343,10 +343,5 @@ public class Map {
         map.spawnZombies();
         map.moveZombies();
         map.displayMap();
-    }
-
-    public static void main(String[] args) {
-        Map map = new Map(6, 11);
-        map.initiateMap();
     }
 }
