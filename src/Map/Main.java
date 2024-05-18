@@ -219,10 +219,6 @@ public class Main {
             System.out.println( green+ "==============================================" + reset);
 
         while (true) {
-            System.out.println("You have 10 seconds to enter 'addPlant' command (addPlant, display, quit):");
-            System.out.println(green + "==========================================================" + reset);
-            System.out.println(yellow + "|    ADDPLANT     |      DISPLAY     |       QUIT        |" + reset);
-            System.out.println(green + "==========================================================" + reset);
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
                 try {
