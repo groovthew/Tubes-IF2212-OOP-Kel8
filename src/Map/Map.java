@@ -15,7 +15,7 @@ public class Map {
     private Random random = new Random();
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
-    private int x,y;
+    //private int x,y;
 
     public Map(int x, int y) {
         tiles = new Tile[x][y];
@@ -23,19 +23,6 @@ public class Map {
         initializeZombieTypes();
     }
 
-    private void initializeZombieTypes() {
-        zombieTypes = new ArrayList<>();
-        zombieTypes.add(BucketHead.class);
-        zombieTypes.add(ConeHeadZombie.class);
-        zombieTypes.add(DolphinRiderZombie.class);
-        zombieTypes.add(DuckyTubeZombie.class);
-        zombieTypes.add(FootballZombie.class);
-        zombieTypes.add(NewsPaperZombie.class);
-        zombieTypes.add(NormalZombie.class);
-        zombieTypes.add(PoleVaultingZombie.class);
-        zombieTypes.add(ScreenDoorZombie.class);
-        zombieTypes.add(YetiZombie.class);
-    }
     
     private void setupTiles() {
         for (int i = 0; i < tiles.length; i++) {
@@ -48,7 +35,7 @@ public class Map {
     }
 
     public void addPlant(Plant plant, int i, int j) {
-        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 0 && j <= 10)) {
+        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 10)) {
             tiles[i][j].addPlant(plant);
         }
         else if ((i == 2 || i == 3) && plant instanceof Lilypad){
@@ -87,7 +74,19 @@ public class Map {
     
         spawnTimer.schedule(spawnTask, 0, 5000);
     }
-    
+    private void initializeZombieTypes() {
+        zombieTypes = new ArrayList<>();
+        zombieTypes.add(BucketHead.class);
+        zombieTypes.add(ConeHeadZombie.class);
+        zombieTypes.add(DolphinRiderZombie.class);
+        zombieTypes.add(DuckyTubeZombie.class);
+        zombieTypes.add(FootballZombie.class);
+        zombieTypes.add(NewsPaperZombie.class);
+        zombieTypes.add(NormalZombie.class);
+        zombieTypes.add(PoleVaultingZombie.class);
+        zombieTypes.add(ScreenDoorZombie.class);
+        zombieTypes.add(YetiZombie.class);
+    }
     
     public Zombie createZombie(String type) {
         switch (type) {
@@ -236,15 +235,16 @@ public class Map {
     }
     public static void main(String[] args) {
         Map map = new Map(6,11);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 0, 0);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 1, 0);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 4, 0);
-        map.addPlant(new Peashooter(null, 0, 0, 0, 0, 0, 0), 5, 0);
-        map.addPlant(new Lilypad(null, 0, 0, 0, 0, 0, 0), 2, 0);
-        map.addPlant(new Lilypad(null, 0, 0, 0, 0, 0, 0), 3, 0);
+        map.addPlant(new Peashooter(null, 0, 100, 25, 0, 0, 0), 0, 0);
+        map.addPlant(new Peashooter(null, 0, 100, 25, 0, 0, 0), 1, 0);
+        map.addPlant(new Peashooter(null, 0, 100, 25, 0, 0, 0), 4, 0);
+        map.addPlant(new Peashooter(null, 0, 100, 25, 0, 0, 0), 5, 0);
+        map.addPlant(new Lilypad(null, 0, 100, 25, 0, 0, 0), 2, 0);
+        map.addPlant(new Lilypad(null, 0, 100, 25, 0, 0, 0), 3, 0);
         map.spawnZombies();
         map.moveZombies();
         map.displayMap();
+        map.attack();
         
     }
 }
