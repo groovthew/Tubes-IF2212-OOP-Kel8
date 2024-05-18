@@ -2,7 +2,7 @@ package Zombie;
 
 import Map.Tile;
 import Zombie.PoleVaultingZombie;
-import Zombie.Zombie;
+
 
 public class PoleVaultingZombie extends Zombie {
     private boolean hasJumped = false;
