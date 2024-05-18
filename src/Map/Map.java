@@ -46,16 +46,15 @@ public class Map {
                 if (!tiles[i][j].getZombies().isEmpty()) {
                     Zombie zombie = tiles[i][j].getZombies().get(0);
                     if (j == 0) {
-                        System.out.println("NT, ZOMBIE SUDAH SAMPAI BASE!");
                         continueSpawning = false;
                         return;
                     }
                     if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
                         Plant plant = tiles[i][j - 1].getPlants().get(0);
                         plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
-                        System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
                         if (plant.getHealth() <= 0) {
                             tiles[i][j - 1].getPlants().clear();
+                            System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
                             System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
                         }
                     }
@@ -187,7 +186,7 @@ public class Map {
                 }
 
                 if (zombieReachedBase) {
-                    System.out.println("Zombie has reached the base!");
+                    System.out.println("NT ZOMBIE DAH SAMPE BASE!");
                     continueSpawning = false;
                     timer.cancel();
                 }
