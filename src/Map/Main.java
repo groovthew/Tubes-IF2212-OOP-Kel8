@@ -29,11 +29,9 @@ public class Main {
                     startGame(scanner);
                     break;
                 case "inventory":
-                    // Implement inventory functionality
                     manageInventory();
                     break;
                 case "deck":
-                    // Implement deck functionality
                     manageDeck();
                     if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
                         System.out.println("Deck telah terisi penuh:");

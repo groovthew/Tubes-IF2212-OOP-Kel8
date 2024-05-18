@@ -149,24 +149,24 @@ public class Map {
         timer.schedule(task, 5000, 5000);
     }
     
-    public void attack() {
-        for (int i = 0; i < tiles.length; i++) { 
-            List<Plant> plantsInRow = new ArrayList<>();
-            List<Zombie> zombiesInRow = new ArrayList<>();
+    // public void attack() {
+    //     for (int i = 0; i < tiles.length; i++) { 
+    //         List<Plant> plantsInRow = new ArrayList<>();
+    //         List<Zombie> zombiesInRow = new ArrayList<>();
     
-            for (int j = 0; j < tiles[i].length; j++) { 
-                plantsInRow.addAll(tiles[i][j].getPlants());
-                zombiesInRow.addAll(tiles[i][j].getZombies());
-            }
-            if (!plantsInRow.isEmpty() && !zombiesInRow.isEmpty()) {
-                for (Plant plant : plantsInRow) {
-                    for (Zombie zombie : zombiesInRow) {
-                        plant.attack(zombie); 
-                    }
-                }
-            }
-        }
-    }
+    //         for (int j = 0; j < tiles[i].length; j++) { 
+    //             plantsInRow.addAll(tiles[i][j].getPlants());
+    //             zombiesInRow.addAll(tiles[i][j].getZombies());
+    //         }
+    //         if (!plantsInRow.isEmpty() && !zombiesInRow.isEmpty()) {
+    //             for (Plant plant : plantsInRow) {
+    //                 for (Zombie zombie : zombiesInRow) {
+    //                     plant.attack(zombie); 
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     public void displayMap() {
         for (int i = 0; i < tiles.length; i++) {
@@ -182,6 +182,38 @@ public class Map {
                 System.out.print(String.format("[%3s]", tileContent)); 
             }
             System.out.println();
+        }
+    }
+
+    private String getColorCode(String symbol) {
+        switch(symbol) {
+            case "PS":
+            case "SF":
+            case "CH":
+            case "SP":
+            case "SQ":
+            case "SS":
+            case "TN":
+            case "JP":
+            case "LL":
+            case "WN":
+                // Green color for plants
+                return "\u001B[32m"; // Green color ANSI escape code
+            case "B":
+            case "C":
+            case "D":
+            case "DT":
+            case "F":
+            case "N":
+            case "Z":
+            case "PV":
+            case "S":
+            case "Y":
+                // Red color for zombies
+                return "\u001B[31m"; // Red color ANSI escape code
+            default:
+                // Default color
+                return "";
         }
     }
     
@@ -244,7 +276,7 @@ public class Map {
         map.spawnZombies();
         map.moveZombies();
         map.displayMap();
-        map.attack();
+        // map.attack();
         
     }
 }
