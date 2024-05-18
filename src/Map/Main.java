@@ -49,7 +49,7 @@ public class Main {
                     Help.displayHelp();
                     break;
                 case "exit":
-                    System.out.println("Exiting game. Goodbye!");
+                    System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
                     scanner.close();
                     return;
                 default:
@@ -87,20 +87,20 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.println(green + "========================GAME MENU=========================" + reset);
-        System.out.println(yellow + "|           START            |          INVENTORY        |");
-        System.out.println("|           DECK             |            HELP           |");
-        System.out.println("|           EXIT             |                           |" + reset);
-        System.out.println(green + "==========================================================" + reset);
+        System.out.println(green + "===========================GAME MENU============================" + reset);
+        System.out.println(yellow + "|             START             |           INVENTORY          |");
+        System.out.println("|             DECK              |              HELP            |");
+        System.out.println("|             EXIT              |                              |" + reset);
+        System.out.println(green + "================================================================" + reset);
         System.out.print("Enter your choice: ");
     }
 
     public static void manageInventory() {
         while (true) {
-            System.out.println(green + "======================INVENTORY MENU======================" + reset);
-            System.out.println(yellow + "|      DISPLAY INVENTORY     |      SWAP INVENTORY       |");
-            System.out.println("|            BACK            |                           |" + reset);
-            System.out.println(green + "==========================================================" + reset); 
+            System.out.println(green + "=========================INVENTORY MENU=========================" + reset);
+            System.out.println(yellow + "|        DISPLAY INVENTORY      |        SWAP INVENTORY        |");
+            System.out.println("|              BACK             |                              |" + reset);
+            System.out.println(green + "================================================================" + reset); 
 
             System.out.print("Enter your choice: ");
             String inventoryChoice = scanner.nextLine();
@@ -127,11 +127,11 @@ public class Main {
 
     public static void manageDeck() {
         while (true) {
-            System.out.println(green + "========================DECK MENU=========================" + reset);
-            System.out.println(yellow + "|          SWAP DECK         |        REMOVE DECK        |");
-            System.out.println("|          ADD PLANT         |        DISPLAY DECK       |"); 
-            System.out.println("|            BACK            |                           |" + reset);
-            System.out.println(green + "==========================================================" + reset);
+            System.out.println(green + "===========================DECK MENU============================" + reset);
+            System.out.println(yellow + "|            SWAP DECK          |          REMOVE DECK         |");
+            System.out.println("|            ADD PLANT          |          DISPLAY DECK        |"); 
+            System.out.println("|              BACK             |                              |" + reset);
+            System.out.println(green + "================================================================" + reset);
             System.out.print("Pilih menu yang diinginkan: ");
             String deckChoice = scanner.nextLine();
     
@@ -214,9 +214,9 @@ public class Main {
 
         while (true) {
             System.out.println("You have 10 seconds to enter 'addPlant' command (addPlant, display, quit):");
-            System.out.println(green + "==========================================================" + reset);
-            System.out.println(yellow + "|    ADDPLANT     |      DISPLAY     |       QUIT        |" + reset);
-            System.out.println(green + "==========================================================" + reset);
+            System.out.println(green + "================================================================" + reset);
+            System.out.println(yellow + "|     ADDPLANT      |       DISPLAY      |        QUIT         |" + reset);
+            System.out.println(green + "================================================================" + reset);
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
                 try {
