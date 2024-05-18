@@ -18,7 +18,6 @@ public abstract class Zombie extends Character {
         this.walking_speed = 3;
         this.isAquatic = false;
         this.is_slowed = false;
-        this.map.setTiles(new Tile[x][y]);
     }
 
     public Zombie(String name, int health, int attack_damage, int attack_speed, boolean isAquatic){
@@ -26,7 +25,6 @@ public abstract class Zombie extends Character {
         this.isAquatic = isAquatic;
         this.walking_speed = 3;
         this.is_slowed = false;
-        this.map.setTiles(new Tile[x][y]);
     }
 
     public Zombie(String name, int health, int attack_damage, int attack_speed, int walking_speed){
@@ -34,7 +32,6 @@ public abstract class Zombie extends Character {
         this.walking_speed = walking_speed;
         this.isAquatic = false;
         this.is_slowed = false;
-        this.map.setTiles(new Tile[x][y]);
     }
 
     //getter

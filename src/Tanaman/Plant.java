@@ -21,7 +21,6 @@ public class Plant extends Character{
         this.range = range;
         this.cooldown = cooldown;
         this.isAquatic = isAquatic;
-        this.map.setTiles(new Tile[x][y]);
     }
 
     //getter
