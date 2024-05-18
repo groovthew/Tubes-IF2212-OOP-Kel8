@@ -124,6 +124,7 @@ public class Deck {
 
             System.out.println("Deck setelah swap:");
             deck.displayDeck();
+            scanner.close();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
