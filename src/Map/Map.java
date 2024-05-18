@@ -15,6 +15,9 @@ public class Map {
     private Random random = new Random();
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
+    static String green = "\033[32m";  // Kode ANSI untuk warna hijau
+    static String blue = "\033[34m";   // Kode ANSI untuk warna biru
+    static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
 
     public Map(int x, int y) {
         tiles = new Tile[x][y];
@@ -163,7 +166,17 @@ public class Map {
                     Plant firstPlant = tiles[i][j].getPlants().get(0);
                     tileContent = getPlantSymbol(firstPlant);
                 }
-                System.out.print(String.format("[%3s]", tileContent));
+    
+                String color;
+                if (i == 0 || i == 1 || i == 4 || i == 5) {
+                    color = green;
+                } else if (i == 2 || i == 3) {
+                    color = blue;
+                } else {
+                    color = reset;
+                }
+    
+                System.out.print(color + String.format("[%3s]", tileContent) + reset);
             }
             System.out.println();
         }

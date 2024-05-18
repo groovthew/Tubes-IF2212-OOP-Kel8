@@ -213,9 +213,9 @@ public class Main {
         zombieAdder.start();  // Start the zombie adding thread
 
         System.out.println("ENTER COMMAND");
-            System.out.println("==============================================");
-            System.out.println("|   PLAY     |     DISPLAY    |     QUIT     |");
-            System.out.println("==============================================");
+            System.out.println(green + "==============================================" + reset);
+            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     QUIT     |" + reset);
+            System.out.println( green+ "==============================================" + reset);
 
         while (true) {
             long startTime = System.currentTimeMillis();
@@ -232,6 +232,15 @@ public class Main {
                 if (command.equalsIgnoreCase("play")) {
                     Map map = new Map(6, 11);
                     map.initiateMap();
+                }
+
+                if (command.equalsIgnoreCase("display")) {
+                    gameMap.displayMap();
+                }
+
+                if (command.equalsIgnoreCase("quit")){
+                    zombieAdder.interrupt();
+                    break;
                 }
             }
         }
