@@ -24,6 +24,10 @@ public class DolphinRiderZombie extends Zombie {
         }
     }
 
+    public void attack(){
+        
+    }
+
     public static void main(String[] args) {
         DolphinRiderZombie drz = new DolphinRiderZombie();
         drz.jump();

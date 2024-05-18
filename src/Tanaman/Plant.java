@@ -2,6 +2,7 @@ package Tanaman;
 
 import Main.Character;
 import Zombie.Zombie;
+import Map.*;
 
 public class Plant extends Character{
 
@@ -10,7 +11,8 @@ public class Plant extends Character{
     private int range;
     private int cooldown;
     private boolean isAquatic = false;
-    private Plant plant;
+    private Map map;
+    private int x,y;
 
     // Method
     public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown, boolean isAquatic) {
@@ -19,16 +21,16 @@ public class Plant extends Character{
         this.range = range;
         this.cooldown = cooldown;
         this.isAquatic = isAquatic;
+        this.map.setTiles(new Tile[x][y]);
     }
 
     //getter
     public int getCost(){ return cost;}
     public int getRange(){ return range;}
     public int getCooldown(){ return cooldown;}
-    public Plant getPlant() {return plant;}
 
-    public void setHealth(Plant plant) {
-        this.plant = plant;
+    public void setPlantHealth(int health) {
+        setHealth(health);
     }
 
     public boolean getIsAquatic() {

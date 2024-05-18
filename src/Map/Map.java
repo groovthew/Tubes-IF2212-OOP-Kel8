@@ -25,6 +25,10 @@ public class Map {
         initializeZombieTypes();
     }
 
+    public void setTiles(Tile[][] tiles) {
+        this.tiles = tiles;
+    }
+
     private void setupTiles() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
