@@ -206,11 +206,12 @@ public class Main {
 
         zombieAdder.start();  // Start the zombie adding thread
 
+        System.out.println("GAME STARTED!");
+            System.out.println("==============================================");
+            System.out.println("|   PLAY    |     DISPLAY   |    QUIT     |");
+            System.out.println("==============================================");
+
         while (true) {
-            System.out.println("You have 10 seconds to enter 'addPlant' command (addPlant, display, quit):");
-            System.out.println("==============================================");
-            System.out.println("|   ADDPLANT    |     DISPLAY   |    QUIT     |");
-            System.out.println("==============================================");
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
                 try {
@@ -222,44 +223,9 @@ public class Main {
             if (scanner.hasNextLine()) {
                 String command = scanner.nextLine();
 
-                if (command.equalsIgnoreCase("addPlant")) {
-                    System.out.println("Enter plant name and cost:");
-                    String name = scanner.next();
-                    int cost = scanner.nextInt();
-                    System.out.println("Enter coordinates (x y):");
-                    int x = scanner.nextInt();
-                    int y = scanner.nextInt();
-                    if (name.equalsIgnoreCase("Sunflower")) {
-                        gameMap.addPlant(new Sunflower(name, 50, 0, 0, 50, 0, 10), x, y);
-                    } else if (name.equalsIgnoreCase("Peashooter")) {
-                        gameMap.addPlant(new Peashooter(name, 50, 0, 0, 50, 0, 10), x, y);
-                    } else if (name.equalsIgnoreCase("Wallnut")) {
-                        gameMap.addPlant(new WallNut(name, 50, 0, 0, 50, 0), x, y);
-                    } else if (name.equalsIgnoreCase("Snowpea")) {
-                        gameMap.addPlant(new SnowPea(name, 50, 0, 0, 50, 0, 10), x, y);
-                    } else if (name.equalsIgnoreCase("Chomper")) {
-                        gameMap.addPlant(new Chomper(name, y, y, y, cost, x, y), x, y);
-                    } else if (name.equalsIgnoreCase("Jalapeno")) {
-                        gameMap.addPlant(new Jalapeno(name, y, y, y, cost, x, y), x, y);
-                    } else if (name.equalsIgnoreCase("Lilypad")) {
-                        gameMap.addPlant(new Lilypad(name, y, y, y, cost, x, y), y, y);
-                    } else if (name.equalsIgnoreCase("Squash")) {
-                        gameMap.addPlant(new Squash(name, y, y, y, cost, x, y), y, y);
-                    } else if (name.equalsIgnoreCase("Sunshroom")) {
-                        gameMap.addPlant(new SunShroom(name, y, y, y, cost, x, y), y, y);
-                    } else if (name.equalsIgnoreCase("Tallnut")) {
-                        gameMap.addPlant(new TallNut(name, y, y, y, cost, x, y), y, y);
-                    } else {
-                        System.out.println("Invalid plant name.");
-                        continue;
-                    }
-                    gameMap.displayMap(); // Display the updated game map
-                } else if (command.equalsIgnoreCase("display")) {
-                    gameMap.displayMap(); // Display the current game map
-                } else if (command.equalsIgnoreCase("quit")) {
-                    // Interrupt the zombie adding thread and exit the game loop
-                    zombieAdder.interrupt();
-                    break;
+                if (command.equalsIgnoreCase("play")) {
+                    Map map = new Map(6, 11);
+                    map.initiateMap();
                 }
             }
         }

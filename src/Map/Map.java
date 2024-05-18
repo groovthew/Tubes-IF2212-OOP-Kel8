@@ -150,25 +150,6 @@ public class Map {
 
         timer.schedule(task, 5000, 5000);
     }
-    
-    public void attack() {
-        for (int i = 0; i < tiles.length; i++) { 
-            List<Plant> plantsInRow = new ArrayList<>();
-            List<Zombie> zombiesInRow = new ArrayList<>();
-    
-            for (int j = 0; j < tiles[i].length; j++) { 
-                plantsInRow.addAll(tiles[i][j].getPlants());
-                zombiesInRow.addAll(tiles[i][j].getZombies());
-            }
-            if (!plantsInRow.isEmpty() && !zombiesInRow.isEmpty()) {
-                for (Plant plant : plantsInRow) {
-                    for (Zombie zombie : zombiesInRow) {
-                        plant.attack(zombie); 
-                    }
-                }
-            }
-        }
-    }
 
     public void displayMap() {
         System.out.println();
@@ -238,7 +219,7 @@ public class Map {
         return null;
     }
 
-    public static void main(String[] args) {
+    public void initiateMap(){
         Map map = new Map(6, 11);
 
         Thread inputThread = new Thread(() -> {
@@ -295,7 +276,10 @@ public class Map {
         map.spawnZombies();
         map.moveZombies();
         map.displayMap();
-        map.attack();
-        
+    }
+
+    public static void main(String[] args) {
+        Map map = new Map(6, 11);
+        map.initiateMap();
     }
 }
