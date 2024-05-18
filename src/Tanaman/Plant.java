@@ -35,11 +35,4 @@ public class Plant extends Character{
     public boolean getIsAquatic() {
         return isAquatic;
     }
-    public void attack(Zombie zombie){
-        while(zombie.getHealth() != 0 && this.getHealth() != 0){
-            int remainingHealth = zombie.getHealth();
-            remainingHealth -= this.getAttackDamage();
-            zombie.setHealth(remainingHealth);
-        }
-    }
 }

@@ -42,5 +42,11 @@ public abstract class Zombie extends Character {
     //setter
     public void setWalkingSpeed(int walking_speed){ this.walking_speed = walking_speed;}
 
-    public abstract void attack();
+    // public void attack(){
+    //     while(this.getHealth() != 0 ){
+    //         int remainingHealth = plant.getHealth();
+    //         remainingHealth -= this.getAttackDamage();
+    //         plant.setHealth(remainingHealth);
+    //     }
+    // }
 }

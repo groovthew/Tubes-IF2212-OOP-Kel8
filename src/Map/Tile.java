@@ -28,13 +28,13 @@ public class Tile {
     public void addZombie(Zombie zombie) {
         if (isSpawnArea) {
             zombies.add(zombie);
-            System.out.println("Zombie spawned on tile.");
+            // System.out.println("Zombie spawned on tile.");
         }
     }
 
     public void removeZombie(Zombie zombie) {
         zombies.remove(zombie);
-        System.out.println("Zombie removed from tile.");
+        // System.out.println("Zombie removed from tile.");
     }
 
     public boolean isWater() {
@@ -50,6 +50,6 @@ public class Tile {
 
     public void removeAllZombies() {
         zombies.clear();
-        System.out.println("Semua Zombie telah mati.");
+        // System.out.println("Semua Zombie telah mati.");
     }
 }

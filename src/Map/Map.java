@@ -15,6 +15,9 @@ public class Map {
     private Random random = new Random();
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
+    private boolean adaPlant;
+    private boolean adaZombie;
+    static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
@@ -27,6 +30,38 @@ public class Map {
 
     public void setTiles(Tile[][] tiles) {
         this.tiles = tiles;
+    }
+
+    public boolean getAdaPlant(Tile[][] tiles, int i, int j) {
+        return !tiles[i][j].getPlants().isEmpty();
+    }
+
+    public boolean getAdaZombie(Tile[][] tiles, int i, int j) {
+        return !tiles[i][j].getZombies().isEmpty();
+    }
+
+    public void zombieAttacking(){
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                if (!tiles[i][j].getZombies().isEmpty()) {
+                    Zombie zombie = tiles[i][j].getZombies().get(0);
+                    if (j == 0) {
+                        System.out.println("Zombie has reached the base!");
+                        continueSpawning = false;
+                        return;
+                    }
+                    if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
+                        Plant plant = tiles[i][j - 1].getPlants().get(0);
+                        plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
+                        System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
+                        if (plant.getHealth() <= 0) {
+                            tiles[i][j - 1].getPlants().clear();
+                            System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void setupTiles() {
@@ -42,8 +77,10 @@ public class Map {
     public synchronized void addPlant(Plant plant, int i, int j) {
         if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 10)) {
             tiles[i][j].addPlant(plant);
+            this.getAdaPlant(tiles, i, j);
         } else if ((i == 2 || i == 3) && plant instanceof Lilypad) {
             tiles[i][j].addPlant(plant);
+            this.getAdaPlant(tiles, i, j);
         } else {
             System.out.println("Invalid position or plant type for the specified position.");
         }
@@ -55,7 +92,7 @@ public class Map {
             @Override
             public void run() {
                 if (!continueSpawning) {
-                    System.out.println("Zombies have reached the base.");
+                    System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
                     spawnTimer.cancel();
                     return;
                 }
@@ -74,6 +111,7 @@ public class Map {
 
                         Zombie zombie = createZombie(zombieType);
                         tiles[i][spawnColumn].addZombie(zombie);
+                        zombieAttacking();
                     }
                 }
             }
@@ -129,10 +167,12 @@ public class Map {
             @Override
             public void run() {
                 boolean zombieReachedBase = false;
+                adaZombie = false;
 
                 for (int i = 0; i < tiles.length; i++) {
                     if (!tiles[i][0].getZombies().isEmpty()) {
                         zombieReachedBase = true;
+                        adaZombie = true;
                         break;
                     }
 
@@ -141,6 +181,7 @@ public class Map {
                         if (!zombiesToMove.isEmpty()) {
                             tiles[i][j - 1].getZombies().addAll(zombiesToMove);
                             tiles[i][j].getZombies().clear();
+                            adaZombie = true;
                         }
                     }
                 }
@@ -172,7 +213,9 @@ public class Map {
                 }
     
                 String color;
-                if (i == 0 || i == 1 || i == 4 || i == 5) {
+                if (j == 0 || j == 10) {
+                    color = red;
+                } else if (i == 0 || i == 1 || i == 4 || i == 5) {
                     color = green;
                 } else if (i == 2 || i == 3) {
                     color = blue;
@@ -180,58 +223,65 @@ public class Map {
                     color = reset;
                 }
     
-                System.out.print(color + String.format("[%3s]", tileContent) + reset);
+                System.out.print(color + String.format("[ %3s ]", tileContent) + reset);
             }
             System.out.println();
         }
     }
     
     private String getPlantSymbol(Plant plant) {
-        if (plant instanceof Peashooter) {
-            return "PS";
-        } else if (plant instanceof Sunflower) {
-            return "SF";
-        } else if (plant instanceof Chomper) {
-            return "CH";
-        } else if (plant instanceof SnowPea) {
-            return "SP";
-        } else if (plant instanceof Squash) {
-            return "SQ";
-        } else if (plant instanceof SunShroom) {
-            return "SS";
-        } else if (plant instanceof TallNut) {
-            return "TN";
-        } else if (plant instanceof Jalapeno) {
-            return "JP";
-        } else if (plant instanceof Lilypad) {
-            return "LL";
-        } else if (plant instanceof WallNut) {
-            return "WN";
+        while (plant.getHealth() > 0){
+            if (plant instanceof Peashooter) {
+                return "PS";
+            } else if (plant instanceof Sunflower) {
+                return "SF";
+            } else if (plant instanceof Chomper) {
+                return "CH";
+            } else if (plant instanceof SnowPea) {
+                return "SP";
+            } else if (plant instanceof Squash) {
+                return "SQ";
+            } else if (plant instanceof SunShroom) {
+                return "SS";
+            } else if (plant instanceof TallNut) {
+                return "TN";
+            } else if (plant instanceof Jalapeno) {
+                return "JP";
+            } else if (plant instanceof Lilypad) {
+                return "LL";
+            } else if (plant instanceof WallNut) {
+                return "WN";
+            }
         }
+
+        if (plant.getHealth() <= 0) {
+            return "   ";
+        }
+        
         return null;
     }
 
     private String getZombieSymbol(Zombie zombie) {
         if (zombie instanceof BucketHead) {
-            return "B";
+            return "BH";
         } else if (zombie instanceof ConeHeadZombie) {
-            return "C";
+            return "CH"; 
         } else if (zombie instanceof DolphinRiderZombie) {
-            return "D";
+            return "DR";
         } else if (zombie instanceof DuckyTubeZombie) {
             return "DT";
         } else if (zombie instanceof FootballZombie) {
-            return "F";
+            return "FB";
         } else if (zombie instanceof NewsPaperZombie) {
-            return "N";
+            return "NP";
         } else if (zombie instanceof NormalZombie) {
             return "Z";
         } else if (zombie instanceof PoleVaultingZombie) {
             return "PV";
         } else if (zombie instanceof ScreenDoorZombie) {
-            return "S";
+            return "SD";
         } else if (zombie instanceof YetiZombie) {
-            return "Y";
+            return "YT"; 
         }
         return null;
     }

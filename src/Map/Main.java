@@ -215,7 +215,7 @@ public class Main {
 
         System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println(green + "==============================================" + reset);
-            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     QUIT     |" + reset);
+            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     BACK     |" + reset);
             System.out.println( green+ "==============================================" + reset);
 
         while (true) {
@@ -243,8 +243,8 @@ public class Main {
                     
                 }
 
-                if (command.equalsIgnoreCase("quit")){
-                    zombieAdder.interrupt();
+                if (command.equalsIgnoreCase("back")){
+            
                     break;
                 }
             }

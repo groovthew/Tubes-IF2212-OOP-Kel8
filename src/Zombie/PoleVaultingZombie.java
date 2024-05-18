@@ -26,8 +26,4 @@ public class PoleVaultingZombie extends Zombie {
             }
         }
     }
-
-    public void attack(){
-        
-    }
 }
