@@ -1,7 +1,7 @@
 package Main;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+// import java.util.Scanner;
 import Tanaman.*;
 import Exceptions.CantBePlantedException;
 
@@ -15,10 +15,6 @@ public class Inventory {
   public ArrayList<Plant> getInventory() {
     return container;
   }
-
-  // public Deck getDeck() {
-  //   return deck;
-  // }
 
   public void swapPlants(int x, int y) {
     if (x >= 0 && x < container.size() && y >= 0 && y < container.size()) {
@@ -66,7 +62,7 @@ public class Inventory {
     int i = 1;
         if (!container.isEmpty()) {
             for (Plant plant : container) {
-                System.out.println(i + ". " + plant.getName());
+                System.out.println(i + ". " + plant.getName() + " " + plant.getCost());
                 i++;
             }
         } else {
@@ -74,21 +70,21 @@ public class Inventory {
         }
     }
 
-  public static void main(String[] args) {
-    Inventory inventory = new Inventory();
-    inventory.addPlantToInventory(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
-    inventory.addPlantToInventory(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
-    inventory.addPlantToInventory(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
-    inventory.displayInventory();
+  // public static void main(String[] args) {
+  //   Inventory inventory = new Inventory();
+  //   inventory.addPlantToInventory(new Peashooter("Peashooter", 100, 25, 4, 100, -1, 10));
+  //   inventory.addPlantToInventory(new Sunflower("Sunflower", 50, 0, 0, 50, 0, 10));
+  //   inventory.addPlantToInventory(new Squash("Squash", 100, 5000, 0, 50, 1, 20));
+  //   inventory.displayInventory();
   
-    System.out.println("Pilih Tanaman yang ingin dihapus: ");
-    Scanner delete = new Scanner(System.in);
-    int deletePlant = delete.nextInt();
+  //   System.out.println("Pilih Tanaman yang ingin dihapus: ");
+  //   Scanner delete = new Scanner(System.in);
+  //   int deletePlant = delete.nextInt();
   
-    inventory.removePlant(deletePlant);
-    inventory.displayInventory();
-    delete.close();
-  }
+  //   inventory.removePlant(deletePlant);
+  //   inventory.displayInventory();
+  //   delete.close();
+  // }
   
 }
 
