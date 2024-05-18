@@ -21,9 +21,14 @@ public class Inventory {
   // }
 
   public void swapPlants(int x, int y) {
-    Plant plant = container.get(x);
-    container.set(x, container.get(y));
-    container.set(y, plant);
+    if (x >= 0 && x < container.size() && y >= 0 && y < container.size()) {
+        Plant temp = container.get(x);
+        container.set(x, container.get(y));
+        container.set(y, temp);
+        System.out.println("Tanaman pada posisi " + (x + 1) + " dan " + (y + 1) + " telah ditukar di inventory.");
+    } else {
+        System.out.println("Indeks tidak valid. Tukar tidak dapat dilakukan.");
+  }
   }
 
   public Plant getPlantByName(String name) {

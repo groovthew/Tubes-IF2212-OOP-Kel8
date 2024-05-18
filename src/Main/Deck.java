@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Deck {
     private ArrayList<Plant> deck;
-    private static final int MAX_PLANTS = 6;
+    public static final int MAX_PLANTS = 6;
     public Deck() {
         deck = new ArrayList<>();
     }
@@ -51,6 +51,15 @@ public class Deck {
             addPlant(plant);
         } else {
             throw new CantBePlantedException();
+        }
+    }
+
+    public void removePlant(int index) {
+        if (index >= 0 && index < deck.size()) {
+            Plant removedPlant = deck.remove(index);
+            System.out.println(removedPlant.getName() + " telah dihapus dari Deck.");
+        } else {
+            System.out.println("Indeks tidak valid. Penghapusan tidak dapat dilakukan.");
         }
     }
 
@@ -130,5 +139,15 @@ public class Deck {
             System.out.println(e.getMessage());
         }
     }
+
+    public boolean isPlantInDeck(String plantName) {
+        for (Plant plant : deck) {
+            if (plant.getName().equalsIgnoreCase(plantName)) {
+                return true; 
+            }
+        }
+        return false; 
+    }
+    
     
 }
