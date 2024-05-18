@@ -36,10 +36,9 @@ public class Sunflower extends Plant implements ProduceSun{
     @Override
     public void startProducingSun(){
         Thread thread = new Thread(() -> {
-            Random random = new Random();
-            while (true) {
+            while (makingSun) {
                 try {
-                    Thread.sleep((random.nextInt(6) + 5) * 1000);
+                    Thread.sleep(3000);
                     synchronized (this) {
                         increaseSun();
                     }
@@ -48,6 +47,7 @@ public class Sunflower extends Plant implements ProduceSun{
                 }
             }
         });
+        makingSun = true;
         thread.start();
     }
 
