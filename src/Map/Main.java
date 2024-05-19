@@ -248,18 +248,12 @@ public class Main {
 
                     // Create instances of Sun, Sunflower, and SunShroom
                     Sun sun = new Sun(0);
-                    Sunflower sunflower = new Sunflower(command, 0, 0, 0, 0, 0, 0);
-                    SunShroom sunShroom = new SunShroom(command, 0, 0, 0, 0, 0, 0);
             
                     // Add producers to SunManager
                     sunManager.addProducer(sun);
-                    sunManager.addProducer(sunflower);
-                    sunManager.addProducer(sunShroom);
             
                     // Start producing sun
                     sun.startProducingSun();
-                    sunflower.startProducingSun();
-                    sunShroom.startProducingSun();
                 }    
 
                 if (command.equalsIgnoreCase("display")) {
