@@ -6,6 +6,12 @@ import Tanaman.*;
 import Exceptions.CantBePlantedException;
 
 public class Inventory {
+  String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
+  String red = "\u001B[31m";    // Kode ANSI untuk warna merah
+  String blue = "\u001B[34m";   // Kode ANSI untuk warna biru
+  String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
+  String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
+  
     private ArrayList<Plant> container;
     public Inventory() {
     this.container = new ArrayList<>();
@@ -58,7 +64,7 @@ public class Inventory {
 }
 
   public void displayInventory() {
-    System.out.println("Inventory:");
+    System.out.println(green + "============================INVENTORY===========================" + reset);
     int i = 1;
         if (!container.isEmpty()) {
             for (Plant plant : container) {
