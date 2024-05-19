@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import Sun.*;
 
 import Tanaman.*;
 import Zombie.*;
@@ -21,7 +22,7 @@ public class Map {
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
-
+    private Runnable zombieReachedBaseListener;
     public Map(int x, int y) {
         tiles = new Tile[x][y];
         setupTiles();
@@ -189,8 +190,7 @@ public class Map {
                     System.out.println("NT ZOMBIE DAH SAMPE BASE!");
                     continueSpawning = false;
                     timer.cancel();
-                }
-
+                } 
                 displayMap();
             }
         };
@@ -287,11 +287,13 @@ public class Map {
 
     public void initiateMap(){
         Map map = new Map(6, 11);
-
+        Sun sun = new Sun(0);
+        sun.startProducingSun();
         Thread inputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 System.out.println("Enter plant type (PS, SF, CH, SP, SQ, SS, TN, JP, LL, WN) and coordinates (i, j): ");
+                
                 String plantType = scanner.next();
                 int i = scanner.nextInt();
                 int j = scanner.nextInt();
@@ -343,4 +345,6 @@ public class Map {
         map.moveZombies();
         map.displayMap();
     }
+
+    
 }

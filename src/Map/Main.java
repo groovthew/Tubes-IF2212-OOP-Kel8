@@ -10,6 +10,7 @@ import Main.Deck;
 import Main.Inventory;
 import Main.Help;
 import java.util.Scanner;
+import Sun.*;
 
 public class Main {
     static String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
@@ -233,7 +234,23 @@ public class Main {
                 if (command.equalsIgnoreCase("play")) {
                     Map map = new Map(6, 11);
                     map.initiateMap();
-                }
+                    SunManager sunManager = new SunManager();
+
+                    // Create instances of Sun, Sunflower, and SunShroom
+                    Sun sun = new Sun(0);
+                    Sunflower sunflower = new Sunflower(command, 0, 0, 0, 0, 0, 0);
+                    SunShroom sunShroom = new SunShroom(command, 0, 0, 0, 0, 0, 0);
+            
+                    // Add producers to SunManager
+                    sunManager.addProducer(sun);
+                    sunManager.addProducer(sunflower);
+                    sunManager.addProducer(sunShroom);
+            
+                    // Start producing sun
+                    sun.startProducingSun();
+                    sunflower.startProducingSun();
+                    sunShroom.startProducingSun();
+                }    
 
                 if (command.equalsIgnoreCase("display")) {
                     gameMap.displayMap();
