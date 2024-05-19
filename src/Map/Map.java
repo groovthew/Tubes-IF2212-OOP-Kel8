@@ -166,22 +166,32 @@ public class Map {
             @Override
             public void run() {
                 boolean zombieReachedBase = false;
-                adaZombie = false;
+                boolean adaZombie = false;
 
                 for (int i = 0; i < tiles.length; i++) {
-                    if (!tiles[i][0].getZombies().isEmpty()) {
-                        zombieReachedBase = true;
-                        adaZombie = true;
-                        break;
-                    }
-
                     for (int j = 1; j < tiles[i].length; j++) {
                         List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
                         if (!zombiesToMove.isEmpty()) {
-                            tiles[i][j - 1].getZombies().addAll(zombiesToMove);
-                            tiles[i][j].getZombies().clear();
+                            if (!tiles[i][j - 1].getPlants().isEmpty()) {
+                                Plant plant = tiles[i][j - 1].getPlants().get(0);
+                                for (Zombie zombie : zombiesToMove) {
+                                    zombieAttacking();
+                                    if (plant.getHealth() <= 0) {
+                                        tiles[i][j - 1].getZombies().add(zombie);
+                                        tiles[i][j].getZombies().remove(zombie);
+                                    }
+                                }
+                            } else {
+                                tiles[i][j - 1].getZombies().addAll(zombiesToMove);
+                                tiles[i][j].getZombies().clear();
+                            }
                             adaZombie = true;
                         }
+                    }
+
+                    if (!tiles[i][0].getZombies().isEmpty()) {
+                        zombieReachedBase = true;
+                        break;
                     }
                 }
 
