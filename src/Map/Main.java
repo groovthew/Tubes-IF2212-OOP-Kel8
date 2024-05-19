@@ -87,7 +87,7 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.println(green + "===========================MAIN MENU=============================" + reset);
+        System.out.println(green + "===========================MAIN MENU============================" + reset);
         System.out.println(yellow + "|             START             |           INVENTORY          |");
         System.out.println("|             DECK              |              HELP            |");
         System.out.println("|             EXIT              |                              |" + reset);
