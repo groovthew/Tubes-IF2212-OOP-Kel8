@@ -113,7 +113,7 @@ public class Map {
                         for (int col = j; col < tiles[i].length; col++) {
                             if (tiles[i][col].getZombies().contains(targetZombie)) {
                                 tiles[i][col].getZombies().remove(targetZombie);
-                                System.out.println(targetZombie.getName() + " on tile [" + i + "][" + col + "] has been destroyed.");
+                                // System.out.println(targetZombie.getName() + " on tile [" + i + "][" + col + "] has been destroyed.");
                                 plantTargetMap.remove(plant);  // Hapus target dari map setelah mati
                                 break;
                             }

@@ -12,7 +12,7 @@ public class Sunflower extends Plant implements ProduceSun{
     private SunListener listener;
 
     public Sunflower(String name, int health, int attack_damage, int attacks_speed, int cost, int range, int cooldown) {
-        super("Sunflower", 50, 0, 0, 50, 0, 10, false);
+        super("Sunflower", 100, 0, 0, 50, 0, 10, false);
         this.sunTotal = 0;
     }
 
