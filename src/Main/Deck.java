@@ -4,6 +4,7 @@ import Tanaman.Plant;
 import java.util.ArrayList;
 import java.util.List;
 import Exceptions.CantBePlantedException;
+import Main.Inventory;
 // import java.util.Scanner;
 
 public class Deck {
@@ -28,7 +29,6 @@ public class Deck {
     public void addPlant(Plant plant) throws CantBePlantedException {
         if (deck.size() <= MAX_PLANTS) {
             deck.add(plant);
-            System.out.println(plant.getName() + " berhasil ditambahkan ke Deck!");
         } else {
             throw new CantBePlantedException();
         }
@@ -45,14 +45,27 @@ public class Deck {
         }
     }
 
-    public void addPlantFromInventory(String plantName, Inventory inventory) throws CantBePlantedException {
-        Plant plant = inventory.getPlantByName(plantName);
-        if (plant != null) {
-            addPlant(plant);
+    public void addPlantFromInventory(int plantIndex, Inventory inventory, Deck deck) throws CantBePlantedException {
+        // Memeriksa apakah indeks berada dalam rentang yang valid
+        if (plantIndex >= 0 && plantIndex < inventory.getInventory().size()) {
+            // Mendapatkan tanaman dari inventory berdasarkan indeks
+            Plant plant = inventory.getInventory().get(plantIndex);
+    
+            // Memeriksa apakah tanaman sudah ada di deck
+            if (deck.isPlantInDeck(plant.getName())) {
+                System.out.println("Tanaman tersebut sudah ada di deck.");
+                return;
+            }
+    
+            // Menambahkan tanaman ke deck
+            deck.addPlant(plant);
+            System.out.println("Tanaman " + plant.getName() + " berhasil ditambahkan ke deck.");
         } else {
-            throw new CantBePlantedException();
+            System.out.println("Indeks tanaman tidak valid.");
         }
     }
+    
+    
 
     public void removePlant(int index) {
         if (index >= 0 && index < deck.size()) {

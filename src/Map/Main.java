@@ -88,7 +88,7 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.println(green + "===========================MAIN MENU============================" + reset);
+        System.out.println(green + "===========================GAME MENU============================" + reset);
         System.out.println(yellow + "|             START             |           INVENTORY          |");
         System.out.println("|             DECK              |              HELP            |");
         System.out.println("|             EXIT              |                              |" + reset);
@@ -160,28 +160,67 @@ public class Main {
                     System.out.println("Deck kosong. Tidak ada tanaman yang bisa dihapus.");
                 }
                     break;
-                case "add plant":
-                    // Memeriksa apakah deck sudah penuh
-                    if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
-                        System.out.println("Deck sudah penuh. Tidak dapat menambahkan tanaman lagi.");
+                    case "add plant":
+                // Memeriksa apakah deck sudah penuh
+                if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
+                    System.out.println("Deck sudah penuh. Tidak dapat menambahkan tanaman lagi.");
+                    deck.displayDeck();
+                    break;
+                }
+                
+                // Menampilkan inventory
+                inventory.displayInventory();
+                System.out.println("Enter the index of the plant to add from inventory:");
+                int plantIndex = scanner.nextInt();
+                scanner.nextLine(); // Membersihkan newline karakter
+                
+                try {
+                    // Memeriksa apakah indeks berada dalam rentang yang valid
+                    if (plantIndex < 1 || plantIndex >= inventory.getInventory().size()) {
+                        System.out.println("Indeks tanaman tidak valid.");
                         break;
                     }
-                    // Menampilkan inventory
-                    inventory.displayInventory();
-                    System.out.println("Enter the name of the plant to add from inventory:");
-                    String plantName = scanner.nextLine();
-                    try {
-                        // Memeriksa apakah tanaman sudah ada di deck
-                        if (deck.isPlantInDeck(plantName)) {
-                            System.out.println("Tanaman tersebut sudah ada di deck.");
-                            break;
-                        }
-                        // Menambahkan tanaman ke deck
-                        deck.addPlantFromInventory(plantName, inventory);
-                    } catch (CantBePlantedException e) {
-                        System.out.println(e.getMessage());
+                    
+                    // Mendapatkan tanaman dari inventory berdasarkan indeks
+                    Plant plant = inventory.getInventory().get(plantIndex-1);
+                    
+                    // Memeriksa apakah tanaman sudah ada di deck
+                    if (deck.isPlantInDeck(plant.getName())) {
+                        System.out.println("Tanaman tersebut sudah ada di deck.");
+                        break;
                     }
-                    break;
+                    
+                    // Menambahkan tanaman ke deck
+                    deck.addPlant(plant);
+                    System.out.println("Tanaman " + plant.getName() + " berhasil ditambahkan ke deck!");
+                } catch (CantBePlantedException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+
+                // case "add plant":
+                            
+                //     // // Memeriksa apakah deck sudah penuh
+                //     // if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
+                //     //     System.out.println("Deck sudah penuh. Tidak dapat menambahkan tanaman lagi.");
+                //     //     break;
+                //     // }
+                //     // // Menampilkan inventory
+                //     // inventory.displayInventory();
+                //     // System.out.println("Enter the name of the plant to add from inventory:");
+                //     // String plantName = scanner.nextLine();
+                //     // try {
+                //     //     // Memeriksa apakah tanaman sudah ada di deck
+                //     //     if (deck.isPlantInDeck(plantName)) {
+                //     //         System.out.println("Tanaman tersebut sudah ada di deck.");
+                //     //         break;
+                //     //     }
+                //     //     // Menambahkan tanaman ke deck
+                //     //     deck.addPlantFromInventory(plantName, inventory);
+                //     // } catch (CantBePlantedException e) {
+                //     //     System.out.println(e.getMessage());
+                //     // }
+                //     // break;
                 case "display deck":
                     // Menampilkan isi deck
                     System.out.println("Deck: ");
@@ -215,9 +254,9 @@ public class Main {
         zombieAdder.start();  // Start the zombie adding thread
 
         System.out.println(blue + "ENTER COMMAND" + reset);
-            System.out.println(green + "================================================================" + reset);
-            System.out.println(yellow + "|       PLAY        |       DISPLAY       |        BACK        |" + reset);
-            System.out.println( green+ "================================================================" + reset);
+            System.out.println(green + "==============================================" + reset);
+            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     BACK     |" + reset);
+            System.out.println( green+ "==============================================" + reset);
 
         while (true) {
             long startTime = System.currentTimeMillis();
