@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import Sun.*;
+import java.util.HashMap;
 
 import Tanaman.*;
 import Zombie.*;
@@ -18,6 +19,7 @@ public class Map {
     private boolean continueSpawning = true;
     private boolean adaPlant;
     private boolean adaZombie;
+    private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
     static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
@@ -65,19 +67,57 @@ public class Map {
     }
 
     public void plantAttacking(){
+        // System.out.println("plantAttacking called");
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
-                if (!tiles[i][j].getPlants().isEmpty() && !tiles[i][j].getZombies().isEmpty()) {
+                if (!tiles[i][j].getPlants().isEmpty()) {
                     Plant plant = tiles[i][j].getPlants().get(0);
+                    Zombie targetZombie = plantTargetMap.get(plant);
+                    // System.out.println("Checking plant: " + plant.getName() + " at tile [" + i + "][" + j + "]");
 
-                    // Menyerang zombie yang paling dekat (di posisi pertama dalam list zombies)
-                    Zombie zombie = tiles[i][j].getZombies().get(0);
-                    zombie.setHealth(zombie.getHealth() - plant.getAttackDamage());
-                    
-                    if (zombie.getHealth() <= 0) {
-                        tiles[i][j].getZombies().clear();
-                        System.out.println(plant.getName() + " attacked " + zombie.getName() + " on tile [" + i + "][" + j + "]" + " for " + plant.getAttackDamage() + " damage.");
-                        System.out.println(zombie.getName() + " on tile [" + i + "][" + j + "] has been destroyed.");
+                    boolean targetFound = false;
+
+                    // Cari target zombie dari kolom saat ini hingga akhir baris
+                    for (int col = j; col < tiles[i].length; col++) {
+                        if (!tiles[i][col].getZombies().isEmpty()) {
+                            // System.out.println("Zombies present at tile [" + i + "][" + col + "]: " + tiles[i][col].getZombies().size());
+                            for (Zombie z : tiles[i][col].getZombies()) {
+                                // System.out.println("Zombie: " + z.getName() + ", Health: " + z.getHealth());
+                            }
+
+                            if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
+                                targetZombie = tiles[i][col].getZombies().get(0);
+                                plantTargetMap.put(plant, targetZombie);
+                                // System.out.println("New target set: " + targetZombie.getName() + " for plant " + plant.getName());
+                            }
+                            
+                            targetFound = true;
+                            break; // Keluar dari loop kolom setelah menemukan target
+                        }
+                    }
+
+                    if (!targetFound) {
+                        // Jika tidak ada target zombie, hapus target plant dari map
+                        plantTargetMap.remove(plant);
+                        // System.out.println("No zombies left for plant: " + plant.getName());
+                        continue;
+                    }
+
+                    // Menyerang target zombie
+                    System.out.println(plant.getName() + " is attacking " + targetZombie.getName() + " on tile [" + i + "][" + j + "]");
+                    targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
+                    System.out.println(targetZombie.getName() + " health is now: " + targetZombie.getHealth());
+
+                    if (targetZombie.getHealth() <= 0) {
+                        // Cari tile yang mengandung targetZombie dan hapus dari sana
+                        for (int col = j; col < tiles[i].length; col++) {
+                            if (tiles[i][col].getZombies().contains(targetZombie)) {
+                                tiles[i][col].getZombies().remove(targetZombie);
+                                System.out.println(targetZombie.getName() + " on tile [" + i + "][" + col + "] has been destroyed.");
+                                plantTargetMap.remove(plant);  // Hapus target dari map setelah mati
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -136,6 +176,7 @@ public class Map {
                         zombieAttacking();
                     }
                 }
+                plantAttacking();
             }
         };
 
