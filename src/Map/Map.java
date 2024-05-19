@@ -151,36 +151,53 @@ public class Map {
     public void spawnZombies() {
         Timer spawnTimer = new Timer();
         TimerTask spawnTask = new TimerTask() {
+            private int timeElapsed = 0;
+    
             @Override
             public void run() {
-                if (!continueSpawning) {
-                    System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                    spawnTimer.cancel();
+                timeElapsed += 3; // Increment time elapsed by 3 seconds for each run
+    
+                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
+                    if (timeElapsed > 160 || !continueSpawning) {
+                        System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                        spawnTimer.cancel();
+                    }
                     return;
                 }
-
+    
                 int spawnColumn = tiles[0].length - 1;
+                int zombieCount = getZombieCount();
                 for (int i = 0; i < tiles.length; i++) {
-                    if (random.nextDouble() < 0.3) {
+                    if (random.nextDouble() < 0.3 && zombieCount < 10) {
                         Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
                         String zombieType = zombieClass.getSimpleName();
-
+    
                         if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && (i != 2 && i != 3)) {
                             continue;
                         } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && (i != 0 && i != 1 && i != 4 && i != 5)) {
                             continue;
                         }
-
+    
                         Zombie zombie = createZombie(zombieType);
                         tiles[i][spawnColumn].addZombie(zombie);
-                        zombieAttacking();
+                        zombieCount++;
                     }
                 }
                 plantAttacking();
             }
         };
-
-        spawnTimer.schedule(spawnTask, 0, 5000);
+    
+        spawnTimer.schedule(spawnTask, 0, 3000); // Schedule to run every 3 seconds
+    }
+    
+    private int getZombieCount() {
+        int count = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                count += tiles[i][j].getZombies().size();
+            }
+        }
+        return count;
     }
 
     private void initializeZombieTypes() {
@@ -269,7 +286,7 @@ public class Map {
         }
     };
 
-    timer.schedule(task, 5000, 5000);
+    timer.schedule(task, 0, 10000);
     }
 
     public void displayMap() {
