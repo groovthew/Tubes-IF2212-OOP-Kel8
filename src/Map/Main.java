@@ -88,7 +88,7 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.println(green + "===========================GAME MENU============================" + reset);
+        System.out.println(green + "===========================MAIN MENU============================" + reset);
         System.out.println(yellow + "|             START             |           INVENTORY          |");
         System.out.println("|             DECK              |              HELP            |");
         System.out.println("|             EXIT              |                              |" + reset);
@@ -215,9 +215,9 @@ public class Main {
         zombieAdder.start();  // Start the zombie adding thread
 
         System.out.println(blue + "ENTER COMMAND" + reset);
-            System.out.println(green + "==============================================" + reset);
-            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     BACK     |" + reset);
-            System.out.println( green+ "==============================================" + reset);
+            System.out.println(green + "================================================================" + reset);
+            System.out.println(yellow + "|       PLAY        |       DISPLAY       |        BACK        |" + reset);
+            System.out.println( green+ "================================================================" + reset);
 
         while (true) {
             long startTime = System.currentTimeMillis();

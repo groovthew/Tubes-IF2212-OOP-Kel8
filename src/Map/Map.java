@@ -64,6 +64,26 @@ public class Map {
         }
     }
 
+    public void plantAttacking(){
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                if (!tiles[i][j].getPlants().isEmpty() && !tiles[i][j].getZombies().isEmpty()) {
+                    Plant plant = tiles[i][j].getPlants().get(0);
+
+                    // Menyerang zombie yang paling dekat (di posisi pertama dalam list zombies)
+                    Zombie zombie = tiles[i][j].getZombies().get(0);
+                    zombie.setHealth(zombie.getHealth() - plant.getAttackDamage());
+                    
+                    if (zombie.getHealth() <= 0) {
+                        tiles[i][j].getZombies().clear();
+                        System.out.println(plant.getName() + " attacked " + zombie.getName() + " on tile [" + i + "][" + j + "]" + " for " + plant.getAttackDamage() + " damage.");
+                        System.out.println(zombie.getName() + " on tile [" + i + "][" + j + "] has been destroyed.");
+                    }
+                }
+            }
+        }
+    }
+
     private void setupTiles() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -77,9 +97,11 @@ public class Map {
     public synchronized void addPlant(Plant plant, int i, int j) {
         if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 10)) {
             tiles[i][j].addPlant(plant);
+            plantAttacking();
             this.getAdaPlant(tiles, i, j);
         } else if ((i == 2 || i == 3) && plant instanceof Lilypad) {
             tiles[i][j].addPlant(plant);
+            plantAttacking();
             this.getAdaPlant(tiles, i, j);
         } else {
             System.out.println("Invalid position or plant type for the specified position.");
@@ -163,39 +185,50 @@ public class Map {
 
     public void moveZombies() {
         Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                boolean zombieReachedBase = false;
-                adaZombie = false;
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            boolean zombieReachedBase = false;
 
-                for (int i = 0; i < tiles.length; i++) {
-                    if (!tiles[i][0].getZombies().isEmpty()) {
-                        zombieReachedBase = true;
-                        adaZombie = true;
-                        break;
-                    }
-
-                    for (int j = 1; j < tiles[i].length; j++) {
-                        List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
-                        if (!zombiesToMove.isEmpty()) {
+            for (int i = 0; i < tiles.length; i++) {
+                for (int j = 1; j < tiles[i].length; j++) {
+                    List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
+                    if (!zombiesToMove.isEmpty()) {
+                        if (!tiles[i][j - 1].getPlants().isEmpty()) {
+                            Plant plant = tiles[i][j - 1].getPlants().get(0);
+                            for (Zombie zombie : zombiesToMove) {
+                                zombieAttacking();
+                                if (plant.getHealth() <= 0) {
+                                    tiles[i][j - 1].getZombies().add(zombie);
+                                    tiles[i][j].getZombies().remove(zombie);
+                                }
+                            }
+                        } else {
                             tiles[i][j - 1].getZombies().addAll(zombiesToMove);
                             tiles[i][j].getZombies().clear();
-                            adaZombie = true;
                         }
                     }
                 }
 
-                if (zombieReachedBase) {
-                    System.out.println("NT ZOMBIE DAH SAMPE BASE!");
-                    continueSpawning = false;
-                    timer.cancel();
-                } 
-                displayMap();
+                if (!tiles[i][0].getZombies().isEmpty()) {
+                    zombieReachedBase = true;
+                    break;
+                }
             }
-        };
 
-        timer.schedule(task, 5000, 5000);
+            plantAttacking();
+
+            if (zombieReachedBase) {
+                System.out.println("NT ZOMBIE DAH SAMPE BASE!");
+                continueSpawning = false;
+                timer.cancel();
+            }
+
+            displayMap();
+        }
+    };
+
+    timer.schedule(task, 5000, 5000);
     }
 
     public void displayMap() {
