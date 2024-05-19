@@ -104,9 +104,9 @@ public class Map {
                     }
 
                     // Menyerang target zombie
-                    System.out.println(plant.getName() + " is attacking " + targetZombie.getName() + " on tile [" + i + "][" + j + "]");
+                    //System.out.println(plant.getName() + " is attacking " + targetZombie.getName() + " on tile [" + i + "][" + j + "]");
                     targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
-                    System.out.println(targetZombie.getName() + " health is now: " + targetZombie.getHealth());
+                    //System.out.println(targetZombie.getName() + " on tile [" + i + "][" + j + "]" + " health is now: " + targetZombie.getHealth());
 
                     if (targetZombie.getHealth() <= 0) {
                         // Cari tile yang mengandung targetZombie dan hapus dari sana
