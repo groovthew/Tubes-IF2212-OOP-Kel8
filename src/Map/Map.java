@@ -67,53 +67,39 @@ public class Map {
     }
 
     public void plantAttacking(){
-        // System.out.println("plantAttacking called");
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (!tiles[i][j].getPlants().isEmpty()) {
                     Plant plant = tiles[i][j].getPlants().get(0);
                     Zombie targetZombie = plantTargetMap.get(plant);
-                    // System.out.println("Checking plant: " + plant.getName() + " at tile [" + i + "][" + j + "]");
 
                     boolean targetFound = false;
 
                     // Cari target zombie dari kolom saat ini hingga akhir baris
                     for (int col = j; col < tiles[i].length; col++) {
                         if (!tiles[i][col].getZombies().isEmpty()) {
-                            // System.out.println("Zombies present at tile [" + i + "][" + col + "]: " + tiles[i][col].getZombies().size());
                             for (Zombie z : tiles[i][col].getZombies()) {
-                                // System.out.println("Zombie: " + z.getName() + ", Health: " + z.getHealth());
                             }
 
                             if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
                                 targetZombie = tiles[i][col].getZombies().get(0);
                                 plantTargetMap.put(plant, targetZombie);
-                                // System.out.println("New target set: " + targetZombie.getName() + " for plant " + plant.getName());
                             }
-                            
                             targetFound = true;
                             break; // Keluar dari loop kolom setelah menemukan target
                         }
                     }
-
                     if (!targetFound) {
                         // Jika tidak ada target zombie, hapus target plant dari map
                         plantTargetMap.remove(plant);
-                        // System.out.println("No zombies left for plant: " + plant.getName());
                         continue;
                     }
-
                     // Menyerang target zombie
-                    //System.out.println(plant.getName() + " is attacking " + targetZombie.getName() + " on tile [" + i + "][" + j + "]");
                     targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
-                    //System.out.println(targetZombie.getName() + " on tile [" + i + "][" + j + "]" + " health is now: " + targetZombie.getHealth());
-
                     if (targetZombie.getHealth() <= 0) {
-                        // Cari tile yang mengandung targetZombie dan hapus dari sana
                         for (int col = j; col < tiles[i].length; col++) {
                             if (tiles[i][col].getZombies().contains(targetZombie)) {
                                 tiles[i][col].getZombies().remove(targetZombie);
-                                // System.out.println(targetZombie.getName() + " on tile [" + i + "][" + col + "] has been destroyed.");
                                 plantTargetMap.remove(plant);  // Hapus target dari map setelah mati
                                 break;
                             }
@@ -154,7 +140,7 @@ public class Map {
             @Override
             public void run() {
                 if (!continueSpawning) {
-                    System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                    System.out.println("ZOMBIE LAGI MAKAN GULAI OTAK MANUSIA");
                     spawnTimer.cancel();
                     return;
                 }
@@ -260,7 +246,6 @@ public class Map {
             plantAttacking();
 
             if (zombieReachedBase) {
-                System.out.println("NT ZOMBIE DAH SAMPE BASE!");
                 continueSpawning = false;
                 timer.cancel();
             }
@@ -296,7 +281,7 @@ public class Map {
                     color = reset;
                 }
     
-                System.out.print(color + String.format("[ %7s ]", tileContent) + reset);
+                System.out.print(color + String.format("[ %8s ]", tileContent) + reset);
             }
             System.out.println();
         }
