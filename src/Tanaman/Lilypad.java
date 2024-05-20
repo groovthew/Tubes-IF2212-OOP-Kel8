@@ -26,10 +26,11 @@ public class Lilypad extends Plant {
     }
 
     public int totalHealth() {
-        int totalHealth = this.getHealth();
+        int totalHealth = 0;
         if (plantOnTop != null) {
             totalHealth += plantOnTop.getHealth();
         }
+        totalHealth += this.getHealth();
         return totalHealth;
     }
 

@@ -35,7 +35,7 @@ public class Map {
         initializeTiles();
     }
 
-    public void initializeTiles() {
+    private void initializeTiles() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 boolean isWater = (i == 2 || i == 3);
@@ -169,13 +169,18 @@ public class Map {
         }
     }
 
-    public void updateTileNameFromPlants(int i, int j) {
-        if (isValidPosition(i, j)) {
-            tiles[i][j].updateTileName();
-        } else {
-            System.out.println("Invalid position for updating tile name.");
+    public void updateTileNameFromLilypad(Tile tile) {
+        if (tile.hasLilypad() && tile.getLilypad().getPlantOnTop() != null) {
+            Plant plantOnTop = tile.getLilypad().getPlantOnTop();
+            int totalHealth = tile.getLilypad().totalHealth();
+            System.out.println("[" + getPlantSymbol(plantOnTop) + ": " + totalHealth + "] Total Health: " + totalHealth);
         }
+        // } else {
+        //     // Jika tidak ada tanaman di atas lilypad, gunakan simbol lilypad
+        //     System.out.println("[" + "LL" + ": " + tile.getLilypad().totalHealth() + "] Total Health: " + tile.getLilypad().totalHealth());
+        // }
     }
+    
 
     public void spawnZombies() {
         Timer spawnTimer = new Timer();
@@ -418,6 +423,30 @@ public class Map {
         return null;
     }
 
+    // private String getTileSymbol(Tile tile) {
+    //     StringBuilder tileSymbol = new StringBuilder();
+        
+    //     // Jika ada lilypad dan tanaman di atasnya, gunakan simbol tanaman
+    //     if (tile.hasLilypad() && tile.getLilypad().getPlantOnTop() != null) {
+    //         Plant plantOnTop = tile.getLilypad().getPlantOnTop();
+    //         if (plantOnTop instanceof Lilypad) {
+    //             tileSymbol.append("LL");
+    //         } else {
+    //             tileSymbol.append(getPlantSymbol(plantOnTop));
+    //         }
+    //         tileSymbol.append(": ");
+    //         tileSymbol.append(tile.getLilypad().totalHealth());
+    //     } else {
+    //         // Jika tidak, gunakan simbol lilypad
+    //         tileSymbol.append("LL");
+    //         tileSymbol.append(": ");
+    //         tileSymbol.append(tile.getLilypad().totalHealth());
+    //     }
+        
+    //     return tileSymbol.toString();
+    // }
+    
+
     public void initiateMap(){
         Map map = new Map(6, 11);
         Sun sun = new Sun(0);
@@ -430,7 +459,7 @@ public class Map {
                 String plantType = scanner.next();
                 int i = scanner.nextInt();
                 int j = scanner.nextInt();
-
+    
                 Plant plant = null;
                 switch (plantType) {
                     case "PS":
@@ -470,12 +499,10 @@ public class Map {
                 map.addPlant(plant, i, j);
             }
         });
-
+    
         inputThread.start();
         map.spawnZombies();
         map.moveZombies();
-        //map.displayMap();
+        
     }
-
-    
 }

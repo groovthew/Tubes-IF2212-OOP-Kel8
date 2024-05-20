@@ -5,6 +5,7 @@ import java.util.List;
 import Tanaman.*;
 import Zombie.*;
 
+
 public class Tile {
     private List<Plant> plants = new ArrayList<>();
     private List<Zombie> zombies = new ArrayList<>();
@@ -53,24 +54,22 @@ public class Tile {
     public void updateTileName() {
         StringBuilder tileName = new StringBuilder();
         int totalHealth = 0;
-
-        for (Plant plant : plants) {
-            if (plant instanceof Lilypad && ((Lilypad) plant).getPlantOnTop() != null) {
-                tileName.append("[").append(((Lilypad) plant).getPlantOnTop().getName()).append(": ").append(((Lilypad) plant).getPlantOnTop().getHealth()).append("]");
-                totalHealth += ((Lilypad) plant).getPlantOnTop().getHealth();
-            } else {
-                tileName.append("[").append(plant.getName()).append(": ").append(plant.getHealth()).append("]");
-                totalHealth += plant.getHealth();
-            }
+    
+        // Periksa apakah ada lilypad dan tanaman di atasnya
+        if (hasLilypad() && lilypad.getPlantOnTop() != null) {
+            Plant plantOnTop = lilypad.getPlantOnTop();
+            tileName.append("[").append(plantOnTop.getName()).append(": ").append(plantOnTop instanceof Lilypad ? ((Lilypad) plantOnTop).totalHealth() : plantOnTop.getHealth()).append("]");
+            totalHealth += plantOnTop instanceof Lilypad ? ((Lilypad) plantOnTop).totalHealth() : plantOnTop.getHealth();
+        } else {
+            // Jika tidak ada tanaman di atas lilypad, gunakan simbol lilypad
+            // tileName.append("[LL").append(": ").append(lilypad != null ? lilypad.totalHealth() : 0).append("]");
+            totalHealth += lilypad != null ? lilypad.totalHealth() : 0;
         }
-
-        // If there are no plants or Lilypad, show an empty tile
-        if (tileName.length() == 0) {
-            tileName.append("[         ]");
-        }
-
-        System.out.println(tileName.toString() + " Total Health: " + totalHealth);
+    
+        // Cetak total kesehatan tile
+        // System.out.println(tileName.toString() + " Total Health: " + totalHealth);
     }
+     
 
     public void addZombie(Zombie zombie) {
         if (isSpawnArea) {
@@ -101,4 +100,9 @@ public class Tile {
     public Lilypad getLilypad() {
         return lilypad;
     }
+
+    // public String totalHealth() {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'totalHealth'");
+    // }
 }
