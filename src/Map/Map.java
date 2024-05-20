@@ -314,8 +314,8 @@ public class Map {
                 return "SP";
             } else if (plant instanceof Squash) {
                 return "SQ";
-            } else if (plant instanceof SunShroom) {
-                return "SS";
+            } else if (plant instanceof TwinSunflower) {
+                return "TS";
             } else if (plant instanceof TallNut) {
                 return "TN";
             } else if (plant instanceof Jalapeno) {
@@ -389,8 +389,8 @@ public class Map {
                     case "SQ":
                         plant = new Squash(null, 0, 100, 25, 0, 0, 0);
                         break;
-                    case "SS":
-                        plant = new SunShroom(null, 0, 100, 25, 0, 0, 0);
+                    case "TS":
+                        plant = new TwinSunflower(null, 0, 100, 25, 0, 0, 0);
                         break;
                     case "TN":
                         plant = new TallNut(null, 0, 100, 25, 0, 0, 0);

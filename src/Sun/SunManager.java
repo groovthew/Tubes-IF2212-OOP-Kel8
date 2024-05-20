@@ -2,10 +2,7 @@ package Sun;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import Tanaman.SunShroom;
 import Tanaman.Sunflower;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,15 +43,12 @@ public class SunManager implements SunListener{
 
         Sun sun = new Sun(0);
         Sunflower sunflower = new Sunflower(null, 0, 0, 0, 0, 0, 0);
-        SunShroom sunShroom = new SunShroom(null, 0, 0, 0, 0, 0, 0);
 
         sunManager.addProducer(sun);
         sunManager.addProducer(sunflower);
-        sunManager.addProducer(sunShroom);
 
         sun.startProducingSun();
         sunflower.startProducingSun();
-        sunShroom.startProducingSun();
     }
 }
 

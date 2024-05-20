@@ -1,19 +1,16 @@
 package Tanaman;
 
-import java.util.Random;
-
 import Sun.ProduceSun;
 import Sun.SunListener;
 
-// import Sun.ProduceSun;
-
-public class SunShroom extends Plant implements ProduceSun{
+public class TwinSunflower extends Plant implements ProduceSun{
     private int sunTotal;
     private boolean makingSun;
     private SunListener listener;
 
-    public SunShroom(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
-        super("Sun-Shroom", 100, 0, 0, 15, 0, 5, false);
+    public TwinSunflower(String name, int health, int attack_damage, int attacks_speed, int cost, int range, int cooldown) {
+        super("Twin Sunflower", 100, 0, 0, 50, 0, 10, false);
+        this.sunTotal = 0;
     }
 
     public void setSunListener(SunListener listener) {
@@ -21,7 +18,7 @@ public class SunShroom extends Plant implements ProduceSun{
     }
 
     public void increaseSun(){
-        sunTotal += 25;
+        sunTotal += 50;
         makingSun = true;
         if (listener != null) {
             listener.onSunProduced();
@@ -38,7 +35,7 @@ public class SunShroom extends Plant implements ProduceSun{
         Thread thread = new Thread(() -> {
             while (makingSun) {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(3500);
                     synchronized (this) {
                         increaseSun();
                     }
