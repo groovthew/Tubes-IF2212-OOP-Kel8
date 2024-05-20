@@ -87,7 +87,8 @@ public class Map {
                     Plant plant = tiles[i][j].getPlants().get(0);
                     Zombie targetZombie = plantTargetMap.get(plant);
 
-                    boolean targetFound = false;
+                    if (plant instanceof Peashooter){
+                        boolean targetFound = false;
 
                     // Cari target zombie dari kolom saat ini hingga akhir baris
                     for (int col = j; col < tiles[i].length; col++) {
@@ -118,6 +119,7 @@ public class Map {
                                 break;
                             }
                         }
+                    }
                     }
                 }
             }
