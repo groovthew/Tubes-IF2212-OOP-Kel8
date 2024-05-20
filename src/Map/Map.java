@@ -8,10 +8,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import Sun.*;
 import java.util.HashMap;
-
 import Tanaman.*;
 import Zombie.*;
 import Map.Tile;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 
 public class Map {
     private Tile[][] tiles;
@@ -80,53 +81,39 @@ public class Map {
     }
 
     public void plantAttacking(){
-        // System.out.println("plantAttacking called");
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (!tiles[i][j].getPlants().isEmpty()) {
                     Plant plant = tiles[i][j].getPlants().get(0);
                     Zombie targetZombie = plantTargetMap.get(plant);
-                    // System.out.println("Checking plant: " + plant.getName() + " at tile [" + i + "][" + j + "]");
 
                     boolean targetFound = false;
 
                     // Cari target zombie dari kolom saat ini hingga akhir baris
                     for (int col = j; col < tiles[i].length; col++) {
                         if (!tiles[i][col].getZombies().isEmpty()) {
-                            // System.out.println("Zombies present at tile [" + i + "][" + col + "]: " + tiles[i][col].getZombies().size());
                             for (Zombie z : tiles[i][col].getZombies()) {
-                                // System.out.println("Zombie: " + z.getName() + ", Health: " + z.getHealth());
                             }
 
                             if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
                                 targetZombie = tiles[i][col].getZombies().get(0);
                                 plantTargetMap.put(plant, targetZombie);
-                                // System.out.println("New target set: " + targetZombie.getName() + " for plant " + plant.getName());
                             }
-                            
                             targetFound = true;
                             break; // Keluar dari loop kolom setelah menemukan target
                         }
                     }
-
                     if (!targetFound) {
                         // Jika tidak ada target zombie, hapus target plant dari map
                         plantTargetMap.remove(plant);
-                        // System.out.println("No zombies left for plant: " + plant.getName());
                         continue;
                     }
-
                     // Menyerang target zombie
-                    //System.out.println(plant.getName() + " is attacking " + targetZombie.getName() + " on tile [" + i + "][" + j + "]");
                     targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
-                    //System.out.println(targetZombie.getName() + " on tile [" + i + "][" + j + "]" + " health is now: " + targetZombie.getHealth());
-
                     if (targetZombie.getHealth() <= 0) {
-                        // Cari tile yang mengandung targetZombie dan hapus dari sana
                         for (int col = j; col < tiles[i].length; col++) {
                             if (tiles[i][col].getZombies().contains(targetZombie)) {
                                 tiles[i][col].getZombies().remove(targetZombie);
-                                // System.out.println(targetZombie.getName() + " on tile [" + i + "][" + col + "] has been destroyed.");
                                 plantTargetMap.remove(plant);  // Hapus target dari map setelah mati
                                 break;
                             }
@@ -193,17 +180,27 @@ public class Map {
     public void spawnZombies() {
         Timer spawnTimer = new Timer();
         TimerTask spawnTask = new TimerTask() {
+            private int timeElapsed = 0;
             @Override
             public void run() {
-                if (!continueSpawning) {
-                    System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                    spawnTimer.cancel();
+                // if (!continueSpawning) {
+                //     System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                //     spawnTimer.cancel();
+                //     return;
+                // }
+                timeElapsed += 3;
+                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
+                    if (timeElapsed > 160 || !continueSpawning) {
+                        System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                        spawnTimer.cancel();
+                    }
                     return;
                 }
 
                 int spawnColumn = tiles[0].length - 1;
+                int zombieCount = getZombieCount();
                 for (int i = 0; i < tiles.length; i++) {
-                    if (random.nextDouble() < 0.3) {
+                    if (random.nextDouble() < 0.3 && zombieCount < 10) {
                         Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
                         String zombieType = zombieClass.getSimpleName();
 
@@ -215,6 +212,7 @@ public class Map {
 
                         Zombie zombie = createZombie(zombieClass);
                         tiles[i][spawnColumn].addZombie(zombie);
+                        zombieCount++;
                         zombieAttacking();
                     }
                 }
@@ -224,14 +222,14 @@ public class Map {
 
         spawnTimer.schedule(spawnTask, 0, 3000);
     }
-
-    private Zombie createZombie(Class<? extends Zombie> zombieClass) {
-        try {
-            return zombieClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    private int getZombieCount() {
+        int count = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                count += tiles[i][j].getZombies().size();
+            }
         }
+        return count;
     }
 
     private void initializeZombieTypes() {
@@ -276,8 +274,8 @@ public class Map {
     }
 
     public void moveZombies() {
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
         @Override
         public void run() {
             boolean zombieReachedBase = false;
@@ -320,7 +318,7 @@ public class Map {
         }
     };
 
-    timer.schedule(task, 5000, 5000);
+    timer.schedule(task,0, 10000);
     }
 
     public void displayMap() {
@@ -347,7 +345,7 @@ public class Map {
                     color = reset;
                 }
     
-                System.out.print(color + String.format("[ %7s ]", tileContent) + reset);
+                System.out.print(color + String.format("[ %8s ]", tileContent) + reset);
             }
             System.out.println();
         }
@@ -459,16 +457,14 @@ public class Map {
                         System.out.println("Invalid plant type.");
                         continue;
                 }
-
                 map.addPlant(plant, i, j);
             }
         });
 
         inputThread.start();
-
         map.spawnZombies();
         map.moveZombies();
-        map.displayMap();
+        //map.displayMap();
     }
 
     
