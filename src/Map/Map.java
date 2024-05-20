@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import Tanaman.*;
 import Zombie.*;
+import Map.Tile;
 
 public class Map {
     private Tile[][] tiles;
@@ -25,10 +26,22 @@ public class Map {
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
     private Runnable zombieReachedBaseListener;
+
     public Map(int x, int y) {
-        tiles = new Tile[x][y];
+        tiles = new Tile[6][11];
         setupTiles();
         initializeZombieTypes();
+        initializeTiles();
+    }
+
+    public void initializeTiles() {
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                boolean isWater = (i == 2 || i == 3);
+                boolean isSpawnArea = (j == tiles[i].length - 1); // Menyesuaikan kondisi untuk area spawn
+                tiles[i][j] = new Tile(isWater, isSpawnArea);
+            }
+        }
     }
 
     public void setTiles(Tile[][] tiles) {
@@ -124,7 +137,7 @@ public class Map {
         }
     }
 
-    private void setupTiles() {
+    public void setupTiles() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 boolean isWater = (i == 2 || i == 3);
@@ -133,18 +146,47 @@ public class Map {
             }
         }
     }
-
+    
     public synchronized void addPlant(Plant plant, int i, int j) {
-        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 10)) {
-            tiles[i][j].addPlant(plant);
-            plantAttacking();
-            this.getAdaPlant(tiles, i, j);
-        } else if ((i == 2 || i == 3) && plant instanceof Lilypad) {
-            tiles[i][j].addPlant(plant);
-            plantAttacking();
-            this.getAdaPlant(tiles, i, j);
+        if (isValidPosition(i, j)) {
+            if (canPlacePlant(plant, i, j)) {
+                tiles[i][j].addPlant(plant);
+            } else {
+                System.out.println("Invalid position or plant type for the specified position.");
+            }
         } else {
-            System.out.println("Invalid position or plant type for the specified position.");
+            System.out.println("Invalid position for the specified plant.");
+        }
+    }
+
+    private boolean isValidPosition(int i, int j) {
+        return (i >= 0 && i < tiles.length) && (j >= 0 && j < tiles[i].length);
+    }
+
+    private boolean canPlacePlant(Plant plant, int i, int j) {
+        if (tiles[i][j].isWater() && plant.isLilypad()) {
+            return true;
+        } else if (!tiles[i][j].isWater() && !plant.isLilypad()) {
+            return true;
+        } else if (tiles[i][j].isWater() && tiles[i][j].hasLilypad() && !plant.isLilypad()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void placeLilypad(Lilypad lilypad, int i, int j) {
+        if (isValidPosition(i, j)) {
+            tiles[i][j].placeLilypad(lilypad);
+        } else {
+            System.out.println("Invalid position for Lilypad.");
+        }
+    }
+
+    public void updateTileNameFromPlants(int i, int j) {
+        if (isValidPosition(i, j)) {
+            tiles[i][j].updateTileName();
+        } else {
+            System.out.println("Invalid position for updating tile name.");
         }
     }
 
@@ -165,13 +207,13 @@ public class Map {
                         Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
                         String zombieType = zombieClass.getSimpleName();
 
-                        if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && (i != 2 && i != 3)) {
+                        if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && !tiles[i][spawnColumn].isWater()) {
                             continue;
-                        } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && (i != 0 && i != 1 && i != 4 && i != 5)) {
+                        } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
                             continue;
                         }
 
-                        Zombie zombie = createZombie(zombieType);
+                        Zombie zombie = createZombie(zombieClass);
                         tiles[i][spawnColumn].addZombie(zombie);
                         zombieAttacking();
                     }
@@ -180,7 +222,16 @@ public class Map {
             }
         };
 
-        spawnTimer.schedule(spawnTask, 0, 5000);
+        spawnTimer.schedule(spawnTask, 0, 3000);
+    }
+
+    private Zombie createZombie(Class<? extends Zombie> zombieClass) {
+        try {
+            return zombieClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void initializeZombieTypes() {
@@ -226,7 +277,7 @@ public class Map {
 
     public void moveZombies() {
         Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
+        TimerTask task = new TimerTask() {
         @Override
         public void run() {
             boolean zombieReachedBase = false;

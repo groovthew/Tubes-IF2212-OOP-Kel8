@@ -35,4 +35,8 @@ public class Plant extends Character{
     public boolean getIsAquatic() {
         return isAquatic;
     }
+
+    public boolean isLilypad() {
+        return this instanceof Lilypad;
+    }
 }

@@ -1,7 +1,7 @@
 package Main;
 
 public abstract class Character {
-    private String name;
+    protected String name;
     private int health;
     private int attack_damage;
     private int attack_speed;

@@ -15,6 +15,14 @@ public class Lilypad extends Plant {
 
     public void setPlantOnTop(Plant plantOnTop) {
         this.plantOnTop = plantOnTop;
+        if (plantOnTop != null) {
+            this.setHealth(plantOnTop.getHealth());
+            this.setName(plantOnTop.getName());
+        }
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int totalHealth() {
