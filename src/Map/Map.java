@@ -25,8 +25,8 @@ public class Map {
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
     private Runnable zombieReachedBaseListener;
-    public Map(int x, int y) {
-        tiles = new Tile[x][y];
+    public Map(int i, int j) {
+        tiles = new Tile[i][j];
         setupTiles();
         initializeZombieTypes();
     }
@@ -121,7 +121,7 @@ public class Map {
     }
 
     public synchronized void addPlant(Plant plant, int i, int j) {
-        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 1 && j <= 10)) {
+        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 0 && j <= 10)) {
             tiles[i][j].addPlant(plant);
             plantAttacking();
             this.getAdaPlant(tiles, i, j);
@@ -137,17 +137,27 @@ public class Map {
     public void spawnZombies() {
         Timer spawnTimer = new Timer();
         TimerTask spawnTask = new TimerTask() {
+            private int timeElapsed = 0;
             @Override
             public void run() {
-                if (!continueSpawning) {
-                    System.out.println("ZOMBIE LAGI MAKAN GULAI OTAK MANUSIA");
-                    spawnTimer.cancel();
+                // if (!continueSpawning) {
+                //     System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                //     spawnTimer.cancel();
+                //     return;
+                // }
+                timeElapsed += 3;
+                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
+                    if (timeElapsed > 160 || !continueSpawning) {
+                        System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                        spawnTimer.cancel();
+                    }
                     return;
                 }
 
                 int spawnColumn = tiles[0].length - 1;
+                int zombieCount = getZombieCount();
                 for (int i = 0; i < tiles.length; i++) {
-                    if (random.nextDouble() < 0.3) {
+                    if (random.nextDouble() < 0.3 && zombieCount < 10) {
                         Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
                         String zombieType = zombieClass.getSimpleName();
 
@@ -159,6 +169,7 @@ public class Map {
 
                         Zombie zombie = createZombie(zombieType);
                         tiles[i][spawnColumn].addZombie(zombie);
+                        zombieCount++;
                         zombieAttacking();
                     }
                 }
@@ -166,7 +177,16 @@ public class Map {
             }
         };
 
-        spawnTimer.schedule(spawnTask, 0, 5000);
+        spawnTimer.schedule(spawnTask, 0, 3000);
+    }
+    private int getZombieCount() {
+        int count = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                count += tiles[i][j].getZombies().size();
+            }
+        }
+        return count;
     }
 
     private void initializeZombieTypes() {
@@ -211,7 +231,7 @@ public class Map {
     }
 
     public void moveZombies() {
-        Timer timer = new Timer();
+    Timer timer = new Timer();
     TimerTask task = new TimerTask() {
         @Override
         public void run() {
@@ -246,6 +266,7 @@ public class Map {
             plantAttacking();
 
             if (zombieReachedBase) {
+                System.out.println("NT ZOMBIE DAH SAMPE BASE!");
                 continueSpawning = false;
                 timer.cancel();
             }
@@ -254,7 +275,7 @@ public class Map {
         }
     };
 
-    timer.schedule(task, 5000, 5000);
+    timer.schedule(task,0, 10000);
     }
 
     public void displayMap() {
@@ -402,7 +423,7 @@ public class Map {
 
         map.spawnZombies();
         map.moveZombies();
-        map.displayMap();
+        //map.displayMap();
     }
 
     
