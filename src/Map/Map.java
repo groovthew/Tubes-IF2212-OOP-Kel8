@@ -8,9 +8,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import Sun.*;
 import java.util.HashMap;
-
 import Tanaman.*;
 import Zombie.*;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 
 public class Map {
     private Tile[][] tiles;
@@ -121,7 +122,7 @@ public class Map {
     }
 
     public synchronized void addPlant(Plant plant, int i, int j) {
-        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j >= 0 && j <= 10)) {
+        if ((i == 0 || i == 1 || i == 4 || i == 5) && (j > 0 && j <= 10)) {
             tiles[i][j].addPlant(plant);
             plantAttacking();
             this.getAdaPlant(tiles, i, j);
@@ -414,13 +415,11 @@ public class Map {
                         System.out.println("Invalid plant type.");
                         continue;
                 }
-
                 map.addPlant(plant, i, j);
             }
         });
 
         inputThread.start();
-
         map.spawnZombies();
         map.moveZombies();
         //map.displayMap();
