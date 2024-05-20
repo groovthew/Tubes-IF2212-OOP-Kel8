@@ -222,6 +222,16 @@ public class Map {
 
         spawnTimer.schedule(spawnTask, 0, 3000);
     }
+
+    public Zombie createZombie(Class<? extends Zombie> zombieClass) {
+        try {
+            return zombieClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private int getZombieCount() {
         int count = 0;
         for (int i = 0; i < tiles.length; i++) {
