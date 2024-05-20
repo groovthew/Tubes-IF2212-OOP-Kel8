@@ -296,7 +296,7 @@ public class Map {
                     color = reset;
                 }
     
-                System.out.print(color + String.format("[ %3s ]", tileContent) + reset);
+                System.out.print(color + String.format("[ %7s ]", tileContent) + reset);
             }
             System.out.println();
         }
@@ -305,25 +305,25 @@ public class Map {
     private String getPlantSymbol(Plant plant) {
         while (plant.getHealth() > 0){
             if (plant instanceof Peashooter) {
-                return "PS";
+                return "PS" + ": " + plant.getHealth();
             } else if (plant instanceof Sunflower) {
-                return "SF";
+                return "SF" + ": " + plant.getHealth();
             } else if (plant instanceof Chomper) {
-                return "CH";
+                return "CH" + ": " + plant.getHealth();
             } else if (plant instanceof SnowPea) {
-                return "SP";
+                return "SP" + ": " + plant.getHealth();
             } else if (plant instanceof Squash) {
-                return "SQ";
+                return "SQ" + ": " + plant.getHealth();
             } else if (plant instanceof TwinSunflower) {
-                return "TS";
+                return "TS" + ": " + plant.getHealth();
             } else if (plant instanceof TallNut) {
-                return "TN";
+                return "TN" + ": " + plant.getHealth();
             } else if (plant instanceof Jalapeno) {
-                return "JP";
+                return "JP" + ": " + plant.getHealth();
             } else if (plant instanceof Lilypad) {
-                return "LL";
+                return "LL" + ": " + plant.getHealth();
             } else if (plant instanceof WallNut) {
-                return "WN";
+                return "WN" + ": " + plant.getHealth();
             }
         }
 
@@ -336,25 +336,25 @@ public class Map {
 
     private String getZombieSymbol(Zombie zombie) {
         if (zombie instanceof BucketHead) {
-            return "BH";
+            return "BH" + ": " + zombie.getHealth();
         } else if (zombie instanceof ConeHeadZombie) {
-            return "CH"; 
+            return "CH" + ": " + zombie.getHealth(); 
         } else if (zombie instanceof DolphinRiderZombie) {
-            return "DR";
+            return "DR" + ": " + zombie.getHealth();
         } else if (zombie instanceof DuckyTubeZombie) {
-            return "DT";
+            return "DT" + ": " + zombie.getHealth();
         } else if (zombie instanceof FootballZombie) {
-            return "FB";
+            return "FB" + ": " + zombie.getHealth();
         } else if (zombie instanceof NewsPaperZombie) {
-            return "NP";
+            return "NP" + ": " + zombie.getHealth();
         } else if (zombie instanceof NormalZombie) {
-            return "Z";
+            return "Z" + ": " + zombie.getHealth();
         } else if (zombie instanceof PoleVaultingZombie) {
-            return "PV";
+            return "PV" + ": " + zombie.getHealth();
         } else if (zombie instanceof ScreenDoorZombie) {
-            return "SD";
+            return "SD" + ": " + zombie.getHealth();
         } else if (zombie instanceof YetiZombie) {
-            return "YT"; 
+            return "YT" + ": " + zombie.getHealth(); 
         }
         return null;
     }
