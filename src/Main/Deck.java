@@ -4,7 +4,7 @@ import Tanaman.Plant;
 import java.util.ArrayList;
 import java.util.List;
 import Exceptions.CantBePlantedException;
-import Main.Inventory;
+// import Main.Inventory;
 // import java.util.Scanner;
 
 public class Deck {

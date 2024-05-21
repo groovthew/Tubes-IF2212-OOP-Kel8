@@ -10,23 +10,20 @@ import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
 import Zombie.*;
-import Map.Tile;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 
 public class Map {
     private Tile[][] tiles;
     private Random random = new Random();
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
-    private boolean adaPlant;
-    private boolean adaZombie;
+    // private boolean adaPlant;
+    // private boolean adaZombie;
     private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
     static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
-    private Runnable zombieReachedBaseListener;
+    // private Runnable zombieReachedBaseListener;
 
     public Map(int x, int y) {
         tiles = new Tile[6][11];
@@ -175,10 +172,6 @@ public class Map {
             int totalHealth = tile.getLilypad().totalHealth();
             System.out.println("[" + getPlantSymbol(plantOnTop) + ": " + totalHealth + "] Total Health: " + totalHealth);
         }
-        // } else {
-        //     // Jika tidak ada tanaman di atas lilypad, gunakan simbol lilypad
-        //     System.out.println("[" + "LL" + ": " + tile.getLilypad().totalHealth() + "] Total Health: " + tile.getLilypad().totalHealth());
-        // }
     }
     
 

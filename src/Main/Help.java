@@ -10,8 +10,8 @@ public class Help {
 
     public static void displayHelp() {
         String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
-        String red = "\u001B[31m";    // Kode ANSI untuk warna merah
-        String blue = "\u001B[34m";   // Kode ANSI untuk warna biru
+        // String red = "\u001B[31m";    // Kode ANSI untuk warna merah
+        // String blue = "\u001B[34m";   // Kode ANSI untuk warna biru
         String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
         String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
 
