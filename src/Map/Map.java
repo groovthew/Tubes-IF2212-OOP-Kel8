@@ -54,7 +54,7 @@ public class Map {
         return !tiles[i][j].getZombies().isEmpty();
     }
 
-    public void zombieAttacking(){
+    public void zombieAttacking() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (!tiles[i][j].getZombies().isEmpty()) {
@@ -65,7 +65,11 @@ public class Map {
                     }
                     if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
                         Plant plant = tiles[i][j - 1].getPlants().get(0);
-                        plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
+                        if (zombie instanceof BucketHead) {
+                            plant.setHealth(plant.getHealth() - zombie.getAttackDamage() / 2); // Reduce plant health by half the zombie's attack damage
+                        } else {
+                            plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
+                        }
                         if (plant.getHealth() <= 0) {
                             tiles[i][j - 1].getPlants().clear();
                             System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
@@ -76,52 +80,99 @@ public class Map {
             }
         }
     }
+    
 
-    public void plantAttacking(){
+    public void processZombies() {
+        // First, handle jumping for PoleVaultingZombies
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = tiles[i].length - 1; j >= 0; j--) {  // Iterate from right to left
+                List<Zombie> zombies = tiles[i][j].getZombies();
+                List<Zombie> zombiesToJump = new ArrayList<>(zombies);
+                for (Zombie zombie : zombiesToJump) {
+                    if (zombie instanceof PoleVaultingZombie) {
+                        ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
+                    }
+                }
+            }
+        }
+
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
-                if (!tiles[i][j].getPlants().isEmpty()) {
-                    Plant plant = tiles[i][j].getPlants().get(0);
+                List<Plant> plants = tiles[i][j].getPlants();
+                for (Plant plant : plants) {
+                    if (plant instanceof Chomper) {
+                        ((Chomper) plant).instantKillZombie(tiles, i, j);
+                    }
+                }
+            }
+        }
+    
+        // Then, handle the zombie attacks
+        zombieAttacking();
+    }
+
+    public void plantAttacking() {
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                List<Plant> plants = tiles[i][j].getPlants();
+    
+                for (Plant plant : plants) {
+                    // Check if the plant is a Lilypad and has a plant on top
+                    if (plant instanceof Lilypad) {
+                        Plant plantOnTop = ((Lilypad) plant).getPlantOnTop();
+                        if (plantOnTop != null) {
+                            plant = plantOnTop;
+                        } else {
+                            // If there's no plant on top of the Lilypad, skip this iteration
+                            continue;
+                        }
+                    }
+    
                     Zombie targetZombie = plantTargetMap.get(plant);
-
-                    if (plant instanceof Peashooter){
+    
+                    if (plant instanceof Peashooter) {
                         boolean targetFound = false;
-
-                    // Cari target zombie dari kolom saat ini hingga akhir baris
-                    for (int col = j; col < tiles[i].length; col++) {
-                        if (!tiles[i][col].getZombies().isEmpty()) {
-                            for (Zombie z : tiles[i][col].getZombies()) {
-                            }
-
-                            if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
-                                targetZombie = tiles[i][col].getZombies().get(0);
-                                plantTargetMap.put(plant, targetZombie);
-                            }
-                            targetFound = true;
-                            break; // Keluar dari loop kolom setelah menemukan target
-                        }
-                    }
-                    if (!targetFound) {
-                        // Jika tidak ada target zombie, hapus target plant dari map
-                        plantTargetMap.remove(plant);
-                        continue;
-                    }
-                    // Menyerang target zombie
-                    targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
-                    if (targetZombie.getHealth() <= 0) {
+    
+                        // Find target zombie from the current column to the end of the row
                         for (int col = j; col < tiles[i].length; col++) {
-                            if (tiles[i][col].getZombies().contains(targetZombie)) {
-                                tiles[i][col].getZombies().remove(targetZombie);
-                                plantTargetMap.remove(plant);  // Hapus target dari map setelah mati
-                                break;
+                            if (!tiles[i][col].getZombies().isEmpty()) {
+                                for (Zombie z : tiles[i][col].getZombies()) {
+                                    // Possibly add some logic here if needed
+                                }
+    
+                                if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
+                                    targetZombie = tiles[i][col].getZombies().get(0);
+                                    plantTargetMap.put(plant, targetZombie);
+                                }
+                                targetFound = true;
+                                break; // Exit the column loop after finding a target
                             }
                         }
-                    }
+    
+                        if (!targetFound) {
+                            // If no target zombie is found, remove the plant from the target map
+                            plantTargetMap.remove(plant);
+                            continue;
+                        }
+    
+                        // Attack the target zombie
+                        targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
+                        if (targetZombie.getHealth() <= 0) {
+                            for (int col = j; col < tiles[i].length; col++) {
+                                if (tiles[i][col].getZombies().contains(targetZombie)) {
+                                    tiles[i][col].getZombies().remove(targetZombie);
+                                    plantTargetMap.remove(plant);  // Remove the target from the map after it dies
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
+    
+    
 
     public void setupTiles() {
         for (int i = 0; i < tiles.length; i++) {

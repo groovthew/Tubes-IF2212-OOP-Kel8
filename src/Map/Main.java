@@ -70,7 +70,7 @@ public class Main {
             Plant plant7 = new Plant("Jalapeno", 100, 0, 0, 150, 0, 20, false);
             Plant plant8 = new Plant("Tall-nut", 2000, 0, 0, 100, 0, 20, false);
             Plant plant9 = new Plant("Lilypad", 100, 0, 0, 25, 0, 10, true);
-            Plant plant10 = new Plant("Sun-Shroom", 100, 0, 0, 15, 0, 5, false);
+            Plant plant10 = new Plant("Twin Sunflower", 100, 0, 0, 50, 0, 10, false);
 
             inventory.addPlantToInventory(plant1);
             inventory.addPlantToInventory(plant2);
@@ -226,7 +226,7 @@ public class Main {
 
         System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println(green + "==============================================" + reset);
-            System.out.println(yellow + "|   PLAY     |     DISPLAY    |     BACK     |" + reset);
+            System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
             System.out.println( green+ "==============================================" + reset);
 
         while (true) {
@@ -241,7 +241,7 @@ public class Main {
             if (scanner.hasNextLine()) {
                 String command = scanner.nextLine();
 
-                if (command.equalsIgnoreCase("play")) {
+                if (command.equalsIgnoreCase("1")) {
                     Map map = new Map(6, 11);
                     map.initiateMap();
                     SunManager sunManager = new SunManager();
@@ -256,7 +256,7 @@ public class Main {
                     sun.startProducingSun();
                 }    
 
-                if (command.equalsIgnoreCase("display")) {
+                if (command.equalsIgnoreCase("2")) {
                     gameMap.displayMap();
                     System.out.println(green + "==============================================" + reset);
                     System.out.println(yellow + "|                    BACK                    |" + reset);
@@ -264,7 +264,7 @@ public class Main {
                     
                 }
 
-                if (command.equalsIgnoreCase("back")){
+                if (command.equalsIgnoreCase("3")){
             
                     break;
                 }

@@ -17,7 +17,7 @@ public class PoleVaultingZombie extends Zombie {
             Tile nextTile = tiles[row][col - 1];
 
             if (!nextTile.getPlants().isEmpty()) {
-                // Perform the jump
+                // Perform the jump over the plant
                 Tile targetTile = tiles[row][col - 2 < 0 ? 0 : col - 2];
                 targetTile.addZombie(this);
                 currentTile.removeZombie(this);

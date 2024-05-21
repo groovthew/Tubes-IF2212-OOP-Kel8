@@ -100,9 +100,4 @@ public class Tile {
     public Lilypad getLilypad() {
         return lilypad;
     }
-
-    // public String totalHealth() {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'totalHealth'");
-    // }
 }

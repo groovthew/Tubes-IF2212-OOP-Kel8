@@ -18,10 +18,4 @@ public class SnowPea extends Plant {
     //         System.out.println("No zombie on this tile to shoot at.");
     //     }
     // }
-
-    public static void main(String[] args) {
-        SnowPea snowPea = new SnowPea("Snow Pea", 100, 25, 4, 175, -1, 10);
-        System.out.println("Name: " + snowPea.getName());
-        System.out.println("Health of the plant is: " + snowPea.getHealth());
-    }
 }

@@ -11,11 +11,12 @@ public class Jalapeno extends Plant {
         super("Jalapeno", 100, 0, 0, 150, 0, 20, false);
     }
 
-    public void clearZombieTile(List<Tile> row) {
-        for (Tile tile : row) {
+    public void clearZombieRow(Tile[][] tiles, int row) {
+        for (Tile tile : tiles[row]) {
             tile.removeAllZombies();
         }
     }
+
 
     // public static void main(String[] args) {
     //     // Create a row of tiles

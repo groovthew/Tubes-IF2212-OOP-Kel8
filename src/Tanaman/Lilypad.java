@@ -1,6 +1,5 @@
 package Tanaman;
 
-import Zombie.*;
 
 public class Lilypad extends Plant {
     Plant plant;

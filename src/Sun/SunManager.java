@@ -3,8 +3,7 @@ package Sun;
 import java.util.ArrayList;
 import java.util.List;
 import Tanaman.Sunflower;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class SunManager implements SunListener{
     private List<ProduceSun> producers;
