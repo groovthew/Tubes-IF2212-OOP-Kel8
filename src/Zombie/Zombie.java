@@ -1,9 +1,9 @@
 package Zombie;
 
 import Main.Character;
-import Tanaman.Peashooter;
-import Tanaman.Plant;
-import Map.Tile;
+// import Tanaman.Peashooter;
+// import Tanaman.Plant;
+// import Map.Tile;
 import Map.Map;
 
 public abstract class Zombie extends Character {

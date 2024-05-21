@@ -1,6 +1,6 @@
 package Tanaman;
 
-import java.util.Random;
+
 
 import Sun.ProduceSun;
 import Sun.Sun;
