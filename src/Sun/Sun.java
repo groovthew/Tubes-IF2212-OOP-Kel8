@@ -46,6 +46,34 @@ public class Sun implements ProduceSun{
             sunProductionThread.start();
         }
     }
+    // public void startProducingSun(Map map) {
+    //     if (!makingSun) {
+    //         makingSun = true;
+    //         sunProductionThread = new Thread(() -> {
+    //             Random random = new Random();
+    //             while (makingSun) {
+    //                 try {
+    //                     // Calculate dynamic sleep time, for example, 5 to 10 seconds
+    //                     int sleepTime = (random.nextInt(6) + 5) * 1000;
+    //                     Thread.sleep(sleepTime);
+    //                     increaseSun(); 
+                        
+
+    //                     // Check if zombies have reached the base or if no zombies are left after 160 seconds
+    //                     if (map.gameOver()) {
+    //                         makingSun = false; // Stop producing sun due to game conditions
+    //                         break; // Exit the loop
+    //                     }
+    //                 } catch (InterruptedException e) {
+    //                     System.out.println("Sun production thread was interrupted.");
+    //                     makingSun = false; // Ensure flag is updated to stop the thread
+    //                     Thread.currentThread().interrupt(); // Properly handle thread interruption
+    //                 }
+    //             }
+    //         });
+    //         sunProductionThread.start();
+    //     }
+    // }
 
     @Override
     public void stopProducingSun() {

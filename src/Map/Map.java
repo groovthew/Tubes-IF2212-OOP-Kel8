@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
@@ -22,13 +20,18 @@ public class Map {
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
-    // private Runnable zombieReachedBaseListener;
+    private long startTime;
+    private boolean gameStarted = false;
 
     public Map(int x, int y) {
         tiles = new Tile[6][11];
         setupTiles();
         initializeZombieTypes();
         initializeTiles();
+    }
+    public void startGame(){
+        startTime = System.currentTimeMillis();
+        gameStarted = true;
     }
 
     private void initializeTiles() {
@@ -185,8 +188,11 @@ public class Map {
     public synchronized void addPlant(Plant plant, int i, int j) {
         if (isValidPosition(i, j)) {
             if (canPlacePlant(plant, i, j)) {
-                tiles[i][j].addPlant(plant);
-                System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
+                int plantCost = plant.getCost();
+                if(SunManager.useSun(plantCost)){
+                    tiles[i][j].addPlant(plant);
+                    System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "] Sun Remaining: " + SunManager.getTotalSun());
+                }
             } else {
                 System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
             }
@@ -228,49 +234,75 @@ public class Map {
     
 
     public void spawnZombies() {
-        Timer spawnTimer = new Timer();
-        TimerTask spawnTask = new TimerTask() {
-            private int timeElapsed = 0;
-            @Override
-            public void run() {
-                // if (!continueSpawning) {
-                //     System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                //     spawnTimer.cancel();
-                //     return;
-                // }
-                timeElapsed += 3;
-                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
-                    if (timeElapsed > 160 || !continueSpawning) {
-                        System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                        spawnTimer.cancel();
+        Thread spawnThread = new Thread(() -> {
+            int elapsedTime = 0;  // Track elapsed time in seconds
+    
+            while (!gameOver()) {
+                if (elapsedTime >= 2 && elapsedTime <= 160 && getZombieCount() < 10) {
+                    int spawnColumn = tiles[0].length - 1;
+    
+                    for (int i = 0; i < tiles.length; i++) {
+                        if (random.nextDouble() < 0.3) {
+                            Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
+                            String zombieType = zombieClass.getSimpleName();
+    
+                            if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && !tiles[i][spawnColumn].isWater()) {
+                                continue;
+                            } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
+                                continue;
+                            }
+    
+                            Zombie zombie = createZombie(zombieClass);
+                            tiles[i][spawnColumn].addZombie(zombie);
+    
+                            // Attack handling
+                            zombieAttacking();
+                            plantAttacking();
+                        }
                     }
+                }
+    
+                try {
+                    Thread.sleep(3000); // Wait for 3 seconds before the next check and spawn cycle
+                    elapsedTime += 3;  // Increment the elapsed time by 3 seconds
+                } catch (InterruptedException e) {
+                    System.out.println("Zombie spawning thread was interrupted.");
+                    Thread.currentThread().interrupt(); // Properly handle thread interruption
                     return;
                 }
-
-                int spawnColumn = tiles[0].length - 1;
-                int zombieCount = getZombieCount();
-                for (int i = 0; i < tiles.length; i++) {
-                    if (random.nextDouble() < 0.3 && zombieCount < 10) {
-                        Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
-                        String zombieType = zombieClass.getSimpleName();
-
-                        if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && !tiles[i][spawnColumn].isWater()) {
-                            continue;
-                        } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
-                            continue;
-                        }
-
-                        Zombie zombie = createZombie(zombieClass);
-                        tiles[i][spawnColumn].addZombie(zombie);
-                        zombieCount++;
-                        zombieAttacking();
-                    }
-                }
-                plantAttacking();
             }
-        };
-
-        spawnTimer.schedule(spawnTask, 0, 3000);
+            System.out.println("Game over condition met, stopping zombie spawning.");
+        });
+    
+        spawnThread.start();
+    }
+    public boolean zombiesReachedBase() {
+        for (int i = 0; i < tiles.length; i++) {
+            if (!tiles[i][0].getZombies().isEmpty()) {
+                return true;  // Zombies have reached the base
+            }
+        }
+        return false;  // No zombies at the base
+    }
+    public boolean gameOver(){
+        if (zombiesReachedBase()){
+            return true;
+        }
+        if(gameStarted && (System.currentTimeMillis()- startTime > 160000)){
+            if (getZombieCount()==0){
+                return true;
+            }
+        }
+        return false;
+    }
+    public int getZombieCount() {
+        int count = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                count += tiles[i][j].getZombies().size();
+            }
+        }
+        return count;
     }
 
     public Zombie createZombie(Class<? extends Zombie> zombieClass) {
@@ -280,16 +312,6 @@ public class Map {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private int getZombieCount() {
-        int count = 0;
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                count += tiles[i][j].getZombies().size();
-            }
-        }
-        return count;
     }
 
     private void initializeZombieTypes() {
@@ -334,51 +356,42 @@ public class Map {
     }
 
     public void moveZombies() {
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            boolean zombieReachedBase = false;
-
-            for (int i = 0; i < tiles.length; i++) {
-                for (int j = 1; j < tiles[i].length; j++) {
-                    List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
-                    if (!zombiesToMove.isEmpty()) {
-                        if (!tiles[i][j - 1].getPlants().isEmpty()) {
-                            Plant plant = tiles[i][j - 1].getPlants().get(0);
-                            for (Zombie zombie : zombiesToMove) {
-                                zombieAttacking();
-                                if (plant.getHealth() <= 0) {
-                                    tiles[i][j - 1].getZombies().add(zombie);
-                                    tiles[i][j].getZombies().remove(zombie);
+        new Thread(() -> {
+            try {
+                int elapsedTime = 0;
+                while (!gameOver()) {
+                    for (int i = 0; i < tiles.length; i++) {
+                        for (int j = 1; j < tiles[i].length; j++) {
+                            List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
+                            if (!zombiesToMove.isEmpty()) {
+                                if (!tiles[i][j - 1].getPlants().isEmpty()) {
+                                    Plant plant = tiles[i][j - 1].getPlants().get(0);
+                                    for (Zombie zombie : zombiesToMove) {
+                                        zombieAttacking();
+                                        if (plant.getHealth() <= 0) {
+                                            tiles[i][j - 1].getZombies().add(zombie);
+                                            tiles[i][j].getZombies().remove(zombie);
+                                        }
+                                    }
+                                } else {
+                                    tiles[i][j - 1].getZombies().addAll(zombiesToMove);
+                                    tiles[i][j].getZombies().clear();
                                 }
                             }
-                        } else {
-                            tiles[i][j - 1].getZombies().addAll(zombiesToMove);
-                            tiles[i][j].getZombies().clear();
                         }
                     }
+                    
+                    plantAttacking();
+                    displayMap();  
+                    Thread.sleep(1000);  
+                    elapsedTime += 1;  
                 }
-
-                if (!tiles[i][0].getZombies().isEmpty()) {
-                    zombieReachedBase = true;
-                    break;
-                }
+            } catch (InterruptedException e) {
+                System.out.println("Zombie moving thread was interrupted.");
+                Thread.currentThread().interrupt(); 
             }
-
-            plantAttacking();
-
-            if (zombieReachedBase) {
-                System.out.println("NT ZOMBIE DAH SAMPE BASE!");
-                continueSpawning = false;
-                timer.cancel();
-            }
-
-            displayMap();
-        }
-    };
-
-    timer.schedule(task,0, 10000);
+            System.out.println("GAME OVER! ");
+        }).start();
     }
 
     public void displayMap() {
@@ -492,62 +505,55 @@ public class Map {
     // }
     
 
-    public void initiateMap(){
-        Map map = new Map(6, 11);
-        Sun sun = new Sun(0);
-        sun.startProducingSun();
+    public void plantInput(){
         Thread inputThread = new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
-            while (true) {
-                System.out.println("Enter plant type (PS, SF, CH, SP, SQ, SS, TN, JP, LL, WN) and coordinates (i, j): ");
-                
-                String plantType = scanner.next();
-                int i = scanner.nextInt();
-                int j = scanner.nextInt();
-    
-                Plant plant = null;
-                switch (plantType) {
-                    case "PS":
-                        plant = new Peashooter(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "SF":
-                        plant = new Sunflower(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "CH":
-                        plant = new Chomper(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "SP":
-                        plant = new SnowPea(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "SQ":
-                        plant = new Squash(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "TS":
-                        plant = new TwinSunflower(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "TN":
-                        plant = new TallNut(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "JP":
-                        plant = new Jalapeno(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "LL":
-                        plant = new Lilypad(null, 0, 100, 25, 0, 0, 0);
-                        break;
-                    case "WN":
-                        plant = new WallNut(null, 100, 100, 25, 0, 0);
-                        break;
-                    default:
-                        System.out.println("Invalid plant type.");
-                        continue;
+                while (!gameOver()) {
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Enter plant type (PS, SF, CH, SP, SQ, SS, TN, JP, LL, WN) and coordinates (i, j): ");
+                    String plantType = scanner.next();
+                    int i = scanner.nextInt();
+                    int j = scanner.nextInt();
+                    Plant plant = null;
+                    switch (plantType) {
+                        case "PS":
+                            plant = new Peashooter(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "SF":
+                            plant = new Sunflower(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "CH":
+                            plant = new Chomper(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "SP":
+                            plant = new SnowPea(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "SQ":
+                            plant = new Squash(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "TS":
+                            plant = new TwinSunflower(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "TN":
+                            plant = new TallNut(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "JP":
+                            plant = new Jalapeno(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "LL":
+                            plant = new Lilypad(null, 0, 100, 25, 0, 0, 0);
+                            break;
+                        case "WN":
+                            plant = new WallNut(null, 100, 100, 25, 0, 0);
+                            break;
+                        default:
+                            System.out.println("Invalid plant type.");
+                            continue;
+                    }
+                    addPlant(plant, i, j);
                 }
-                map.addPlant(plant, i, j);
-            }
-        });
-    
-        inputThread.start();
-        map.spawnZombies();
-        map.moveZombies();
+                System.out.println("UDAHAN");
+            });
         
-    }
+            inputThread.start();
+        }
 }

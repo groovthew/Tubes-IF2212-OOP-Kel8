@@ -206,69 +206,52 @@ public class Main {
     }    
 
     public static void startGame(Scanner scanner) {
-        Random random = new Random();
-        Map gameMap = new Map(6, 11);
-        Tile tile = new Tile(false, false);
-
-        Thread zombieAdder = new Thread(() -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    // Simulate adding zombies every 5 seconds
-                    Thread.sleep(5000);
-                    tile.addZombie(new NormalZombie());
-                }
-            } catch (InterruptedException e) {
-                System.out.println("Zombie adding thread interrupted.");
-            }
-        });
-
-        zombieAdder.start();  // Start the zombie adding thread
-
+        // Random random = new Random();
+        // Map gameMap = new Map(6, 11);
+        // Tile tile = new Tile(false, false);
         System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println(green + "==============================================" + reset);
             System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
             System.out.println( green+ "==============================================" + reset);
 
-        while (true) {
-            long startTime = System.currentTimeMillis();
-            while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
-                try {
-                    Thread.sleep(200); // Check every 200 milliseconds
-                } catch (InterruptedException e) {
-                    System.out.println("Sleep interrupted");
-                }
-            }
-            if (scanner.hasNextLine()) {
-                String command = scanner.nextLine();
-
+            boolean gameRunning = true;
+            while (gameRunning) {
+                System.out.print("Please enter a command: ");
+                String command = scanner.nextLine().trim();  // Get user input
+        
                 if (command.equalsIgnoreCase("1")) {
                     Map map = new Map(6, 11);
-                    map.initiateMap();
-                    SunManager sunManager = new SunManager();
-
-                    // Create instances of Sun, Sunflower, and SunShroom
+                    map.plantInput();
+                    map.spawnZombies();
+                    map.moveZombies();
+                    SunManager sunManager = new SunManager();  // Use singleton instance
                     Sun sun = new Sun(0);
-            
-                    // Add producers to SunManager
+                    //sun.startProducingSun(map);
+                    sun.setSunListener(sunManager);
                     sunManager.addProducer(sun);
-            
-                    // Start producing sun
-                    sun.startProducingSun();
-                }    
-
-                if (command.equalsIgnoreCase("2")) {
-                    gameMap.displayMap();
-                    System.out.println(green + "==============================================" + reset);
-                    System.out.println(yellow + "|                    BACK                    |" + reset);
-                    System.out.println( green+ "==============================================" + reset);
-                    
-                }
-
-                if (command.equalsIgnoreCase("3")){
-            
-                    break;
+        
+                    // Run a loop to keep checking the game state
+                    while (!map.gameOver()) {
+                        try {
+                            Thread.sleep(1000);  // Check the game state every second
+                        } catch (InterruptedException e) {
+                            System.out.println("Main game loop interrupted.");
+                            break;
+                        }
+                    }
+                    System.out.println("Game Over. Press any key to return to main menu.");
+                    scanner.nextLine();  // Wait for user input to return to the main menu
+                    gameRunning = false;  // Optionally set to false if you want to exit the game after one round
+                } else if (command.equalsIgnoreCase("2")) {
+                    // Optionally display the map or other game information
+                    System.out.println("Displaying game information...");
+                    // gameMap.displayMap(); // Uncomment if you have a method to display the game map or state
+                } else if (command.equalsIgnoreCase("3")) {
+                    System.out.println("Exiting game...");
+                    gameRunning = false;
+                } else {
+                    System.out.println("Invalid command, please try again.");
                 }
             }
-        }
     }
 }
