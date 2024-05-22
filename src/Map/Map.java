@@ -10,14 +10,13 @@ import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
 import Zombie.*;
+import java.util.Iterator;
 
 public class Map {
     private Tile[][] tiles;
     private Random random = new Random();
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
-    // private boolean adaPlant;
-    // private boolean adaZombie;
     private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
     static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
@@ -80,7 +79,6 @@ public class Map {
             }
         }
     }
-    
 
     public void processZombies() {
         // First, handle jumping for PoleVaultingZombies
@@ -114,66 +112,56 @@ public class Map {
     public void plantAttacking() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
-                List<Plant> plants = tiles[i][j].getPlants();
+                List<Plant> plants = new ArrayList<>(tiles[i][j].getPlants());
+                Iterator<Plant> plantIterator = plants.iterator();
     
-                for (Plant plant : plants) {
-                    // Check if the plant is a Lilypad and has a plant on top
+                while (plantIterator.hasNext()) {
+                    Plant plant = plantIterator.next();
                     if (plant instanceof Lilypad) {
                         Plant plantOnTop = ((Lilypad) plant).getPlantOnTop();
                         if (plantOnTop != null) {
                             plant = plantOnTop;
                         } else {
-                            // If there's no plant on top of the Lilypad, skip this iteration
                             continue;
                         }
                     }
-    
-                    Zombie targetZombie = plantTargetMap.get(plant);
-    
                     if (plant instanceof Peashooter) {
+                        Zombie targetZombie = plantTargetMap.get(plant);
                         boolean targetFound = false;
-    
-                        // Find target zombie from the current column to the end of the row
                         for (int col = j; col < tiles[i].length; col++) {
                             if (!tiles[i][col].getZombies().isEmpty()) {
-                                for (Zombie z : tiles[i][col].getZombies()) {
-                                    // Possibly add some logic here if needed
-                                }
-    
                                 if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
                                     targetZombie = tiles[i][col].getZombies().get(0);
                                     plantTargetMap.put(plant, targetZombie);
                                 }
                                 targetFound = true;
-                                break; // Exit the column loop after finding a target
+                                break;
                             }
                         }
     
                         if (!targetFound) {
-                            // If no target zombie is found, remove the plant from the target map
                             plantTargetMap.remove(plant);
                             continue;
                         }
-    
-                        // Attack the target zombie
                         targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
                         if (targetZombie.getHealth() <= 0) {
                             for (int col = j; col < tiles[i].length; col++) {
                                 if (tiles[i][col].getZombies().contains(targetZombie)) {
                                     tiles[i][col].getZombies().remove(targetZombie);
-                                    plantTargetMap.remove(plant);  // Remove the target from the map after it dies
+                                    plantTargetMap.remove(plant); 
                                     break;
                                 }
                             }
                         }
+                    }
+                    if (plant instanceof Squash) {
+                        ((Squash) plant).attackZombie(tiles, i, j);
                     }
                 }
             }
         }
     }
     
-    
-
     public void setupTiles() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -188,11 +176,12 @@ public class Map {
         if (isValidPosition(i, j)) {
             if (canPlacePlant(plant, i, j)) {
                 tiles[i][j].addPlant(plant);
+                System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
             } else {
-                System.out.println("Invalid position or plant type for the specified position.");
+                System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
             }
         } else {
-            System.out.println("Invalid position for the specified plant.");
+            System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
         }
     }
 
@@ -203,7 +192,7 @@ public class Map {
     private boolean canPlacePlant(Plant plant, int i, int j) {
         if (tiles[i][j].isWater() && plant.isLilypad()) {
             return true;
-        } else if (!tiles[i][j].isWater() && !plant.isLilypad()) {
+        } else if (!tiles[i][j].isWater() && !plant.isLilypad() && !getAdaPlant(tiles, i, j)) {
             return true;
         } else if (tiles[i][j].isWater() && tiles[i][j].hasLilypad() && !plant.isLilypad()) {
             return true;
