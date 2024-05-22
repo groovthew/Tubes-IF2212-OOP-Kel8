@@ -6,48 +6,35 @@ import Tanaman.Sunflower;
 
 
 public class SunManager implements SunListener{
-    private static List<ProduceSun> producers;
-    private static int totalSun;
+    private List<ProduceSun> producers;
+    private int totalSun;
 
     public SunManager() {
         producers = new ArrayList<>();
         totalSun = 0;
     }
-    public synchronized static void decreaseSun(int amount){
-        if (useSun(amount)) {
-            totalSun -= amount;
-        }
-        System.out.println(totalSun);
-    }
+
     public void addProducer(ProduceSun producer) {
-        producers.add(producer);
-        producer.setSunListener(this); 
-        updateSunAmount();
-    }
-    public synchronized static boolean useSun(int amount) {
-        
-        if (totalSun >= amount) {
-            totalSun -= amount;
-            return true;
+        if (producer instanceof Sun) {
+            ((Sun) producer).setSunListener(this);
+        } else if (producer instanceof Sunflower) {
+            ((Sunflower) producer).setSunListener(this);
         }
-        return false;
-    }
-    public static synchronized int getTotalSun() {
-        return totalSun;
+        producers.add(producer);
     }
 
     @Override
     public void onSunProduced() {
-        updateSunAmount();
+        totalSun = getTotalSun();
         System.out.println("Total Sun: " + totalSun);
     }
 
-    private void updateSunAmount() {
-        int sum = 0; 
+    public int getTotalSun() {
+        int sum = 0;
         for (ProduceSun producer : producers) {
             sum += producer.getAmount();
         }
-        totalSun = sum;
+        return sum;
     }
 
     public static void main(String[] args) {

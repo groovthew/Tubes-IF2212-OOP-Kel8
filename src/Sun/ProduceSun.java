@@ -5,5 +5,4 @@ public interface ProduceSun {
     int getAmount();
     void startProducingSun();
     void stopProducingSun();
-    void setSunListener(SunListener listener);
 }
