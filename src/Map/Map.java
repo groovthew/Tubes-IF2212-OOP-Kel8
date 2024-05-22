@@ -157,6 +157,10 @@ public class Map {
                     if (plant instanceof Squash) {
                         ((Squash) plant).attackZombie(tiles, i, j);
                     }
+                    if (plant instanceof Jalapeno) {
+                        ((Jalapeno) plant).attackRow(tiles, i, j);
+                        plantIterator.remove();
+                    }
                 }
             }
         }
