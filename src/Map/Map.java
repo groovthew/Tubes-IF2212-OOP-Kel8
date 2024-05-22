@@ -161,6 +161,9 @@ public class Map {
                         ((Jalapeno) plant).attackRow(tiles, i, j);
                         plantIterator.remove();
                     }
+                    if (plant instanceof Chomper) {
+                        ((Chomper) plant).instantKillZombie(tiles, i, j);
+                    }
                 }
             }
         }

@@ -2,34 +2,36 @@ package Tanaman;
 
 import Map.Tile;
 import Zombie.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Chomper extends Plant {
     private boolean isEating; // Untuk menandai apakah Chomper sedang makan atau tidak
     private int eatingCooldown; // Waktu cooldown setelah Chomper makan
+    private Timer timer;
 
     public Chomper(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
-        super("Chomper", 1000, 1000, 0, 150, 0, 10,false);
+        super("Chomper", 200, 1000, 0, 150, 0, 10, false);
         this.isEating = false;
-        this.eatingCooldown = 0;
+        this.eatingCooldown = 15;
+        this.timer = new Timer();
     }
 
-    public void instantKillZombie(Tile[][] tiles, int row, int col) {
-        if (!isEating && col > 0 && !tiles[row][col - 1].getZombies().isEmpty()) {
-            Zombie zombie = tiles[row][col - 1].getZombies().get(0);
-            zombie.setHealth(0); // Instantly kill the zombie
-            tiles[row][col - 1].getZombies().remove(zombie); // Remove the zombie from the tile
-            System.out.println("Chomper instantly killed a zombie on tile [" + row + "][" + (col - 1) + "]");
-            isEating = true;
-            eatingCooldown = 10; // Set cooldown after eating
-        }
-    }
-
-    public void eatingCoolDown() {
+    public void instantKillZombie(Tile[][] tiles, int i, int j) {
         if (isEating) {
-            eatingCooldown--;
-            if (eatingCooldown <= 0) {
-                isEating = false;
-            }
+            return; 
+        }
+        if (j < tiles[i].length - 1 && !tiles[i][j + 1].getZombies().isEmpty()) {
+            tiles[i][j + 1].getZombies().clear();
+            isEating = true; 
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isEating = false;
+                }
+            }, eatingCooldown * 1000);
+            System.out.println("Chomper attacked zombies on the right tile [" + i + "][" + (j + 1) + "] and is now on cooldown.");
         }
     }
 }
