@@ -164,6 +164,9 @@ public class Map {
                     if (plant instanceof Chomper) {
                         ((Chomper) plant).instantKillZombie(tiles, i, j);
                     }
+                    if (plant instanceof SnowPea) {
+                        ((SnowPea) plant).attackZombie(tiles, i, j);
+                    }
                 }
             }
         }

@@ -4,7 +4,7 @@ public abstract class Character {
     protected String name;
     private int health;
     private int attack_damage;
-    private int attack_speed;
+    private double attack_speed;
     private int x;
     private int y;
 
@@ -19,12 +19,15 @@ public abstract class Character {
     public String getName(){ return name;}
     public int getHealth(){ return health;}
     public int getAttackDamage(){ return attack_damage;}
-    public int getAttackSpeed(){ return attack_speed;}
+    public double getAttackSpeed(){ return attack_speed;}
     public int getX() { return x;}
     public int getY() { return y;}
 
     //setter
     public void setHealth(int health){
         this.health = health;
+    }
+    public void setAttackSpeed(double attack_speed){
+        this.attack_speed = attack_speed;
     }
 }
