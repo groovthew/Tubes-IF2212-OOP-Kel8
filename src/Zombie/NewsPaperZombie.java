@@ -26,10 +26,6 @@ public class NewsPaperZombie extends Zombie{
         // this.setWalkingSpeed(this.getWalkingSpeed() * 2); // ini gabisa gini, pake thread?
     }
 
-    public void attack(){
-        
-    }
-
     public static void main(String[] args) {
         NewsPaperZombie nz = new NewsPaperZombie();
         // Example of newspaper getting destroyed
