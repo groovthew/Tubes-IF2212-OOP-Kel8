@@ -100,7 +100,6 @@ public class Map {
                 for (Zombie zombie : zombies) {
                     if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
                         ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
-                        addZombie(zombie, i, j-2);
                     }
                 }
             }
@@ -209,14 +208,6 @@ public class Map {
             }
         } else {
             System.out.println("Tanaman " + plant.getName() + " tidak ada di deck!");
-        }
-    }
-
-    public synchronized void addZombie(Zombie zombie, int i, int j){
-        if (isValidPosition(i, j)) {
-            tiles[i][j].addZombie(zombie);
-        } else {
-            System.out.println("Invalid position for Zombie.");
         }
     }
 
@@ -385,6 +376,12 @@ public class Map {
                                 if (!tiles[i][j - 1].getPlants().isEmpty()) {
                                     Plant plant = tiles[i][j - 1].getPlants().get(0);
                                     for (Zombie zombie : zombiesToMove) {
+                                        if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
+                                            ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
+                                        }
+                                        if (zombie instanceof DolphinRiderZombie && !((DolphinRiderZombie) zombie).hasJumped()) {
+                                            ((DolphinRiderZombie) zombie).jumpTile(tiles, i, j);
+                                        }
                                         zombieAttacking();
                                         if (plant.getHealth() <= 0) {
                                             tiles[i][j - 1].getZombies().add(zombie);
