@@ -5,8 +5,4 @@ public class ScreenDoorZombie extends Zombie {
         super("Screen Door Zombie", 300, 125, 1);
         
     }
-
-    public void attack(){
-        
-    }
 }

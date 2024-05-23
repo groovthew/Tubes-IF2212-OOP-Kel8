@@ -23,11 +23,6 @@ public class DolphinRiderZombie extends Zombie {
             // this.setSpeed(this.getSpeed() / 2); // ini hrsnya thread jg
         }
     }
-
-    public void attack(){
-        
-    }
-
     public static void main(String[] args) {
         DolphinRiderZombie drz = new DolphinRiderZombie();
         drz.jump();

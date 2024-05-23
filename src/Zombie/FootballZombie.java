@@ -5,7 +5,4 @@ public class FootballZombie extends Zombie {
         super("Football Zombie", 350, 100, 1,4);
     }
 
-    public void attack(){
-        
-    }
 }
