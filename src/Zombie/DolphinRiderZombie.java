@@ -1,30 +1,31 @@
 package Zombie;
 
+import Map.Tile;
+import Tanaman.Plant;
+
 public class DolphinRiderZombie extends Zombie {
-    private boolean isJumped;
+    private boolean hasJumped = false;
     
     public DolphinRiderZombie(){
         super("Dolphin Rider Zombie", 175, 100, 1, true);  
-        this.isJumped = false;  
     }
     
-    public boolean isJumped() {
-        return isJumped;
+    public boolean hasJumped() {
+        return hasJumped;
     }
 
-    public void setJumped(boolean isJumped) {
-        this.isJumped = isJumped;
-    }
-
-    public void jump() {
-        if (!isJumped) {
-            System.out.println("Dolphin Rider Zombie jumps over the first plant!");
-            this.setJumped(true);
-            // this.setSpeed(this.getSpeed() / 2); // ini hrsnya thread jg
+    public void jumpTile(Tile[][] tiles, int i, int j) {
+        if (hasJumped) {
+            return;
         }
-    }
-    public static void main(String[] args) {
-        DolphinRiderZombie drz = new DolphinRiderZombie();
-        drz.jump();
+        // Pastikan bahwa tile berikutnya berada dalam batas dan terdapat tanaman
+        if (j >= 2 && !tiles[i][j - 1].getPlants().isEmpty()) {
+                Plant plant = tiles[i][j - 1].getPlants().get(0);
+                tiles[i][j - 1].getPlants().remove(plant);
+                tiles[i][j].getZombies().remove(this);
+                tiles[i][j - 2].getZombies().add(this);
+                hasJumped = true;
+                System.out.println(getName() + " jumped from tile [" + i + "][" + j + "] to tile [" + i + "][" + (j - 2) + "]");
+        } 
     }
 }

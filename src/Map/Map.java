@@ -358,6 +358,9 @@ public class Map {
                                 if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
                                     ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
                                 }
+                                if (zombie instanceof DolphinRiderZombie && !((DolphinRiderZombie) zombie).hasJumped()) {
+                                    ((DolphinRiderZombie) zombie).jumpTile(tiles, i, j);
+                                }
                                 zombieAttacking();
                                 if (plant.getHealth() <= 0) {
                                     tiles[i][j - 1].getZombies().add(zombie);
