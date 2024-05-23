@@ -48,7 +48,7 @@ public class Main {
                     new PlantsList();
                     break;
                 case "5":
-                    Help.displayHelp();
+                    Help.displayHelp();;
                     break;
                 case "3":
                     System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
@@ -121,12 +121,12 @@ public class Main {
                         break;
                     }
                     inventory.displayInventory();
-                    System.out.println("Enter the index of the plant to add from inventory:");
+                    System.out.println("Pilih tanaman yang diinginkan:");
                     int plantIndex = scanner.nextInt();
                     scanner.nextLine(); 
                     
                     try {
-                        if (plantIndex < 1 || plantIndex >= inventory.getInventory().size()) {
+                        if (plantIndex < 1 || plantIndex > inventory.getInventory().size()) {
                             System.out.println("Indeks tanaman tidak valid.");
                             break;
                         }
@@ -146,7 +146,7 @@ public class Main {
                         break;
                 case "3":
                     if (!deck.isDeckEmpty()) {
-                        System.out.println("Enter the index of the plant to remove from deck: ");
+                        System.out.println("Pilih tanaman yang ingin dihapus dari deck: ");
                         int index = scanner.nextInt();
                         scanner.nextLine();
                         deck.removePlant(index - 1);
@@ -156,7 +156,7 @@ public class Main {
                     break;
                 case "4":
                     if (!deck.isDeckEmpty()) {
-                        System.out.println("Enter the positions of the plants to swap (separated by space): ");
+                        System.out.println("Pilih 2 tanaman yang ingin ditukar posisinya: ");
                         int position1 = scanner.nextInt();
                         int position2 = scanner.nextInt();
                         scanner.nextLine(); 
@@ -169,7 +169,7 @@ public class Main {
                     inventory.displayInventory();
                     break;
                 case "6":
-                    System.out.println("Enter the positions of the plants to swap (separated by space): ");
+                    System.out.println("Pilih 2 tanaman yang ingin ditukar posisinya: ");
                     int pos1 = scanner.nextInt();
                     int pos2 = scanner.nextInt();
                     scanner.nextLine(); 
@@ -178,7 +178,7 @@ public class Main {
                 case "7":
                     return;
                 default:
-                    System.out.println(red + "Invalid choice. Please choose again." + reset);
+                    System.out.println(red + "Indeks tidak valid. Harap lakukan pemilihan ulang." + reset);
                 case "8":
                     try {
                         if (deck.isDeckEmpty()) {

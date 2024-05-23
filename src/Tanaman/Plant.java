@@ -11,8 +11,7 @@ public class Plant extends Character{
     private int range;
     private int cooldown;
     private boolean isAquatic = false;
-    private Map map;
-    private int x,y;
+  
 
     // Method
     public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown, boolean isAquatic) {
