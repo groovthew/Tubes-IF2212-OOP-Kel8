@@ -485,7 +485,7 @@ public class Map {
             while (true) {
                 System.out.println(yellow + "============================== DECK ================================" + reset);
                 deck.displayDeck();
-                System.out.println(yellow + "=================================================================" + reset);
+                System.out.println(yellow + "====================================================================" + reset);
                 System.out.println("Enter plant type (PS, SF, CH, SP, SQ, SS, TN, JP, LL, WN) and coordinates (i, j): ");
                 
                 String plantType = scanner.next().toUpperCase(); // Convert to uppercase for consistency

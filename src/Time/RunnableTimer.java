@@ -18,8 +18,6 @@ public class RunnableTimer implements Runnable {
             nightMode = true;
             sun.stopProducingSun();
             System.out.println("Night mode activated!");
-            // Anda bisa menambahkan logika lainnya untuk mengubah tampilan map menjadi night mode
-            // Misalnya, mengubah warna latar belakang, mengurangi pencahayaan, atau menambahkan efek visual lainnya.
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

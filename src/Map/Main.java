@@ -11,8 +11,8 @@ import Tanaman.*;
 import Zombie.*;
 import Main.Deck;
 import Main.Inventory;
-import Main.plantsList;
-import Main.zombiesList;
+import Main.PlantsList;
+import Main.ZombiesList;
 import Main.Help;
 import java.util.Scanner;
 import Sun.*;
@@ -42,10 +42,10 @@ public class Main {
                     gameMenu();
                     break;
                 case "4":
-                    new zombiesList();
+                    new ZombiesList();
                     break;
                 case "2":
-                    new plantsList();
+                    new PlantsList();
                     break;
                 case "5":
                     Help.displayHelp();

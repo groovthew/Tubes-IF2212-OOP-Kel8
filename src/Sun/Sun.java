@@ -28,6 +28,18 @@ public class Sun implements ProduceSun{
         }
     }
 
+    public boolean reduceSun(int cost) {
+        if (totalSun >= cost) {
+            totalSun -= cost;
+            if (listener != null) {
+                listener.onSunProduced();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void startProducingSun() {
         if (!makingSun) {

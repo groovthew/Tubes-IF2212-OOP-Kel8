@@ -4,7 +4,7 @@ public class NewsPaperZombie extends Zombie{
     private boolean isNewspaperDestroyed;
     
     public NewsPaperZombie(){
-        super("News Paper Zombie", 200 , 100, 1);
+        super("Newspaper Zombie", 200 , 100, 1);
         this.isNewspaperDestroyed = false;
     }
 

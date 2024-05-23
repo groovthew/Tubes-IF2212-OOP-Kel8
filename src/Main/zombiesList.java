@@ -1,7 +1,7 @@
 package Main;
 import Zombie.*;
 
-public class zombiesList {
+public class ZombiesList {
     Zombie zombie;
     BucketHeadZombie bucketHead;
     ConeHeadZombie coneHeadZombie;
@@ -16,7 +16,10 @@ public class zombiesList {
 
     static String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
-    public zombiesList() {
+    static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
+    static String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
+
+    public ZombiesList() {
         bucketHead = new BucketHeadZombie();
         coneHeadZombie = new ConeHeadZombie();
         dolphinRiderZombie = new DolphinRiderZombie();
@@ -30,38 +33,41 @@ public class zombiesList {
         screenDoorZombie = new ScreenDoorZombie();
         yetiZombie = new YetiZombie();
 
-        System.out.println(yellow + "================== ZOMBIE LIST =====================" + reset);
-        System.out.println("1. Normal Zombie");
+        System.out.println(yellow + "===========================ZOMBIES LIST==========================" + reset);
+        System.out.println(" ");
+        System.out.println(red + "1. NORMAL ZOMBIE" + reset);
         printZombiesDetails(normalZombie);
-        System.out.println("2. Conehead Zombie");
+        System.out.println(red + "2. CONEHEAD ZOMBIE" + reset);
         printZombiesDetails(coneHeadZombie);
-        System.out.println("3. Dolphin Rider Zombie");
+        System.out.println(red + "3. DOLPHIN RIDER ZOMBIE" + reset);
         printZombiesDetails(dolphinRiderZombie);
-        System.out.println("4. Ducky Tube Zombie");
+        System.out.println(red + "4. DUCKY TUBE ZOMBIE" + reset);
         printZombiesDetails(duckyTubeZombie);
-        System.out.println("5. Football Zombie");
+        System.out.println(red + "5. FOOTBALL ZOMBIE" + reset);
         printZombiesDetails(footballZombie);
-        System.out.println("6. Newspaper Zombie");
+        System.out.println(red + "6. NEWSPAPER ZOMBIE" + reset);
         printZombiesDetails(newsPaperZombie);
-        System.out.println("7. Pole Vaulting Zombie");
+        System.out.println(red + "7. POLE VAULTING ZOMBIE" + reset);
         printZombiesDetails(poleVaultingZombie);
-        System.out.println("8. Screen Door Zombie");
+        System.out.println(red + "8. SCREEN DOOR ZOMBIE" + reset);
         printZombiesDetails(screenDoorZombie);
-        System.out.println("9. Bucket Head Zombie");
+        System.out.println(red + "9. BUCKETHEAD ZOMBIE" + reset);
         printZombiesDetails(bucketHead);
-        System.out.println("10. Yeti Zombie");
+        System.out.println(red + "10. YETI ZOMBIE" + reset);
         printZombiesDetails(yetiZombie);
+        System.out.println(yellow + "================================================================" + reset);
     }
 
+
     public void printZombiesDetails(Zombie zombie) {
-        System.out.println("Name: " + zombie.getName());
-        System.out.println("Health: " + zombie.getHealth());
-        System.out.println("Attack Damage: " + zombie.getAttackDamage());
-        System.out.println("Attack Speed: " + zombie.getAttackSpeed());
+        System.out.println(green + "Name: " + reset + zombie.getName());
+        System.out.println(green + "Health: " + reset + zombie.getHealth());
+        System.out.println(green + "Attack Damage: " + reset + zombie.getAttackDamage());
+        System.out.println(green + "Attack Speed: " + reset + zombie.getAttackSpeed());
         System.out.println(" ");
     }
 
     public static void main(String[] args) {
-        new zombiesList();
+        new ZombiesList();
     }
 }

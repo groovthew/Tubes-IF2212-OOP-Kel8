@@ -64,7 +64,7 @@ public class Inventory {
 }
 
   public void displayInventory() {
-    System.out.println(green + "============================INVENTORY===========================" + reset);
+    System.out.println(yellow + "============================INVENTORY===================================" + reset);
     int i = 1;
         if (!container.isEmpty()) {
             for (Plant plant : container) {
@@ -74,6 +74,7 @@ public class Inventory {
         } else {
             System.out.println("Inventory kosong");
         }
+        System.out.println(yellow + "========================================================================" + reset);
     }
 }
 

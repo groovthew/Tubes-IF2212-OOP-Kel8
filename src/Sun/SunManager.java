@@ -2,7 +2,7 @@ package Sun;
 
 import java.util.ArrayList;
 import java.util.List;
-import Tanaman.Sunflower;
+import Tanaman.*;
 
 
 public class SunManager implements SunListener{
@@ -37,18 +37,34 @@ public class SunManager implements SunListener{
         return sum;
     }
 
-    public static void main(String[] args) {
-        SunManager sunManager = new SunManager();
-
-        Sun sun = new Sun(0);
-        Sunflower sunflower = new Sunflower(null, 0, 0, 0, 0, 0, 0);
-
-        sunManager.addProducer(sun);
-        sunManager.addProducer(sunflower);
-
-        sun.startProducingSun();
-        sunflower.startProducingSun();
+    public boolean plant(Plant plant, int cost) {
+        for (ProduceSun producer : producers) {
+            if (producer instanceof Sun) {
+                Sun sun = (Sun) producer;
+                if (sun.reduceSun(cost)) {
+                    System.out.println("Menanam " + plant.getClass().getSimpleName() + " dengan biaya " + cost);
+                    return true;
+                } else {
+                    System.out.println("Tidak cukup matahari untuk menanam " + plant.getClass().getSimpleName());
+                    return false;
+                }
+            }
+        }
+        return false;
     }
+
+    // public static void main(String[] args) {
+    //     SunManager sunManager = new SunManager();
+
+    //     Sun sun = new Sun(0);
+    //     Sunflower sunflower = new Sunflower(null, 0, 0, 0, 0, 0, 0);
+
+    //     sunManager.addProducer(sun);
+    //     sunManager.addProducer(sunflower);
+
+    //     sun.startProducingSun();
+    //     sunflower.startProducingSun();
+    // }
 }
 
 
