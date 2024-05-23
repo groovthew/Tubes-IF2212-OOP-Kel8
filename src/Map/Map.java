@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Timer;
 import java.util.TimerTask;
+
 import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
@@ -24,7 +24,10 @@ public class Map {
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
     static String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
-    static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
+    static String reset = "\u001B[0m";
+    private long startTime;
+    private boolean gameStarted = false;
+   // Kode ANSI untuk mereset warna
     // private Runnable zombieReachedBaseListener;
 
     public Map(int x, int y, Deck deck) {
@@ -43,6 +46,10 @@ public class Map {
                 tiles[i][j] = new Tile(isWater, isSpawnArea);
             }
         }
+    }
+    public void startGame(){
+        startTime = System.currentTimeMillis();
+        gameStarted = true;
     }
 
     public void setTiles(Tile[][] tiles) {
@@ -246,61 +253,68 @@ public class Map {
     
 
     public void spawnZombies() {
-        Timer spawnTimer = new Timer();
-        TimerTask spawnTask = new TimerTask() {
-            private int timeElapsed = 0;
-            @Override
-            public void run() {
-                // if (!continueSpawning) {
-                //     System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                //     spawnTimer.cancel();
-                //     return;
-                // }
-                timeElapsed += 3;
-                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
-                    if (timeElapsed > 160 || !continueSpawning) {
-                        System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                        spawnTimer.cancel();
+        Thread spawnThread = new Thread(() -> {
+            int elapsedTime = 0;  // Track elapsed time in seconds
+    
+            while (!gameOver()) {
+                if (elapsedTime >= 20 && elapsedTime <= 160 && getZombieCount() < 10) {
+                    int spawnColumn = tiles[0].length - 1;
+    
+                    for (int i = 0; i < tiles.length; i++) {
+                        if (random.nextDouble() < 0.3) {
+                            Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
+                            String zombieType = zombieClass.getSimpleName();
+    
+                            if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && !tiles[i][spawnColumn].isWater()) {
+                                continue;
+                            } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
+                                continue;
+                            }
+    
+                            Zombie zombie = createZombie(zombieClass);
+                            tiles[i][spawnColumn].addZombie(zombie);
+    
+                            // Attack handling
+                            zombieAttacking();
+                            plantAttacking();
+                        }
                     }
+                }
+    
+                try {
+                    Thread.sleep(3000); // Wait for 3 seconds before the next check and spawn cycle
+                    elapsedTime += 3;  // Increment the elapsed time by 3 seconds
+                } catch (InterruptedException e) {
+                    System.out.println("Zombie spawning thread was interrupted.");
+                    Thread.currentThread().interrupt(); // Properly handle thread interruption
                     return;
                 }
-
-                int spawnColumn = tiles[0].length - 1;
-                int zombieCount = getZombieCount();
-                for (int i = 0; i < tiles.length; i++) {
-                    if (random.nextDouble() < 0.3 && zombieCount < 10) {
-                        Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
-                        String zombieType = zombieClass.getSimpleName();
-
-                        if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && !tiles[i][spawnColumn].isWater()) {
-                            continue;
-                        } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
-                            continue;
-                        }
-
-                        Zombie zombie = createZombie(zombieClass);
-                        tiles[i][spawnColumn].addZombie(zombie);
-                        zombieCount++;
-                        zombieAttacking();
-                    }
-                }
-                plantAttacking();
             }
-        };
-
-        spawnTimer.schedule(spawnTask, 0, 3000);
+            System.out.println("Game over condition met, stopping zombie spawning.");
+        });
+    
+        spawnThread.start();
     }
-
-    public Zombie createZombie(Class<? extends Zombie> zombieClass) {
-        try {
-            return zombieClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    public boolean zombiesReachedBase() {
+        for (int i = 0; i < tiles.length; i++) {
+            if (!tiles[i][0].getZombies().isEmpty()) {
+                return true;  // Zombies have reached the base
+            }
         }
+        return false;  // No zombies at the base
     }
-
-    private int getZombieCount() {
+    public boolean gameOver(){
+        if (zombiesReachedBase()){
+            return true;
+        }
+        if(gameStarted && (System.currentTimeMillis()- startTime > 160000)){
+            if (getZombieCount()==0){
+                return true;
+            }
+        }
+        return false;
+    }
+    public int getZombieCount() {
         int count = 0;
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -308,6 +322,14 @@ public class Map {
             }
         }
         return count;
+    }
+    public Zombie createZombie(Class<? extends Zombie> zombieClass) {
+        try {
+            return zombieClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void initializeZombieTypes() {
@@ -352,51 +374,42 @@ public class Map {
     }
 
     public void moveZombies() {
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            boolean zombieReachedBase = false;
-
-            for (int i = 0; i < tiles.length; i++) {
-                for (int j = 1; j < tiles[i].length; j++) {
-                    List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
-                    if (!zombiesToMove.isEmpty()) {
-                        if (!tiles[i][j - 1].getPlants().isEmpty()) {
-                            Plant plant = tiles[i][j - 1].getPlants().get(0);
-                            for (Zombie zombie : zombiesToMove) {
-                                zombieAttacking();
-                                if (plant.getHealth() <= 0) {
-                                    tiles[i][j - 1].getZombies().add(zombie);
-                                    tiles[i][j].getZombies().remove(zombie);
+        new Thread(() -> {
+            try {
+                int elapsedTime = 0;
+                while (!gameOver()) {
+                    for (int i = 0; i < tiles.length; i++) {
+                        for (int j = 1; j < tiles[i].length; j++) {
+                            List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
+                            if (!zombiesToMove.isEmpty()) {
+                                if (!tiles[i][j - 1].getPlants().isEmpty()) {
+                                    Plant plant = tiles[i][j - 1].getPlants().get(0);
+                                    for (Zombie zombie : zombiesToMove) {
+                                        zombieAttacking();
+                                        if (plant.getHealth() <= 0) {
+                                            tiles[i][j - 1].getZombies().add(zombie);
+                                            tiles[i][j].getZombies().remove(zombie);
+                                        }
+                                    }
+                                } else {
+                                    tiles[i][j - 1].getZombies().addAll(zombiesToMove);
+                                    tiles[i][j].getZombies().clear();
                                 }
                             }
-                        } else {
-                            tiles[i][j - 1].getZombies().addAll(zombiesToMove);
-                            tiles[i][j].getZombies().clear();
                         }
                     }
+                    
+                    plantAttacking();
+                    displayMap();  
+                    Thread.sleep(10000);  
+                    elapsedTime += 1;  
                 }
-
-                if (!tiles[i][0].getZombies().isEmpty()) {
-                    zombieReachedBase = true;
-                    break;
-                }
+            } catch (InterruptedException e) {
+                System.out.println("Zombie moving thread was interrupted.");
+                Thread.currentThread().interrupt(); 
             }
-
-            plantAttacking();
-
-            if (zombieReachedBase) {
-                System.out.println("NT ZOMBIE DAH SAMPE BASE!");
-                continueSpawning = false;
-                timer.cancel();
-            }
-
-            displayMap();
-        }
-    };
-
-    timer.schedule(task,0, 10000);
+            System.out.println("GAME OVER! ");
+        }).start();
     }
 
     public void displayMap() {
@@ -492,7 +505,7 @@ public class Map {
         sun.startProducingSun();
         Thread inputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
-            while (true) {
+            while (!gameOver()) {
                 System.out.println(yellow + "============================== DECK ================================" + reset);
                 deck.displayDeck();
                 System.out.println(yellow + "====================================================================" + reset);

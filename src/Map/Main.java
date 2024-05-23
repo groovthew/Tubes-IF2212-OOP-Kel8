@@ -197,30 +197,14 @@ public class Main {
     }
 
     public static void startGame(Scanner scanner) {
-        Random random = new Random();
         Map gameMap = new Map(6, 11, deck);
-        Tile tile = new Tile(false, false);
-
-        Thread zombieAdder = new Thread(() -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    // Simulate adding zombies every 5 seconds
-                    Thread.sleep(5000);
-                    tile.addZombie(new NormalZombie());
-                }
-            } catch (InterruptedException e) {
-                System.out.println("Zombie adding thread interrupted.");
-            }
-        });
-
-        zombieAdder.start();  // Start the zombie adding thread
-
+        //Tile tile = new Tile(false, false);
         System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println(green + "==============================================" + reset);
             System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
             System.out.println( green+ "==============================================" + reset);
 
-        while (true) {
+        while (!gameMap.gameOver()) {
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
                 try {
