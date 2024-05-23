@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.TimerTask;
-
 import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
 import Zombie.*;
 import Main.Deck;
-import java.util.Iterator;
+import Strategy.AttackStrategy;
+import Strategy.PlantAttackStrategy;
 
 public class Map {
     private Tile[][] tiles;
@@ -75,110 +74,28 @@ public class Map {
                     }
                     if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
                         Plant plant = tiles[i][j - 1].getPlants().get(0);
-                        if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
-                            ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
-                        } 
-                        else {
-                            plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
+                        
+                        plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
 
-                            if (plant.getHealth() <= 0){
-                                tiles[i][j - 1].getPlants().clear();
-                                System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
-                                System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
-                            }
+                        if (plant.getHealth() <= 0){
+                            tiles[i][j - 1].getPlants().clear();
+                            System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
+                            System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
                         }
                     }
                 }
             }
         }
     }
-
-    public void processZombies() {
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = tiles[i].length - 1; j >= 0; j--) {  // Iterate from right to left
-                List<Zombie> zombies = new ArrayList<>(tiles[i][j].getZombies());
-                for (Zombie zombie : zombies) {
-                    if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
-                        ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
-                    }
-                }
-            }
-        }
     
-        // Handle other zombie behaviors after jumping
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                List<Plant> plants = tiles[i][j].getPlants();
-                for (Plant plant : plants) {
-                    if (plant instanceof Chomper) {
-                        ((Chomper) plant).instantKillZombie(tiles, i, j);
-                    }
-                }
-            }
-        }
-    
-        // Finally, handle the zombie attacks
-        zombieAttacking();
-    }
 
     public void plantAttacking() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 List<Plant> plants = new ArrayList<>(tiles[i][j].getPlants());
-                Iterator<Plant> plantIterator = plants.iterator();
-    
-                while (plantIterator.hasNext()) {
-                    Plant plant = plantIterator.next();
-                    if (plant instanceof Lilypad) {
-                        Plant plantOnTop = ((Lilypad) plant).getPlantOnTop();
-                        if (plantOnTop != null) {
-                            plant = plantOnTop;
-                        } else {
-                            continue;
-                        }
-                    }
-                    if (plant instanceof Peashooter) {
-                        Zombie targetZombie = plantTargetMap.get(plant);
-                        boolean targetFound = false;
-                        for (int col = j; col < tiles[i].length; col++) {
-                            if (!tiles[i][col].getZombies().isEmpty()) {
-                                if (targetZombie == null || targetZombie.getHealth() <= 0 || !tiles[i][col].getZombies().contains(targetZombie)) {
-                                    targetZombie = tiles[i][col].getZombies().get(0);
-                                    plantTargetMap.put(plant, targetZombie);
-                                }
-                                targetFound = true;
-                                break;
-                            }
-                        }
-    
-                        if (!targetFound) {
-                            plantTargetMap.remove(plant);
-                            continue;
-                        }
-                        targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
-                        if (targetZombie.getHealth() <= 0) {
-                            for (int col = j; col < tiles[i].length; col++) {
-                                if (tiles[i][col].getZombies().contains(targetZombie)) {
-                                    tiles[i][col].getZombies().remove(targetZombie);
-                                    plantTargetMap.remove(plant); 
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (plant instanceof Squash) {
-                        ((Squash) plant).attackZombie(tiles, i, j);
-                    }
-                    if (plant instanceof Jalapeno) {
-                        ((Jalapeno) plant).attackRow(tiles, i, j);
-                        plantIterator.remove();
-                    }
-                    if (plant instanceof Chomper) {
-                        ((Chomper) plant).instantKillZombie(tiles, i, j);
-                    }
-                    if (plant instanceof SnowPea) {
-                        ((SnowPea) plant).attackZombie(tiles, i, j);
-                    }
+                for (Plant plant : plants) {
+                    AttackStrategy strategy = new PlantAttackStrategy(tiles, plant, i, j);
+                    strategy.attack();
                 }
             }
         }
