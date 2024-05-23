@@ -9,9 +9,12 @@ public class Jalapeno extends Plant {
         super("Jalapeno", 100, 0, 0, 150, 0, 20, false);
     }
 
-    public void clearZombieRow(Tile[][] tiles, int row) {
-        for (Tile tile : tiles[row]) {
-            tile.removeAllZombies();
+    public void attackRow(Tile[][] tiles, int i, int j) {
+        for (int col = 0; col < tiles[i].length; col++) {
+            if (!tiles[i][col].getZombies().isEmpty()) {
+                tiles[i][col].getZombies().clear();
+            }
         }
-    }
+        tiles[i][j].getPlants().remove(this);
+        }
 }   
