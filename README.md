@@ -1,4 +1,7 @@
-# Tubes-IF2212-OOP-Kel8
+# MICHAEL VS LALAPAN
+## Git ini dibuat untuk memenuhi persyaratan Tugas Besar IF2212 Pemrograman Berorientasi Objek STI
+
+### Kelompok 8
 | Nama                            | NIM        |
 |---------------------------------|------------|
 | Mattheuw Suciadi Wijaya         | 18222048   |
