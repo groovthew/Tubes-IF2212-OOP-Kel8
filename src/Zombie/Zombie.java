@@ -1,32 +1,36 @@
 package Zombie;
 
+import java.util.Timer;
+
 import Main.Character;
 import Map.Map;
 
-public abstract class Zombie extends Character {
+public class Zombie extends Character {
     private int walking_speed;
     private boolean isAquatic;
     private boolean is_slowed;
     private Map map;
     private double speed;
     private int x,y;
+    private boolean isCooldown = false;
+    private Timer timer;
 
     public Zombie(String name, int health, int attack_damage, int attack_speed){
-        super(name, health, attack_damage, attack_speed);
+        super(name, health, attack_damage, 1);
         this.walking_speed = 3;
         this.isAquatic = false;
         this.is_slowed = false;
     }
 
     public Zombie(String name, int health, int attack_damage, int attack_speed, boolean isAquatic){
-        super(name, health, attack_damage, attack_speed);
+        super(name, health, attack_damage, 1);
         this.isAquatic = isAquatic;
         this.walking_speed = 3;
         this.is_slowed = false;
     }
 
     public Zombie(String name, int health, int attack_damage, int attack_speed, int walking_speed){
-        super(name, health, attack_damage, attack_speed);
+        super(name, health, attack_damage, 1);
         this.walking_speed = walking_speed;
         this.isAquatic = false;
         this.is_slowed = false;
@@ -62,5 +66,13 @@ public abstract class Zombie extends Character {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public boolean isCooldown() {
+        return isCooldown;
+    }
+
+    public void setIsCooldown(boolean isCooldown) {
+        this.isCooldown = isCooldown;
     }
 }

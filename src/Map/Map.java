@@ -11,6 +11,7 @@ import Zombie.*;
 import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
+import Strategy.ZombieAttackStrategy;
 
 public class Map {
     private Tile[][] tiles;
@@ -68,27 +69,13 @@ public class Map {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (!tiles[i][j].getZombies().isEmpty()) {
                     Zombie zombie = tiles[i][j].getZombies().get(0);
-                    if (j == 0) {
-                        continueSpawning = false;
-                        return;
-                    }
-                    if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
-                        Plant plant = tiles[i][j - 1].getPlants().get(0);
-                        
-                        plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
-
-                        if (plant.getHealth() <= 0){
-                            tiles[i][j - 1].getPlants().clear();
-                            System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
-                            System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
-                        }
-                    }
+                    AttackStrategy strategy = new ZombieAttackStrategy(tiles, zombie, i, j);
+                    strategy.attack();
                 }
             }
         }
     }
     
-
     public void plantAttacking() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
