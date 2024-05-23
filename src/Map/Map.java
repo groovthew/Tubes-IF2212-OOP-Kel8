@@ -10,6 +10,7 @@ import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
 import Zombie.*;
+import Main.Deck;
 import java.util.Iterator;
 
 public class Map {
@@ -17,15 +18,18 @@ public class Map {
     private Random random = new Random();
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
+    private Deck deck;
     private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
     static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
     static String blue = "\033[34m";   // Kode ANSI untuk warna biru
+    static String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
     static String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
     // private Runnable zombieReachedBaseListener;
 
-    public Map(int x, int y) {
+    public Map(int x, int y, Deck deck) {
         tiles = new Tile[6][11];
+        this.deck = deck;
         setupTiles();
         initializeZombieTypes();
         initializeTiles();
@@ -183,15 +187,19 @@ public class Map {
     }
     
     public synchronized void addPlant(Plant plant, int i, int j) {
-        if (isValidPosition(i, j)) {
-            if (canPlacePlant(plant, i, j)) {
-                tiles[i][j].addPlant(plant);
-                System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
+        if (deck.isPlantInDeck(plant.getName())) {
+            if (isValidPosition(i, j)) {
+                if (canPlacePlant(plant, i, j)) {
+                    tiles[i][j].addPlant(plant);
+                    System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
+                } else {
+                    System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
+                }
             } else {
                 System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
             }
         } else {
-            System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
+            System.out.println("Tanaman " + plant.getName() + " tidak ada di deck!");
         }
     }
 
@@ -467,44 +475,31 @@ public class Map {
         }
         return null;
     }
-
-    // private String getTileSymbol(Tile tile) {
-    //     StringBuilder tileSymbol = new StringBuilder();
-        
-    //     // Jika ada lilypad dan tanaman di atasnya, gunakan simbol tanaman
-    //     if (tile.hasLilypad() && tile.getLilypad().getPlantOnTop() != null) {
-    //         Plant plantOnTop = tile.getLilypad().getPlantOnTop();
-    //         if (plantOnTop instanceof Lilypad) {
-    //             tileSymbol.append("LL");
-    //         } else {
-    //             tileSymbol.append(getPlantSymbol(plantOnTop));
-    //         }
-    //         tileSymbol.append(": ");
-    //         tileSymbol.append(tile.getLilypad().totalHealth());
-    //     } else {
-    //         // Jika tidak, gunakan simbol lilypad
-    //         tileSymbol.append("LL");
-    //         tileSymbol.append(": ");
-    //         tileSymbol.append(tile.getLilypad().totalHealth());
-    //     }
-        
-    //     return tileSymbol.toString();
-    // }
     
-
     public void initiateMap(){
-        Map map = new Map(6, 11);
+        Map map = new Map(6, 11, deck);
         Sun sun = new Sun(0);
         sun.startProducingSun();
         Thread inputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (true) {
+                System.out.println(yellow + "============================== DECK ================================" + reset);
+                deck.displayDeck();
+                System.out.println(yellow + "=================================================================" + reset);
                 System.out.println("Enter plant type (PS, SF, CH, SP, SQ, SS, TN, JP, LL, WN) and coordinates (i, j): ");
                 
-                String plantType = scanner.next();
+                String plantType = scanner.next().toUpperCase(); // Convert to uppercase for consistency
+                
+                // Check if the plant type is in the deck
+                if (!deck.isPlantMatchDeck(plantType)) {
+                    System.out.println("Invalid plant type. Please choose a valid plant type from the deck.");
+                    continue;
+                }
+                
                 int i = scanner.nextInt();
                 int j = scanner.nextInt();
     
+                // Create plant based on the entered plant code
                 Plant plant = null;
                 switch (plantType) {
                     case "PS":
@@ -548,6 +543,36 @@ public class Map {
         inputThread.start();
         map.spawnZombies();
         map.moveZombies();
-        
+    }
+
+    private boolean isPlantCodeValid(String plantCode) {
+        return deck.isPlantInDeck(getPlantNameFromCode(plantCode));
+    }
+    
+    private String getPlantNameFromCode(String plantCode) {
+        switch (plantCode) {
+            case "PS":
+                return "Peashooter";
+            case "SF":
+                return "Sunflower";
+            case "CH":
+                return "Chomper";
+            case "SP":
+                return "Snow Pea";
+            case "SQ":
+                return "Squash";
+            case "TS":
+                return "Twin Sunflower";
+            case "TN":
+                return "Tall Nut";
+            case "JP":
+                return "Jalapeno";
+            case "LL":
+                return "Lilypad";
+            case "WN":
+                return "Wall-nut";
+            default:
+                return "";
+        }
     }
 }

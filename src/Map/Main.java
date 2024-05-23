@@ -4,11 +4,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 import Exceptions.CantBePlantedException;
+import Exceptions.CantSwapDeckException;
+import Exceptions.DeckIsEmptyException;
+import Exceptions.DeckNotFullException;
 import Tanaman.*;
 import Zombie.*;
 import Main.Deck;
 import Main.Inventory;
 import Main.plantsList;
+import Main.zombiesList;
 import Main.Help;
 import java.util.Scanner;
 import Sun.*;
@@ -24,7 +28,7 @@ public class Main {
     private static Deck deck = new Deck();
     private static Inventory inventory = new Inventory();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         Menu printer = new Menu();
         printer.openingAct();
         initializeInventory();
@@ -35,20 +39,15 @@ public class Main {
 
             switch (choice.toLowerCase()) {
                 case "1":
-                    startGame(scanner);
+                    gameMenu();
                     break;
                 case "4":
-                    manageInventory();
+                    new zombiesList();
                     break;
                 case "2":
                     new plantsList();
-                    // manageDeck();
-                    // if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
-                    //     System.out.println(red + "Deck telah terisi penuh!" + reset);
-                    // }
                     break;
                 case "5":
-                    // Implement help functionality
                     Help.displayHelp();
                     break;
                 case "3":
@@ -91,125 +90,115 @@ public class Main {
 
     public static void displayMenu() {
         System.out.println(green + "===========================GAME MENU============================" + reset);
-        System.out.println(yellow + "|             1. START             |       4. INVENTORY        |");
+        System.out.println(yellow + "|             1. START             |       4. ZOMBIE LIST      |");
         System.out.println("|             2. PLANT LIST        |          5. HELP          |");
         System.out.println("|             3. EXIT              |                           |" + reset);
         System.out.println(green + "================================================================" + reset);
         System.out.print(blue + "Enter your choice: " + reset);
     }
 
-    public static void manageInventory() {
+    public static void gameMenu() throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         while (true) {
-            System.out.println(green + "=========================INVENTORY MENU=========================" + reset);
-            System.out.println(yellow + "|        1. DISPLAY INVENTORY      |      2. SWAP INVENTORY    |");
-            System.out.println("|              3. BACK             |                           |" + reset);
-            System.out.println(green + "================================================================" + reset); 
-
-            System.out.print("Masukkan Pilihanmu: ");
-            String inventoryChoice = scanner.nextLine();
-
-        switch (inventoryChoice.toLowerCase()) {
-            case "1":
-                // Menampilkan isi inventory
-                inventory.displayInventory();
-                break;
-            case "2":
-                System.out.println("Enter the positions of the plants to swap (separated by space): ");
-                int position1 = scanner.nextInt();
-                int position2 = scanner.nextInt();
-                scanner.nextLine(); 
-                inventory.swapPlants(position1 - 1, position2 - 1);
-                break;
-            case "3":
-                return;
-            default:
-                System.out.println("Invalid choice. Please choose again.");
+            System.out.println(green + "=============================GAME MENU==================================" + reset);
+            System.out.println(yellow + "|   1. DISPLAY DECK    |   2. ADD PLANT TO DECK  |   3. REMOVE DECK    |");
+            System.out.println("|   4. SWAP DECK       |   5. DISPLAY INVENTORY  |   6. SWAP INVENTORY |");
+            System.out.println("|   7. BACK            |   8. START GAME         |                     |" + reset);
+            System.out.println(green + "========================================================================" + reset);
+            System.out.print(blue + "Enter your choice: " + reset);
+    
+            String managementChoice = scanner.nextLine();
+    
+            switch (managementChoice.toLowerCase()) {
+                case "1":
+                    System.out.println("Deck:");
+                    deck.displayDeck();
+                    break;
+                case "2":
+                    if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
+                        System.out.println("Deck sudah penuh. Tidak dapat menambahkan tanaman lagi.");
+                        System.out.println("Deck:");
+                        deck.displayDeck();
+                        break;
+                    }
+                    inventory.displayInventory();
+                    System.out.println("Enter the index of the plant to add from inventory:");
+                    int plantIndex = scanner.nextInt();
+                    scanner.nextLine(); 
+                    
+                    try {
+                        if (plantIndex < 1 || plantIndex >= inventory.getInventory().size()) {
+                            System.out.println("Indeks tanaman tidak valid.");
+                            break;
+                        }
+                
+                        Plant plant = inventory.getInventory().get(plantIndex-1);
+            
+                        if (deck.isPlantInDeck(plant.getName())) {
+                            System.out.println("Tanaman tersebut sudah ada di deck.");
+                            break;
+                        }
+                        
+                        deck.addPlant(plant);
+                        System.out.println("Tanaman " + plant.getName() + " berhasil ditambahkan ke deck!");
+                    } catch (CantBePlantedException e) {
+                        System.out.println(e.getMessage());
+                    }
+                        break;
+                case "3":
+                    if (!deck.isDeckEmpty()) {
+                        System.out.println("Enter the index of the plant to remove from deck: ");
+                        int index = scanner.nextInt();
+                        scanner.nextLine();
+                        deck.removePlant(index - 1);
+                    } else {
+                        System.out.println("Deck kosong. Tidak ada tanaman yang bisa dihapus.");
+                    }
+                    break;
+                case "4":
+                    if (!deck.isDeckEmpty()) {
+                        System.out.println("Enter the positions of the plants to swap (separated by space): ");
+                        int position1 = scanner.nextInt();
+                        int position2 = scanner.nextInt();
+                        scanner.nextLine(); 
+                        deck.swapDeck(position1 - 1, position2 - 1);
+                    } else {
+                        throw new CantSwapDeckException();
+                    }
+                    break;
+                case "5":
+                    inventory.displayInventory();
+                    break;
+                case "6":
+                    System.out.println("Enter the positions of the plants to swap (separated by space): ");
+                    int pos1 = scanner.nextInt();
+                    int pos2 = scanner.nextInt();
+                    scanner.nextLine(); 
+                    inventory.swapPlants(pos1 - 1, pos2 - 1);
+                    break;
+                case "7":
+                    return;
+                default:
+                    System.out.println(red + "Invalid choice. Please choose again." + reset);
+                case "8":
+                    try {
+                        if (deck.isDeckEmpty()) {
+                            throw new DeckIsEmptyException();
+                        } else if (deck.getDeck().size() < Deck.MAX_PLANTS) {
+                            throw new DeckNotFullException();
+                        } else {
+                            startGame(scanner);
+                        }
+                    } catch (DeckIsEmptyException | DeckNotFullException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
             }
         }
     }
 
-    public static void manageDeck() {
-        while (true) {
-            System.out.println(green + "===========================DECK MENU============================" + reset);
-            System.out.println(yellow + "|            1. SWAP DECK          |          3. REMOVE DECK   |");
-            System.out.println("|            2. ADD PLANT          |          4. DISPLAY DECK  |"); 
-            System.out.println("|              5. BACK             |                           |" + reset);
-            System.out.println(green + "================================================================" + reset);
-            System.out.print("Pilih menu yang diinginkan: ");
-            String deckChoice = scanner.nextLine();
-    
-            switch (deckChoice.toLowerCase()) {
-                case "1":
-                if (!deck.isDeckEmpty()) {
-                    System.out.println("Enter the positions of the plants to swap (separated by space): ");
-                    int position1 = scanner.nextInt();
-                    int position2 = scanner.nextInt();
-                    scanner.nextLine(); 
-                    
-    
-                    deck.swapDeck(position1 - 1, position2 - 1);
-                } else {
-                    System.out.println("Deck kosong. Tidak ada tanaman yang bisa ditukar.");
-                }
-                    break;
-                    
-                case "3":
-                if (!deck.isDeckEmpty()) {
-                    System.out.println("Enter the index of the plant to remove from deck: ");
-                    int index = scanner.nextInt();
-                    scanner.nextLine();
-                    deck.removePlant(index - 1);
-                } else {
-                    System.out.println("Deck kosong. Tidak ada tanaman yang bisa dihapus.");
-                }
-                    break;
-
-                case "2":
-                if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
-                    System.out.println("Deck sudah penuh. Tidak dapat menambahkan tanaman lagi.");
-                    System.out.println("Deck:");
-                    deck.displayDeck();
-                    break;
-                }
-                inventory.displayInventory();
-                System.out.println("Enter the index of the plant to add from inventory:");
-                int plantIndex = scanner.nextInt();
-                scanner.nextLine(); 
-                
-                try {
-                    if (plantIndex < 1 || plantIndex >= inventory.getInventory().size()) {
-                        System.out.println("Indeks tanaman tidak valid.");
-                        break;
-                    }
-               
-                    Plant plant = inventory.getInventory().get(plantIndex-1);
-           
-                    if (deck.isPlantInDeck(plant.getName())) {
-                        System.out.println("Tanaman tersebut sudah ada di deck.");
-                        break;
-                    }
-                    
-                    deck.addPlant(plant);
-                    System.out.println("Tanaman " + plant.getName() + " berhasil ditambahkan ke deck!");
-                } catch (CantBePlantedException e) {
-                    System.out.println(e.getMessage());
-                }
-                    break;
-                case "4":
-                    System.out.println("Deck: ");
-                    deck.displayDeck();
-                    break;
-                case "5":
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please choose again.");
-            }
-        }
-    }    
-
     public static void startGame(Scanner scanner) {
         Random random = new Random();
-        Map gameMap = new Map(6, 11);
+        Map gameMap = new Map(6, 11, deck);
         Tile tile = new Tile(false, false);
 
         Thread zombieAdder = new Thread(() -> {
@@ -244,7 +233,7 @@ public class Main {
                 String command = scanner.nextLine();
 
                 if (command.equalsIgnoreCase("1")) {
-                    Map map = new Map(6, 11);
+                    Map map = new Map(6, 11, deck);
                     map.initiateMap();
                     SunManager sunManager = new SunManager();
 

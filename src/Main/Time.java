@@ -1,55 +1,55 @@
-package Main;
+// package Main;
 
-import Map.Map;
+// import Map.Map;
 
-public class Time {
-    private int totalSeconds;
-    private int dayLength;
-    private boolean isNight;
-    Map map = new Map(totalSeconds, dayLength);
+// public class Time {
+//     private int totalSeconds;
+//     private int dayLength;
+//     private boolean isNight;
 
-    public Time(int totalSeconds, int dayLength, boolean isNight) {
-        this.totalSeconds = totalSeconds;
-        this.dayLength = dayLength;
-        this.isNight = true;
-    }
 
-    public int getTotalSeconds() {
-        return 200;
-    }
+//     public Time(int totalSeconds, int dayLength, boolean isNight) {
+//         this.totalSeconds = totalSeconds;
+//         this.dayLength = dayLength;
+//         this.isNight = true;
+//     }
 
-    public int getDayLength() {
-        return 100;
-    }
+//     public int getTotalSeconds() {
+//         return 200;
+//     }
 
-    public boolean getIsNight() {
-        return isNight;
-    }
+//     public int getDayLength() {
+//         return 100;
+//     }
 
-    public void startGame() {
-        Thread gameThread = new Thread(() -> {
-            try {
-                while (true) {
-                    // Spawn zombie every 200 seconds
-                    map.spawnZombies();
-                    Thread.sleep(200 * 1000);
+//     public boolean getIsNight() {
+//         return isNight;
+//     }
 
-                    // Switch between day and night
-                    if (totalSeconds < 100) {
-                        // Daytime logic
-                        totalSeconds += 200; // Increment total seconds by 200 (simulate time passing)
-                        System.out.println("It's day. Sun is producing.");
-                    } else {
-                        // Nighttime logic
-                        totalSeconds += 200; // Increment total seconds by 200 (simulate time passing)
-                        System.out.println("It's night. Sun stops producing.");
-                    }
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        gameThread.start();
-    }
+//     public void startGame() {
+//         Thread gameThread = new Thread(() -> {
+//             try {
+//                 while (true) {
+//                     // Spawn zombie every 200 seconds
+//                     map.spawnZombies();
+//                     Thread.sleep(200 * 1000);
 
-}
+//                     // Switch between day and night
+//                     if (totalSeconds < 100) {
+//                         // Daytime logic
+//                         totalSeconds += 200; // Increment total seconds by 200 (simulate time passing)
+//                         System.out.println("It's day. Sun is producing.");
+//                     } else {
+//                         // Nighttime logic
+//                         totalSeconds += 200; // Increment total seconds by 200 (simulate time passing)
+//                         System.out.println("It's night. Sun stops producing.");
+//                     }
+//                 }
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             }
+//         });
+//         gameThread.start();
+//     }
+
+// }
