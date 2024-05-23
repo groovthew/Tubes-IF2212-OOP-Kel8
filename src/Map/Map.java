@@ -68,15 +68,17 @@ public class Map {
                     }
                     if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
                         Plant plant = tiles[i][j - 1].getPlants().get(0);
-                        if (zombie instanceof BucketHeadZombie) {
-                            plant.setHealth(plant.getHealth() - zombie.getAttackDamage() / 2); // Reduce plant health by half the zombie's attack damage
-                        } else {
+                        if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
+                            ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
+                        } 
+                        else {
                             plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
-                        }
-                        if (plant.getHealth() <= 0) {
-                            tiles[i][j - 1].getPlants().clear();
-                            System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
-                            System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
+
+                            if (plant.getHealth() <= 0){
+                                tiles[i][j - 1].getPlants().clear();
+                                System.out.println(zombie.getName() + " attacked " + plant.getName() + " on tile [" + i + "][" + (j - 1) + "]");
+                                System.out.println(plant.getName() + " on tile [" + i + "][" + (j - 1) + "] has been destroyed.");
+                            }
                         }
                     }
                 }
@@ -85,19 +87,19 @@ public class Map {
     }
 
     public void processZombies() {
-        // First, handle jumping for PoleVaultingZombies
         for (int i = 0; i < tiles.length; i++) {
             for (int j = tiles[i].length - 1; j >= 0; j--) {  // Iterate from right to left
-                List<Zombie> zombies = tiles[i][j].getZombies();
-                List<Zombie> zombiesToJump = new ArrayList<>(zombies);
-                for (Zombie zombie : zombiesToJump) {
-                    if (zombie instanceof PoleVaultingZombie) {
+                List<Zombie> zombies = new ArrayList<>(tiles[i][j].getZombies());
+                for (Zombie zombie : zombies) {
+                    if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
                         ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
+                        addZombie(zombie, i, j-2);
                     }
                 }
             }
         }
-
+    
+        // Handle other zombie behaviors after jumping
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 List<Plant> plants = tiles[i][j].getPlants();
@@ -109,7 +111,7 @@ public class Map {
             }
         }
     
-        // Then, handle the zombie attacks
+        // Finally, handle the zombie attacks
         zombieAttacking();
     }
 
@@ -200,6 +202,14 @@ public class Map {
             }
         } else {
             System.out.println("Tanaman " + plant.getName() + " tidak ada di deck!");
+        }
+    }
+
+    public synchronized void addZombie(Zombie zombie, int i, int j){
+        if (isValidPosition(i, j)) {
+            tiles[i][j].addZombie(zombie);
+        } else {
+            System.out.println("Invalid position for Zombie.");
         }
     }
 
@@ -455,7 +465,7 @@ public class Map {
         if (zombie instanceof BucketHeadZombie) {
             return "BH" + ": " + zombie.getHealth();
         } else if (zombie instanceof ConeHeadZombie) {
-            return "CH" + ": " + zombie.getHealth(); 
+            return "CZ" + ": " + zombie.getHealth(); 
         } else if (zombie instanceof DolphinRiderZombie) {
             return "DR" + ": " + zombie.getHealth();
         } else if (zombie instanceof DuckyTubeZombie) {

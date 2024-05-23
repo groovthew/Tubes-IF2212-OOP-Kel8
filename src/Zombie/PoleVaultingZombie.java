@@ -1,28 +1,40 @@
 package Zombie;
 
 import Map.Tile;
-import Zombie.PoleVaultingZombie;
-
 
 public class PoleVaultingZombie extends Zombie {
     private boolean hasJumped = false;
 
-    public PoleVaultingZombie(){
+    public PoleVaultingZombie() {
         super("Pole Vaulting Zombie", 175, 100, 1);
     }
 
-    public void jumpTile(Tile[][] tiles, int row, int col) {
-        if (col > 0 && col < tiles[row].length - 1 && !hasJumped) {
-            Tile currentTile = tiles[row][col];
-            Tile nextTile = tiles[row][col - 1];
+    public boolean hasJumped() {
+        return hasJumped;
+    }
 
-            if (!nextTile.getPlants().isEmpty()) {
-                // Perform the jump over the plant
-                Tile targetTile = tiles[row][col - 2 < 0 ? 0 : col - 2];
-                targetTile.addZombie(this);
-                currentTile.removeZombie(this);
+    // Method untuk melakukan lompatan
+    public void jumpTile(Tile[][] tiles, int i, int j) {
+        // Jika sudah melompat, kembalikan method
+        if (hasJumped) {
+            return;
+        }
+
+        // Pastikan bahwa tile berikutnya berada dalam batas dan terdapat tanaman
+        if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
+            // Pastikan bahwa tile dua langkah ke kiri berada dalam batas
+            if (j - 2 >= 0) {
+                // Pindahkan zombie ke tile dua langkah ke kiri
+                tiles[i][j - 2].addZombie(this);
+                tiles[i][j].removeZombie(this);
                 hasJumped = true;
-                System.out.println(this.getName() + " jumped over a plant and landed on tile [" + row + "][" + (col - 2 < 0 ? 0 : col - 2) + "]");
+                System.out.println(getName() + " jumped from tile [" + i + "][" + j + "] to tile [" + i + "][" + (j - 2) + "]");
+            } else {
+                // Jika tidak bisa melompat dua langkah, pindahkan ke satu langkah ke kiri
+                tiles[i][j - 1].addZombie(this);
+                tiles[i][j].removeZombie(this);
+                hasJumped = true;
+                System.out.println(getName() + " jumped from tile [" + i + "][" + j + "] to tile [" + i + "][" + (j - 1) + "]");
             }
         }
     }
