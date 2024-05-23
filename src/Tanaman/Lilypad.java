@@ -12,6 +12,10 @@ public class Lilypad extends Plant {
         return plantOnTop;
     }
 
+    public boolean hasPlantOnTop() {
+        return plantOnTop != null;
+    }
+
     public void setPlantOnTop(Plant plantOnTop) {
         this.plantOnTop = plantOnTop;
         if (plantOnTop != null) {

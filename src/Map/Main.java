@@ -2,19 +2,14 @@ package Map;
 
 import java.util.Random;
 import java.util.Scanner;
-
 import Exceptions.CantBePlantedException;
 import Exceptions.CantSwapDeckException;
 import Exceptions.DeckIsEmptyException;
 import Exceptions.DeckNotFullException;
 import Tanaman.*;
 import Zombie.*;
-import Main.Deck;
-import Main.Inventory;
-import Main.PlantsList;
-import Main.ZombiesList;
+import Main.*;
 import Main.Help;
-import java.util.Scanner;
 import Sun.*;
 
 public class Main {

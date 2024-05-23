@@ -11,7 +11,7 @@ public class Chomper extends Plant {
     private Timer timer;
 
     public Chomper(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
-        super("Chomper", 200, 1000, 0, 150, 0, 10, false);
+        super("Chomper", 200, 1000, 0, 150, 0, 15, false);
         this.isEating = false;
         this.eatingCooldown = 20;
         this.timer = new Timer();

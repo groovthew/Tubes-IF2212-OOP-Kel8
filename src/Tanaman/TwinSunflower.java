@@ -9,7 +9,7 @@ public class TwinSunflower extends Plant implements ProduceSun{
     private SunListener listener;
 
     public TwinSunflower(String name, int health, int attack_damage, int attacks_speed, int cost, int range, int cooldown) {
-        super("Twin Sunflower", 100, 0, 0, 50, 0, 10, false);
+        super("Twin Sunflower", 100, 0, 0, 50, 0, 15, false);
         this.sunTotal = 0;
     }
 
