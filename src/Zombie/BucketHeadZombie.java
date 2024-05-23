@@ -1,7 +1,7 @@
 package Zombie;
 
-public class BucketHead extends Zombie {
-    public BucketHead(){
+public class BucketHeadZombie extends Zombie {
+    public BucketHeadZombie(){
         super("Normal Zombie", 300, 100, 1);
     }
 

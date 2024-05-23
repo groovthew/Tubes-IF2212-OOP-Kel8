@@ -64,7 +64,7 @@ public class Map {
                     }
                     if (j > 0 && !tiles[i][j - 1].getPlants().isEmpty()) {
                         Plant plant = tiles[i][j - 1].getPlants().get(0);
-                        if (zombie instanceof BucketHead) {
+                        if (zombie instanceof BucketHeadZombie) {
                             plant.setHealth(plant.getHealth() - zombie.getAttackDamage() / 2); // Reduce plant health by half the zombie's attack damage
                         } else {
                             plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
@@ -294,7 +294,7 @@ public class Map {
 
     private void initializeZombieTypes() {
         zombieTypes = new ArrayList<>();
-        zombieTypes.add(BucketHead.class);
+        zombieTypes.add(BucketHeadZombie.class);
         zombieTypes.add(ConeHeadZombie.class);
         zombieTypes.add(DolphinRiderZombie.class);
         zombieTypes.add(DuckyTubeZombie.class);
@@ -309,7 +309,7 @@ public class Map {
     public Zombie createZombie(String type) {
         switch (type) {
             case "BucketHead":
-                return new BucketHead();
+                return new BucketHeadZombie();
             case "ConeHeadZombie":
                 return new ConeHeadZombie();
             case "DolphinRiderZombie":
@@ -444,7 +444,7 @@ public class Map {
     }
 
     private String getZombieSymbol(Zombie zombie) {
-        if (zombie instanceof BucketHead) {
+        if (zombie instanceof BucketHeadZombie) {
             return "BH" + ": " + zombie.getHealth();
         } else if (zombie instanceof ConeHeadZombie) {
             return "CH" + ": " + zombie.getHealth(); 
