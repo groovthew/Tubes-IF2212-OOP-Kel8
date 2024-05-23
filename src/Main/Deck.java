@@ -39,7 +39,8 @@ public class Deck {
             deck.set(index1, deck.get(index2));
             deck.set(index2, temp);
             System.out.println("Tanaman pada posisi " + (index1 + 1) + " dan " + (index2 + 1) + " telah ditukar.");
-        } else {
+        }
+        else {
             System.out.println("Indeks tidak valid. Tukar tidak dapat dilakukan.");
         }
     }
