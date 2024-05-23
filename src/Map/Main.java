@@ -8,6 +8,7 @@ import Tanaman.*;
 import Zombie.*;
 import Main.Deck;
 import Main.Inventory;
+import Main.plantsList;
 import Main.Help;
 import java.util.Scanner;
 import Sun.*;
@@ -40,10 +41,11 @@ public class Main {
                     manageInventory();
                     break;
                 case "2":
-                    manageDeck();
-                    if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
-                        System.out.println(red + "Deck telah terisi penuh!" + reset);
-                    }
+                    new plantsList();
+                    // manageDeck();
+                    // if (deck.getDeck().size() >= Deck.MAX_PLANTS) {
+                    //     System.out.println(red + "Deck telah terisi penuh!" + reset);
+                    // }
                     break;
                 case "5":
                     // Implement help functionality
@@ -90,7 +92,7 @@ public class Main {
     public static void displayMenu() {
         System.out.println(green + "===========================GAME MENU============================" + reset);
         System.out.println(yellow + "|             1. START             |       4. INVENTORY        |");
-        System.out.println("|             2. DECK              |          5. HELP          |");
+        System.out.println("|             2. PLANT LIST        |          5. HELP          |");
         System.out.println("|             3. EXIT              |                           |" + reset);
         System.out.println(green + "================================================================" + reset);
         System.out.print(blue + "Enter your choice: " + reset);
