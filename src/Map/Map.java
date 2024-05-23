@@ -93,7 +93,6 @@ public class Map {
                 for (Zombie zombie : zombies) {
                     if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
                         ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
-                        addZombie(zombie, i, j-2);
                     }
                 }
             }
@@ -205,14 +204,6 @@ public class Map {
         }
     }
 
-    public synchronized void addZombie(Zombie zombie, int i, int j){
-        if (isValidPosition(i, j)) {
-            tiles[i][j].addZombie(zombie);
-        } else {
-            System.out.println("Invalid position for Zombie.");
-        }
-    }
-
     private boolean isValidPosition(int i, int j) {
         return (i >= 0 && i < tiles.length) && (j >= 0 && j < tiles[i].length);
     }
@@ -259,7 +250,7 @@ public class Map {
                 timeElapsed += 3;
                 if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
                     if (timeElapsed > 160 || !continueSpawning) {
-                        System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
+                        //System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
                         spawnTimer.cancel();
                     }
                     return;
@@ -276,8 +267,7 @@ public class Map {
                             continue;
                         } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
                             continue;
-                        }
-
+                        } 
                         Zombie zombie = createZombie(zombieClass);
                         tiles[i][spawnColumn].addZombie(zombie);
                         zombieCount++;
@@ -365,6 +355,9 @@ public class Map {
                         if (!tiles[i][j - 1].getPlants().isEmpty()) {
                             Plant plant = tiles[i][j - 1].getPlants().get(0);
                             for (Zombie zombie : zombiesToMove) {
+                                if (zombie instanceof PoleVaultingZombie && !((PoleVaultingZombie) zombie).hasJumped()) {
+                                    ((PoleVaultingZombie) zombie).jumpTile(tiles, i, j);
+                                }
                                 zombieAttacking();
                                 if (plant.getHealth() <= 0) {
                                     tiles[i][j - 1].getZombies().add(zombie);
