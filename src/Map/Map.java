@@ -99,10 +99,10 @@ public class Map {
 
     public synchronized void addPlant(Plant plant, int i, int j) {
         long currentTime = System.currentTimeMillis();
-        String plantName = plant.getName();
+        String plantName = plant.getName();//
 
         if (plantCooldowns.containsKey(plantName) && currentTime < plantCooldowns.get(plantName)) {
-            System.out.println(plantName + " masih cooldown selama " + ((plantCooldowns.get(plantName) - currentTime) / 1000) + "s");
+            System.out.println(red + plantName + " masih cooldown selama " + ((plantCooldowns.get(plantName) - currentTime) / 1000) + "s" + reset);
             return;
         }
 
@@ -130,20 +130,27 @@ public class Map {
     }
 
     public synchronized void removePlant(int i, int j) {
-        if (!isValidPosition(i, j)) {
-            System.out.println("Waduh gak bisa diremove di situ, coba tempat lainn!!");
-            return;
-        }
-
         Tile tile = tiles[i][j];
-        if (!tile.hasPlant()) {
-            System.out.println("No plant to remove at position [" + i + "][" + j + "].");
-            return;
+        if (!tile.getPlants().isEmpty()) {
+            if (tile.isWater() && tile.hasLilypad()) {
+                Lilypad lilypad = tile.getLilypad();
+                if (lilypad.getPlantOnTop() != null) {
+                    System.out.println("Removing " + lilypad.getPlantOnTop().getName() + " from tile (" + i + ", " + j + ")");
+                    lilypad.setPlantOnTop(null);
+                } else {
+                    System.out.println("Removing Lilypad from tile (" + i + ", " + j + ")");
+                    tile.removePlant(lilypad);
+                }
+            } else {
+                Plant plant = tile.getPlants().get(0);
+                System.out.println("Removing " + plant.getName() + " from tile (" + i + ", " + j + ")");
+                tile.removePlant(plant);
+            }
+        } else {
+            System.out.println("No plant found at position: (" + i + ", " + j + ")");
         }
-
-        tile.removePlant();
-        System.out.println("Plant removed from [" + i +"][" + j + "].");
     }
+    
 
     public boolean isValidPosition(int i, int j) {
         return (i >= 0 && i < tiles.length) && (j > 0 && j < tiles[i].length-1);
@@ -199,7 +206,7 @@ public class Map {
             int elapsedTime = 0;
 
             while (!gameOver()) {
-                if (elapsedTime >= 2 && elapsedTime <= 160 && getZombieCount() < 10) {
+                if (elapsedTime >= 20 && elapsedTime <= 160 && getZombieCount() < 10) {
                     int spawnColumn = tiles[0].length - 1;
 
                     for (int i = 0; i < tiles.length; i++) {
@@ -350,7 +357,7 @@ public class Map {
 
                     plantAttacking();
                     displayMap();
-                    Thread.sleep(1000);
+                    Thread.sleep(10000);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

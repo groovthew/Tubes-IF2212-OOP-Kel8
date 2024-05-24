@@ -210,9 +210,14 @@ public class Main {
             deck.displayDeck();
             System.out.println(yellow + "====================================================================" + reset);
             System.out.println("Masukkan tipe Plant (PS, SF, CH, SP, SQ, TS, TN, JP, LL, WN) dan kordinatnya (i, j): ");
+            System.out.println("Input RP i j untuk menghapus tanaman di posisi i j");
+            System.out.println("");
             
-            String input = scanner.nextLine().toUpperCase();
+            String input = scanner.nextLine().toUpperCase().trim();
             String[] parts = input.split(" ");
+            if (input.isEmpty()) {
+                continue;
+            }
             if (parts.length != 3) {
                 System.out.println("Salah format input! Contoh input (PS 1 1).");
                 continue;
@@ -226,7 +231,11 @@ public class Main {
                 System.out.println(" Koordinat tempat tanam salah! ");
                 continue;
             }
-            if (!deck.isPlantMatchDeck(plantType)) {
+            if (plantType.equals("RP")) {
+                map.removePlant(i, j);
+                continue;
+            }
+            if (!deck.isPlantMatchDeck(plantType)){
                 System.out.println("Tidak ada tanaman itu di deck! ");
                 continue;
             }
@@ -267,7 +276,7 @@ public class Main {
                     continue;
             }
             if (!map.isValidPosition(i, j)) {
-                System.out.println("Salah posisi: (" + i + ", " + j + ")");
+                System.out.println("Waduh gabisa nanam di posisi : (" + i + ", " + j + ")");
                 continue;
             }
 
@@ -276,7 +285,7 @@ public class Main {
                 continue;
             }
             map.addPlant(plant, i, j);
-            map.displayMap();
+            //map.displayMap();
         }
         //sun.stopProducingSun();
         try {
@@ -287,57 +296,65 @@ public class Main {
         }
     }
     public static void startGame(Scanner scanner) {
-        Map gameMap = new Map(6, 11, deck);
-        System.out.println(blue + "ENTER COMMAND" + reset);
-            System.out.println("==============================================");
-            System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
-            System.out.println("==============================================");
+        boolean exitGame = false;
+        while (!exitGame) {
+            Map gameMap = new Map(6, 11, deck);
+            System.out.println(blue + "ENTER COMMAND" + reset);
+                System.out.println("==============================================");
+                System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
+                System.out.println("==============================================");
+            boolean gameActive = true;
+            while (gameActive && !gameMap.gameOver()) {
+                long startTime = System.currentTimeMillis();
+                while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
+                    try {
+                        Thread.sleep(200); // Check every 200 milliseconds
+                    } catch (InterruptedException e) {
+                        System.out.println("Sleep interrupted");
+                    }
+                }
+                if (scanner.hasNextLine()) {
+                    String command = scanner.nextLine();
 
-        while (!gameMap.gameOver()) {
-            long startTime = System.currentTimeMillis();
-            while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
-                try {
-                    Thread.sleep(200); // Check every 200 milliseconds
-                } catch (InterruptedException e) {
-                    System.out.println("Sleep interrupted");
+                    if (command.equalsIgnoreCase("1")) {
+                        initiateMap(gameMap);
+                        gameActive = false;
+                    }
+                        
+
+                    if (command.equalsIgnoreCase("2")) {
+                        gameMap.displayMap();
+                        System.out.println("==============================================");
+                        System.out.println(yellow + "|                    BACK                    |" + reset);
+                        System.out.println("==============================================");
+                        
+                    }
+                    if (command.equalsIgnoreCase("back")){
+                        gameActive = false;  // Exit the game loop to return to the main menu
+                        exitGame = true;
+                    }
+
+                    
                 }
             }
-            if (scanner.hasNextLine()) {
-                String command = scanner.nextLine();
-
-                if (command.equalsIgnoreCase("1")) {
-                    initiateMap(gameMap);
+            if (gameMap.gameOver()) {
+                //System.out.println("Game Over! Total Sun: " + SunManager.getTotalSun());
+                System.out.println("Game Over! Balik ke menu atau keluar dari permainan ?");
+                System.out.println("1. Menu");
+                System.out.println("2. Exit");
+    
+                boolean validChoice = false;
+                while (!validChoice) {
+                    String choice = scanner.nextLine();
+                    if (choice.equals("1")) {
+                        validChoice = true;
+                        exitGame = true;      // Exit to the main menu
+                    } else if (choice.equals("2")) {
+                        System.exit(0);       // Exit the program
+                    } else {
+                        System.out.println("Invalid choice. Please choose again.");
+                    }
                 }
-                    
-
-                if (command.equalsIgnoreCase("2")) {
-                    gameMap.displayMap();
-                    System.out.println("==============================================");
-                    System.out.println(yellow + "|                    BACK                    |" + reset);
-                    System.out.println("==============================================");
-                    
-                }
-
-                if (command.equalsIgnoreCase("3")){
-            
-                    break;
-                }
-            }
-        }
-        System.out.println("Game Over! Balik ke menu atau keluar dari permainan ? ");
-        System.out.println("1. Menu ");
-        System.out.println("2. Keluar dari permainan ");
-        boolean validChoice = false;
-        while (!validChoice) {
-            String choice = scanner.nextLine();
-            if (choice.equals("1")) {
-                validChoice = true;
-                // exitgame = true;
-            } else if (choice.equals("2")) {
-                System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
-                System.exit(0);
-            } else {
-                System.out.println("Input salah, ulangi ! ");
             }
         }
     }

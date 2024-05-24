@@ -69,7 +69,14 @@ public class Tile {
         // Cetak total kesehatan tile
         // System.out.println(tileName.toString() + " Total Health: " + totalHealth);
     }
-     
+    
+    public void removePlant(Plant plant) {
+        plants.remove(plant);
+        if (plant instanceof Lilypad) {
+            lilypad = null;
+        }
+    }
+    
 
     public void addZombie(Zombie zombie) {
         if (isSpawnArea) {
