@@ -210,6 +210,8 @@ public class Main {
             deck.displayDeck();
             System.out.println(yellow + "====================================================================" + reset);
             System.out.println("Masukkan tipe Plant (PS, SF, CH, SP, SQ, TS, TN, JP, LL, WN) dan kordinatnya (i, j): ");
+            System.out.println("Input RP i j untuk menghapus tanaman di posisi i j");
+            System.out.println("");
             
             String input = scanner.nextLine().toUpperCase().trim();
             String[] parts = input.split(" ");
@@ -229,7 +231,11 @@ public class Main {
                 System.out.println(" Koordinat tempat tanam salah! ");
                 continue;
             }
-            if (!deck.isPlantMatchDeck(plantType)) {
+            if (plantType.equals("RP")) {
+                map.removePlant(i, j);
+                continue;
+            }
+            if (!deck.isPlantMatchDeck(plantType)){
                 System.out.println("Tidak ada tanaman itu di deck! ");
                 continue;
             }
@@ -270,7 +276,7 @@ public class Main {
                     continue;
             }
             if (!map.isValidPosition(i, j)) {
-                System.out.println("Salah posisi: (" + i + ", " + j + ")");
+                System.out.println("Waduh gabisa nanam di posisi : (" + i + ", " + j + ")");
                 continue;
             }
 
@@ -279,7 +285,7 @@ public class Main {
                 continue;
             }
             map.addPlant(plant, i, j);
-            map.displayMap();
+            //map.displayMap();
         }
         //sun.stopProducingSun();
         try {

@@ -131,20 +131,27 @@ public class Map {
     }
 
     public synchronized void removePlant(int i, int j) {
-        if (!isValidPosition(i, j)) {
-            System.out.println("Waduh gak bisa diremove di situ, coba tempat lainn!!");
-            return;
-        }
-
         Tile tile = tiles[i][j];
-        if (!tile.hasPlant()) {
-            System.out.println("No plant to remove at position [" + i + "][" + j + "].");
-            return;
+        if (!tile.getPlants().isEmpty()) {
+            if (tile.isWater() && tile.hasLilypad()) {
+                Lilypad lilypad = tile.getLilypad();
+                if (lilypad.getPlantOnTop() != null) {
+                    System.out.println("Removing " + lilypad.getPlantOnTop().getName() + " from tile (" + i + ", " + j + ")");
+                    lilypad.setPlantOnTop(null);
+                } else {
+                    System.out.println("Removing Lilypad from tile (" + i + ", " + j + ")");
+                    tile.removePlant(lilypad);
+                }
+            } else {
+                Plant plant = tile.getPlants().get(0);
+                System.out.println("Removing " + plant.getName() + " from tile (" + i + ", " + j + ")");
+                tile.removePlant(plant);
+            }
+        } else {
+            System.out.println("No plant found at position: (" + i + ", " + j + ")");
         }
-
-        tile.removePlant();
-        System.out.println("Plant removed from [" + i +"][" + j + "].");
     }
+    
 
     public boolean isValidPosition(int i, int j) {
         return (i >= 0 && i < tiles.length) && (j > 0 && j < tiles[i].length-1);
