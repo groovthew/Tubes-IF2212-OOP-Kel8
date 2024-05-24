@@ -367,7 +367,6 @@ public class Map {
                 throw new IllegalArgumentException("Unknown zombie type: " + type);
         }
     }
-
     public void moveZombies() {
         Thread moveThread = new Thread(() -> {
             int elapsedTime = 0;
@@ -421,12 +420,11 @@ public class Map {
                 }
             }
             System.out.println("GAME OVER! ");
-            GameOver print = new GameOver();
-            print.displayGameOver();
-        }).start();
+        });
+    
+        moveThread.start();
     }
     
-
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {
             return "PS" + ": " + plant.getHealth();
