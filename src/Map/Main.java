@@ -21,7 +21,6 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Deck deck = new Deck();
     private static Inventory inventory = Inventory.getInstance();
-    private Map map;
 
     public static void main(String[] args) throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         Menu printer = new Menu();
@@ -199,9 +198,10 @@ public class Main {
     
         Sun sun = new Sun(50);
         map.sunManager.addProducer(sun);
-        sun.startProducingSun();
+        sun.startProducingSun(map);
     
         while (!map.gameOver()) {
+            //map.checkDayNightCycle();
             System.out.println(yellow + "============================== DECK ================================" + reset);
             deck.displayDeck();
             System.out.println(yellow + "====================================================================" + reset);
