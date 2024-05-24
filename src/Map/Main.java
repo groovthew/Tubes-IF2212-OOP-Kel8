@@ -323,7 +323,7 @@ public class Main {
                         System.out.println("==============================================");
                         
                     }
-                    if (command.equalsIgnoreCase("3")){
+                    if (command.equalsIgnoreCase("back")){
                         gameActive = false;  // Exit the game loop to return to the main menu
                         exitGame = true;
                     }

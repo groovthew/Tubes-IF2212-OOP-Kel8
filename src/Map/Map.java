@@ -103,7 +103,7 @@ public class Map {
         String plantName = plant.getName();//
 
         if (plantCooldowns.containsKey(plantName) && currentTime < plantCooldowns.get(plantName)) {
-            System.out.println(plantName + " masih cooldown selama " + ((plantCooldowns.get(plantName) - currentTime) / 1000) + "s");
+            System.out.println(red + plantName + " masih cooldown selama " + ((plantCooldowns.get(plantName) - currentTime) / 1000) + "s" + reset);
             return;
         }
 
