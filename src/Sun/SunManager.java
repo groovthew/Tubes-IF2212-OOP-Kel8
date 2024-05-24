@@ -27,7 +27,6 @@ public class SunManager implements SunListener{
     @Override
     public void onSunProduced() {
         totalSun = getTotalSun();
-        System.out.println("Total Sun: " + totalSun);
     }
 
     public int getTotalSun() {

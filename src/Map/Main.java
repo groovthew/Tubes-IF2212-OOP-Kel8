@@ -8,8 +8,8 @@ import Exceptions.DeckNotFullException;
 import Tanaman.*;
 import Main.*;
 import Sun.*;
-import Map.GameOver;
-import Map.GameWin;
+// import Map.GameOver;
+// import Map.GameWin;
 
 public class Main {
     static String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
@@ -291,6 +291,7 @@ public class Main {
         }
     }
     
+    
     public static void startGame(Scanner scanner) {
         boolean exitGame = false;
         while (!exitGame) {
@@ -344,9 +345,10 @@ public class Main {
                     String choice = scanner.nextLine();
                     if (choice.equals("1")) {
                         validChoice = true;
-                        exitGame = true;      // Exit to the main menu
+                        exitGame = true;
                     } else if (choice.equals("2")) {
-                        System.exit(0);       // Exit the program
+                        System.exit(0);
+                        System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
                     } else {
                         System.out.println("Invalid choice. Please choose again.");
                     }
