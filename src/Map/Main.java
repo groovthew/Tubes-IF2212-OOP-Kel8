@@ -8,6 +8,8 @@ import Exceptions.DeckNotFullException;
 import Tanaman.*;
 import Main.*;
 import Sun.*;
+import Map.GameOver;
+import Map.GameWin;
 
 public class Main {
     static String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
@@ -333,7 +335,8 @@ public class Main {
             }
             if (gameMap.gameOver()) {
                 //System.out.println("Game Over! Total Sun: " + SunManager.getTotalSun());
-                System.out.println("Game Over! Balik ke menu atau keluar dari permainan ?");
+                GameOver printer = new GameOver();
+                printer.displayGameOver();
                 System.out.println("1. Menu");
                 System.out.println("2. Exit");
     
