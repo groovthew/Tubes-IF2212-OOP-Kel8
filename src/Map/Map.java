@@ -3,7 +3,6 @@ package Map;
 import java.util.*;
 import Tanaman.*;
 import Zombie.*;
-import Main.Character;
 import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
@@ -147,11 +146,11 @@ public class Map {
         System.out.println("Plant removed from [" + i +"][" + j + "].");
     }
 
-    private boolean isValidPosition(int i, int j) {
-        return (i >= 0 && i < tiles.length) && (j >= 0 && j < tiles[i].length);
+    public boolean isValidPosition(int i, int j) {
+        return (i >= 0 && i < tiles.length) && (j > 0 && j < tiles[i].length-1);
     }
 
-    private boolean canPlacePlant(Plant plant, int i, int j) {
+    public boolean canPlacePlant(Plant plant, int i, int j) {
         Tile tile = tiles[i][j];
 
         if (tile.isWater() && plant.isLilypad()) {
@@ -196,20 +195,12 @@ public class Map {
         }
     }
 
-    public void plantPeashooter(int row, int col) {
-        int cost = 100; // Harga Peashooter
-        Plant peashooter = new Peashooter(null, cost, cost, cost, cost, cost, cost); // Buat instance Peashooter
-        // if (sunManager.plant(peashooter, cost)) {
-        //     // Logika untuk menempatkan Peashooter di peta pada posisi (row, col)
-        // }
-    }
-
     public void spawnZombies() {
         Thread spawnThread = new Thread(() -> {
             int elapsedTime = 0;
 
             while (!gameOver()) {
-                if (elapsedTime >= 20 && elapsedTime <= 160 && getZombieCount() < 10) {
+                if (elapsedTime >= 2 && elapsedTime <= 160 && getZombieCount() < 10) {
                     int spawnColumn = tiles[0].length - 1;
 
                     for (int i = 0; i < tiles.length; i++) {
@@ -242,7 +233,6 @@ public class Map {
                     return;
                 }
             }
-            System.out.println("Game over condition met, stopping zombie spawning.");
         });
 
         spawnThread.start();
@@ -268,7 +258,6 @@ public class Map {
         }
         return false;
     }
-
     public int getZombieCount() {
         int count = 0;
         for (int i = 0; i < tiles.length; i++) {
@@ -292,7 +281,6 @@ public class Map {
             return null;
         }
     }
-
     private void initializeZombieTypes() {
         zombieTypes = new ArrayList<>();
         zombieTypes.add(BucketHeadZombie.class);
@@ -306,7 +294,6 @@ public class Map {
         zombieTypes.add(ScreenDoorZombie.class);
         zombieTypes.add(YetiZombie.class);
     }
-
     public Zombie createZombie(String type) {
         switch (type) {
             case "BucketHead":
@@ -367,10 +354,9 @@ public class Map {
 
                     plantAttacking();
                     displayMap();
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 }
             } catch (InterruptedException e) {
-                System.out.println("Zombie moving thread was interrupted.");
                 Thread.currentThread().interrupt();
             }
             System.out.println("GAME OVER! ");
@@ -463,90 +449,9 @@ public class Map {
         }
         return null;
     }
-
-    public void initiateMap() {
-        startGame();
-        Sun sun = new Sun(0);
-        sun.startProducingSun();
-        Thread inputThread = new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
-            while (!gameOver()) {
-                System.out.println(yellow + "============================== DECK ================================" + reset);
-                deck.displayDeck();
-                System.out.println(yellow + "====================================================================" + reset);
-                System.out.println("Enter plant type (PS, SF, CH, SP, SQ, SS, TN, JP, LL, WN) and coordinates (i, j): ");
-
-                String plantType = scanner.next().toUpperCase();
-
-                if (plantType.equals("RP")) {
-                    try {
-                        int i = scanner.nextInt();
-                        int j = scanner.nextInt();
-                        removePlant(i, j);
-                    } catch (Exception e) {
-                        System.out.println("Waduh gak bisa remove di situ. Pilih koordinat lainn!");
-                        scanner.nextLine(); 
-                    }
-                    continue;
-                }
-    
-                if (!deck.isPlantMatchDeck(plantType)) {
-                    System.out.println("Invalid plant type. Please choose a valid plant type from the deck.");
-                    continue;
-                }
-
-                int i = scanner.nextInt();
-                int j = scanner.nextInt();
-
-                Plant plant = null;
-                switch (plantType) {
-                    case "PS":
-                        plant = new Peashooter(null, 100, 25, 4, 100, -1, 10);
-                        break;
-                    case "SF":
-                        plant = new Sunflower(null, 100, 0, 0, 50, -1, 10);
-                        break;
-                    case "CH":
-                        plant = new Chomper(null, 200, 1000, 0, 150, -1, 20);
-                        break;
-                    case "SP":
-                        plant = new SnowPea(null, 100, 25, 4, 175, -1, 10);
-                        break;
-                    case "SQ":
-                        plant = new Squash(null, 100, 5000, 0, 50, 1, 20);
-                        break;
-                    case "TS":
-                        plant = new TwinSunflower(null, 150, 0, 0, 100, -1, 10);
-                        break;
-                    case "TN":
-                        plant = new TallNut(null, 150, 0, 0, 125, -1, 10);
-                        break;
-                    case "JP":
-                        plant = new Jalapeno(null, 100, 0, 0, 150, -1, 20);
-                        break;
-                    case "LL":
-                        plant = new Lilypad(null, 100, 0, 0, 25, -1, 5);
-                        break;
-                    case "WN":
-                        plant = new WallNut(plantType, j, j, j, i, j);
-                        break;
-                    default:
-                        System.out.println("Invalid plant type.");
-                        continue;
-                }
-                addPlant(plant, i, j);
-            }
-        });
-
-        inputThread.start();
-        spawnZombies();
-        moveZombies();
-    }
-
     private boolean isPlantCodeValid(String plantCode) {
         return deck.isPlantInDeck(getPlantNameFromCode(plantCode));
     }
-
     private String getPlantNameFromCode(String plantCode) {
         switch (plantCode) {
             case "PS":

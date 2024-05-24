@@ -9,7 +9,6 @@ import Exceptions.DeckNotFullException;
 import Tanaman.*;
 import Zombie.*;
 import Main.*;
-import Main.Help;
 import Sun.*;
 
 public class Main {
@@ -43,12 +42,12 @@ public class Main {
                     new PlantsList();
                     break;
                 case "5":
-                    Help.displayHelp();;
+                    Help.displayHelp();
                     break;
                 case "3":
                     System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
                     scanner.close();
-                    return;
+                    System.exit(0);
                 default:
                     System.out.println(red + "Invalid choice. Please choose again." + reset);
             }
@@ -190,10 +189,105 @@ public class Main {
             }
         }
     }
+    public static void initiateMap(Map map) {
+        Thread spawnThread = new Thread(map::spawnZombies);
+        Thread moveThread = new Thread(map::moveZombies);
 
+        spawnThread.start();
+        moveThread.start();
+        SunManager sunManager = new SunManager();
+
+        // Create instances of Sun, Sunflower, and SunShroom
+        Sun sun = new Sun(0);
+
+        // Add producers to SunManager
+        sunManager.addProducer(sun);
+
+        // Start producing sun
+        sun.startProducingSun();
+        while (!map.gameOver()) {
+            System.out.println(yellow + "============================== DECK ================================" + reset);
+            deck.displayDeck();
+            System.out.println(yellow + "====================================================================" + reset);
+            System.out.println("Masukkan tipe Plant (PS, SF, CH, SP, SQ, TS, TN, JP, LL, WN) dan kordinatnya (i, j): ");
+            
+            String input = scanner.nextLine().toUpperCase();
+            String[] parts = input.split(" ");
+            if (parts.length != 3) {
+                System.out.println("Salah format input! Contoh input (PS 1 1).");
+                continue;
+            }
+            String plantType = parts[0];
+            int i = 0, j = 0;
+            try {
+                i = Integer.parseInt(parts[1]);
+                j = Integer.parseInt(parts[2]);
+            } catch (NumberFormatException e) {
+                System.out.println(" Koordinat tempat tanam salah! ");
+                continue;
+            }
+            if (!deck.isPlantMatchDeck(plantType)) {
+                System.out.println("Tidak ada tanaman itu di deck! ");
+                continue;
+            }
+            Plant plant = null;
+            switch (plantType) {
+                case "PS":
+                    plant = new Peashooter(null, 100, 25, 4, 100, -1, 10);
+                    break;
+                case "SF":
+                    plant = new Sunflower(null, 100, 0, 0, 50, -1, 10);
+                    break;
+                case "CH":
+                    plant = new Chomper(null, 200, 1000, 0, 150, -1, 20);
+                    break;
+                case "SP":
+                    plant = new SnowPea(null, 100, 25, 4, 175, -1, 10);
+                    break;
+                case "SQ":
+                    plant = new Squash(null, 100, 5000, 0, 50, 1, 20);
+                    break;
+                case "TS":
+                    plant = new TwinSunflower(null, 150, 0, 0, 100, -1, 10);
+                    break;
+                case "TN":
+                    plant = new TallNut(null, 150, 0, 0, 125, -1, 10);
+                    break;
+                case "JP":
+                    plant = new Jalapeno(null, 100, 0, 0, 150, -1, 20);
+                    break;
+                case "LL":
+                    plant = new Lilypad(null, 100, 0, 0, 25, -1, 5);
+                    break;
+                case "WN":
+                    plant = new WallNut(null, 300, 0, 0, 50, -1);
+                    break;
+                default:
+                    System.out.println("Invalid plant type.");
+                    continue;
+            }
+            if (!map.isValidPosition(i, j)) {
+                System.out.println("Salah posisi: (" + i + ", " + j + ")");
+                continue;
+            }
+
+            if (!map.canPlacePlant(plant, i, j)) {
+                System.out.println("Tidak bisa menanam plant " + plant.getClass().getSimpleName() + " di (" + i + ", " + j + ")");
+                continue;
+            }
+            map.addPlant(plant, i, j);
+            map.displayMap();
+        }
+        //sun.stopProducingSun();
+        try {
+            spawnThread.join();
+            moveThread.join();
+        } catch (InterruptedException e) {
+            System.out.println("Threads interrupted: " + e.getMessage());
+        }
+    }
     public static void startGame(Scanner scanner) {
         Map gameMap = new Map(6, 11, deck);
-        //Tile tile = new Tile(false, false);
         System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println("==============================================");
             System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
@@ -212,19 +306,9 @@ public class Main {
                 String command = scanner.nextLine();
 
                 if (command.equalsIgnoreCase("1")) {
-                    Map map = new Map(6, 11, deck);
-                    map.initiateMap();
-                    SunManager sunManager = new SunManager();
-
-                    // Create instances of Sun, Sunflower, and SunShroom
-                    Sun sun = new Sun(0);
-            
-                    // Add producers to SunManager
-                    sunManager.addProducer(sun);
-            
-                    // Start producing sun
-                    sun.startProducingSun();
-                }    
+                    initiateMap(gameMap);
+                }
+                    
 
                 if (command.equalsIgnoreCase("2")) {
                     gameMap.displayMap();
@@ -238,6 +322,22 @@ public class Main {
             
                     break;
                 }
+            }
+        }
+        System.out.println("Game Over! Balik ke menu atau keluar dari permainan ? ");
+        System.out.println("1. Menu ");
+        System.out.println("2. Keluar dari permainan ");
+        boolean validChoice = false;
+        while (!validChoice) {
+            String choice = scanner.nextLine();
+            if (choice.equals("1")) {
+                validChoice = true;
+                // exitgame = true;
+            } else if (choice.equals("2")) {
+                System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
+                System.exit(0);
+            } else {
+                System.out.println("Input salah, ulangi ! ");
             }
         }
     }

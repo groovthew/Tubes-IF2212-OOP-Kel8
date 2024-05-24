@@ -18,7 +18,6 @@ public class DolphinRiderZombie extends Zombie {
         if (hasJumped) {
             return;
         }
-        // Pastikan bahwa tile berikutnya berada dalam batas dan terdapat tanaman
         if (j >= 2 && !tiles[i][j - 1].getPlants().isEmpty()) {
                 Plant plant = tiles[i][j - 1].getPlants().get(0);
                 tiles[i][j - 1].getPlants().remove(plant);
