@@ -1,5 +1,6 @@
 package Sun;
 
+import Map.Map;
 import java.util.Random;
 
 public class Sun implements ProduceSun {
@@ -43,22 +44,20 @@ public class Sun implements ProduceSun {
     }
 
     @Override
-    public void startProducingSun() {
-        if (!makingSun) {
-            makingSun = true;
-            sunProductionThread = new Thread(() -> {
-                Random random = new Random();
-                while (makingSun) {
-                    try {
-                        Thread.sleep((random.nextInt(6) + 5) * 1000);
-                        increaseSun();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    public void startProducingSun(Map map) {
+        sunProductionThread = new Thread(() -> {
+            Random random = new Random();
+            while (!map.gameOver()) {
+                try {
+                    Thread.sleep((random.nextInt(6) + 5) * 1000);
+                    increaseSun();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            });
-            sunProductionThread.start();
-        }
+            }
+            //System.out.println(" Sun berhenti.");
+        });
+        sunProductionThread.start();
     }
 
     @Override

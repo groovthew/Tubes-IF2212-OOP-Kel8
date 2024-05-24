@@ -196,9 +196,10 @@ public class Main {
     
         Sun sun = new Sun(50);
         map.sunManager.addProducer(sun);
-        sun.startProducingSun();
+        sun.startProducingSun(map);
     
         while (!map.gameOver()) {
+            //map.checkDayNightCycle();
             System.out.println(yellow + "============================== DECK ================================" + reset);
             deck.displayDeck();
             System.out.println(yellow + "====================================================================" + reset);
