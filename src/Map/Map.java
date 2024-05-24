@@ -16,9 +16,6 @@ public class Map {
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
     private Deck deck;
-    private SunManager sunManager;
-    private Sun sun;
-    private Timer timer;
     private boolean zombieReachedBase = true;
     private java.util.Map<String, Long> plantCooldowns;
     private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
@@ -33,8 +30,6 @@ public class Map {
     public Map(int x, int y, Deck deck) {
         tiles = new Tile[6][11];
         this.deck = deck;
-        this.sunManager = new SunManager();
-        this.timer = new Timer();
         this.continueSpawning = true;
         this.zombieReachedBase = false;
         setupTiles();
@@ -204,9 +199,9 @@ public class Map {
     public void plantPeashooter(int row, int col) {
         int cost = 100; // Harga Peashooter
         Plant peashooter = new Peashooter(null, cost, cost, cost, cost, cost, cost); // Buat instance Peashooter
-        if (sunManager.plant(peashooter, cost)) {
-            // Logika untuk menempatkan Peashooter di peta pada posisi (row, col)
-        }
+        // if (sunManager.plant(peashooter, cost)) {
+        //     // Logika untuk menempatkan Peashooter di peta pada posisi (row, col)
+        // }
     }
 
     public void spawnZombies() {
@@ -282,11 +277,6 @@ public class Map {
             }
         }
         return count;
-    }
-
-    private void gameOver() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'gameOver'");
     }
 
     private boolean isGameOver() {
