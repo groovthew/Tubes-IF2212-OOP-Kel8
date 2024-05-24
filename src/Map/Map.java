@@ -7,7 +7,6 @@ import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
 import Strategy.ZombieAttackStrategy;
-import Sun.ProduceSun;
 import Sun.SunManager;
 
 public class Map {
@@ -39,25 +38,6 @@ public class Map {
         plantCooldowns = new HashMap<>();
         this.sunManager = new SunManager(); // Tambahkan inisialisasi SunManager
     }
-    public void startGame() {
-        startTime = System.currentTimeMillis();
-        gameStarted = true;
-    }
-    public void checkDayNightCycle() {
-        stopSunProductionAtNight();
-    }
-    private void stopSunProductionAtNight() {
-        // Iterate through all tiles and stop sun production for sunflowers and twin sunflowers at night
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                for (Plant plant : tiles[i][j].getPlants()) {
-                    if (plant instanceof Sunflower || plant instanceof TwinSunflower) {
-                        ((ProduceSun)plant).stopProducingSun();
-                    }
-                }
-            }
-        }
-    }
 
     private void initializeTiles() {
         for (int i = 0; i < tiles.length; i++) {
@@ -67,6 +47,11 @@ public class Map {
                 tiles[i][j] = new Tile(isWater, isSpawnArea);
             }
         }
+    }
+
+    public void startGame() {
+        startTime = System.currentTimeMillis();
+        gameStarted = true;
     }
 
     public void setTiles(Tile[][] tiles) {
@@ -252,6 +237,7 @@ public class Map {
                             Zombie zombie = runZombie(zombieClass);
                             tiles[i][spawnColumn].addZombie(zombie);
 
+                            // Attack handling
                             zombieAttacking();
                             plantAttacking();
                         }
@@ -353,14 +339,9 @@ public class Map {
     }
 
     public void moveZombies() {
-        Thread moveThread = new Thread(() -> {
-            int elapsedTime = 0;
-    
-            while (!gameOver()) {
-                if (elapsedTime > 100){
-                    checkDayNightCycle();
-                }
-                if (elapsedTime % 10 == 0) {  // Gerakan zombie setiap 10 detik
+        new Thread(() -> {
+            try {
+                while (!gameOver()) {
                     for (int i = 0; i < tiles.length; i++) {
                         for (int j = 1; j < tiles[i].length; j++) {
                             List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
@@ -374,6 +355,7 @@ public class Map {
                                         if (zombie instanceof DolphinRiderZombie && !((DolphinRiderZombie) zombie).hasJumped()) {
                                             ((DolphinRiderZombie) zombie).jumpTile(tiles, i, j);
                                         }
+                                        zombieAttacking();
                                         if (plant.getHealth() <= 0) {
                                             tiles[i][j - 1].getZombies().add(zombie);
                                             tiles[i][j].getZombies().remove(zombie);
@@ -386,27 +368,17 @@ public class Map {
                             }
                         }
                     }
-    
-                    zombieAttacking();
+
                     plantAttacking();
                     displayMap();
+                    Thread.sleep(10000);
                 }
-    
-                try {
-                    Thread.sleep(1000);  // Tidur selama 1 detik
-                    elapsedTime += 1;  // Tambahkan elapsedTime setiap detik
-                } catch (InterruptedException e) {
-                    System.out.println("Zombie moving thread was interrupted.");
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
             System.out.println("GAME OVER! ");
-        });
-    
-        moveThread.start();
+        }).start();
     }
-    
 
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {
