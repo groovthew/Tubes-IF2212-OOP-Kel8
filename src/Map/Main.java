@@ -1,13 +1,11 @@
 package Map;
 
-import java.util.Random;
 import java.util.Scanner;
 import Exceptions.CantBePlantedException;
 import Exceptions.CantSwapDeckException;
 import Exceptions.DeckIsEmptyException;
 import Exceptions.DeckNotFullException;
 import Tanaman.*;
-import Zombie.*;
 import Main.*;
 import Sun.*;
 
@@ -21,7 +19,6 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Deck deck = new Deck();
     private static Inventory inventory = Inventory.getInstance();
-    private Map map;
 
     public static void main(String[] args) throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         Menu printer = new Menu();

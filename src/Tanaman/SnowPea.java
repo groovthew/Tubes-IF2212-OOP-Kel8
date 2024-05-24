@@ -1,10 +1,6 @@
 package Tanaman;
 
-import Map.Tile;
-import Zombie.Zombie;
-
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class SnowPea extends Plant {
     private boolean isCooldown;
