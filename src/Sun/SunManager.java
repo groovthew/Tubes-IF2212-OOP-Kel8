@@ -9,6 +9,8 @@ import Tanaman.TwinSunflower;
 public class SunManager implements SunListener {
     private List<ProduceSun> producers;
     private int totalSun;
+    static String red = "\u001B[31m";
+    static String reset = "\u001B[0m";
 
     public SunManager() {
         producers = new ArrayList<>();
@@ -58,7 +60,7 @@ public class SunManager implements SunListener {
             System.out.println("Sun berkurang sebanyak: " + cost + ", Total Sun sekarang: " + totalSun);
             return true;
         } else {
-            System.out.println("Tidak cukup matahari. Total Sun: " + totalSun);
+            System.out.println(red + "Tidak cukup matahari. Total Sun: " + totalSun + reset);
             return false;
         }
     }

@@ -19,7 +19,7 @@ public class Sunflower extends Plant implements ProduceSun {
 
     @Override
     public void increaseSun() {
-        sunTotal += 1;
+        sunTotal += 25;
         if (listener != null) {
             listener.onSunProduced();
         }

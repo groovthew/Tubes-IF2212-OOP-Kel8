@@ -19,7 +19,7 @@ public class TwinSunflower extends Plant implements ProduceSun {
 
     @Override
     public void increaseSun() {
-        sunTotal += 1;
+        sunTotal += 50;
         if (listener != null) {
             listener.onSunProduced();
         }
