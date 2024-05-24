@@ -43,8 +43,10 @@ public class SunManager implements SunListener{
                 Sun sun = (Sun) producer;
                 if (sun.reduceSun(cost)) {
                     System.out.println("Menanam " + plant.getClass().getSimpleName() + " dengan biaya " + cost);
+                    System.out.println("Sun berkurang sebanyak: " + cost + ", Total Sun sekarang: " + totalSun);
                     return true;
                 } else {
+                    System.out.println("Tidak cukup matahari. Total Sun: " + totalSun);
                     return false;
                 }
             }
