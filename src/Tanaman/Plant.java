@@ -12,7 +12,6 @@ public class Plant extends Character{
     private int cooldown;
     private boolean isAquatic = false;
   
-
     // Method
     public Plant(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown, boolean isAquatic) {
         super(name, health, attack_damage, attack_speed);
@@ -38,4 +37,13 @@ public class Plant extends Character{
     public boolean isLilypad() {
         return this instanceof Lilypad;
     }
+
+    public int getTotalHealth(Plant plantOnTop) {
+        int totalHealth = this.getHealth();
+        if (plantOnTop != null) {
+            totalHealth += plantOnTop.getHealth();
+        }
+        return totalHealth;
+    }
+    
 }

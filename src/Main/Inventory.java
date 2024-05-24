@@ -1,7 +1,6 @@
 package Main;
 
 import java.util.ArrayList;
-// import java.util.Scanner;
 import Tanaman.*;
 import Exceptions.CantBePlantedException;
 
@@ -12,8 +11,9 @@ public class Inventory {
   String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
   String reset = "\u001B[0m";   // Kode ANSI untuk mereset warna
   
-    private ArrayList<Plant> container;
-    public Inventory() {
+  private ArrayList<Plant> container;
+
+  public Inventory() {
     this.container = new ArrayList<>();
     new Deck();
   }
@@ -40,14 +40,6 @@ public class Inventory {
         }
     }
     return null; 
-  }
-
-  public void addPlantToDeck(int i, Deck deck) throws CantBePlantedException{
-    Plant plant = container.get(i);
-    if (plant != null) {
-        deck.addPlant(plant);
-    }
-    // deck.getDeck().add(container.get(i));
   }
 
   public void addPlantToInventory(Plant plant) {
@@ -77,5 +69,3 @@ public class Inventory {
         System.out.println(yellow + "========================================================================" + reset);
     }
 }
-
-

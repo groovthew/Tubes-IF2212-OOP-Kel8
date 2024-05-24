@@ -10,6 +10,7 @@ import Sun.*;
 import java.util.HashMap;
 import Tanaman.*;
 import Zombie.*;
+import Main.Character;
 import Main.Deck;
 import java.util.Iterator;
 
@@ -19,6 +20,10 @@ public class Map {
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
     private Deck deck;
+    private SunManager sunManager;
+    private Sun sun;
+    private Timer timer;
+    private boolean zombieReachedBase = true;
     private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
     static String red = "\u001B[31m";    // Kode ANSI untuk warna merah
     static String green = "\033[32m";  // Kode ANSI untuk warna hijau
@@ -30,6 +35,10 @@ public class Map {
     public Map(int x, int y, Deck deck) {
         tiles = new Tile[6][11];
         this.deck = deck;
+        this.sunManager = new SunManager();
+        this.timer = new Timer();
+        this.continueSpawning = true;
+        this.zombieReachedBase = false;
         setupTiles();
         initializeZombieTypes();
         initializeTiles();
@@ -99,7 +108,6 @@ public class Map {
             }
         }
     
-        // Handle other zombie behaviors after jumping
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 List<Plant> plants = tiles[i][j].getPlants();
@@ -194,6 +202,11 @@ public class Map {
                 if (canPlacePlant(plant, i, j)) {
                     tiles[i][j].addPlant(plant);
                     System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
+                    
+                    // Memeriksa apakah ada lilypad di tile ini
+                    if (tiles[i][j].hasLilypad()) {
+                        updateTileNameFromLilypad(tiles[i][j]);
+                    }
                 } else {
                     System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
                 }
@@ -204,6 +217,7 @@ public class Map {
             System.out.println("Tanaman " + plant.getName() + " tidak ada di deck!");
         }
     }
+    
 
     public synchronized void addZombie(Zombie zombie, int i, int j){
         if (isValidPosition(i, j)) {
@@ -237,47 +251,63 @@ public class Map {
     }
 
     public void updateTileNameFromLilypad(Tile tile) {
-        if (tile.hasLilypad() && tile.getLilypad().getPlantOnTop() != null) {
-            Plant plantOnTop = tile.getLilypad().getPlantOnTop();
-            int totalHealth = tile.getLilypad().totalHealth();
-            System.out.println("[" + getPlantSymbol(plantOnTop) + ": " + totalHealth + "] Total Health: " + totalHealth);
+        if (tile.hasLilypad()) {
+            Lilypad lilypad = tile.getLilypad();
+            Plant plantOnTop = lilypad.getPlantOnTop();
+            int totalHealth = lilypad.totalHealth();
+            String name;
+            if (plantOnTop != null) {
+                name = getPlantSymbol(plantOnTop);
+                totalHealth += plantOnTop.getHealth();
+            } else {
+                name = "LL"; 
+            }
+            
+            System.out.println("[" + name + ": " + totalHealth + "] Total Health: " + totalHealth);
         }
     }
     
+
+    public void plantPeashooter(int row, int col) {
+        int cost = 100; // Harga Peashooter
+        Plant peashooter = new Peashooter(null, cost, cost, cost, cost, cost, cost); // Buat instance Peashooter
+        if (sunManager.plant(peashooter, cost)) {
+            // Logika untuk menempatkan Peashooter di peta pada posisi (row, col)
+        }
+    }
 
     public void spawnZombies() {
         Timer spawnTimer = new Timer();
         TimerTask spawnTask = new TimerTask() {
             private int timeElapsed = 0;
+    
             @Override
             public void run() {
-                // if (!continueSpawning) {
-                //     System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
-                //     spawnTimer.cancel();
-                //     return;
-                // }
                 timeElapsed += 3;
-                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning) {
-                    if (timeElapsed > 160 || !continueSpawning) {
+                if (timeElapsed < 20 || timeElapsed > 160 || !continueSpawning || isGameOver()) {
+                    if (timeElapsed > 160 || !continueSpawning || isGameOver()) {
                         System.out.println("WADUH ZOMBIE DAH SAMPE BASE!");
                         spawnTimer.cancel();
+                        if (isGameOver()) {
+                            gameOver();
+                        }
                     }
                     return;
                 }
-
+    
                 int spawnColumn = tiles[0].length - 1;
                 int zombieCount = getZombieCount();
                 for (int i = 0; i < tiles.length; i++) {
                     if (random.nextDouble() < 0.3 && zombieCount < 10) {
                         Class<? extends Zombie> zombieClass = zombieTypes.get(random.nextInt(zombieTypes.size()));
                         String zombieType = zombieClass.getSimpleName();
-
+    
                         if ((zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && !tiles[i][spawnColumn].isWater()) {
                             continue;
                         } else if (!(zombieType.equals("DuckyTubeZombie") || zombieType.equals("DolphinRiderZombie")) && tiles[i][spawnColumn].isWater()) {
                             continue;
                         }
-
+    
                         Zombie zombie = createZombie(zombieClass);
                         tiles[i][spawnColumn].addZombie(zombie);
                         zombieCount++;
@@ -286,10 +316,21 @@ public class Map {
                 }
                 plantAttacking();
             }
-        };
 
+        };
+    
         spawnTimer.schedule(spawnTask, 0, 3000);
     }
+
+    private void gameOver() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'gameOver'");
+    }
+
+    private boolean isGameOver() {
+        return zombieReachedBase;
+    }
+    
 
     public Zombie createZombie(Class<? extends Zombie> zombieClass) {
         try {
@@ -430,36 +471,36 @@ public class Map {
     }
     
     private String getPlantSymbol(Plant plant) {
-        while (plant.getHealth() > 0){
-            if (plant instanceof Peashooter) {
-                return "PS" + ": " + plant.getHealth();
-            } else if (plant instanceof Sunflower) {
-                return "SF" + ": " + plant.getHealth();
-            } else if (plant instanceof Chomper) {
-                return "CH" + ": " + plant.getHealth();
-            } else if (plant instanceof SnowPea) {
-                return "SP" + ": " + plant.getHealth();
-            } else if (plant instanceof Squash) {
-                return "SQ" + ": " + plant.getHealth();
-            } else if (plant instanceof TwinSunflower) {
-                return "TS" + ": " + plant.getHealth();
-            } else if (plant instanceof TallNut) {
-                return "TN" + ": " + plant.getHealth();
-            } else if (plant instanceof Jalapeno) {
-                return "JP" + ": " + plant.getHealth();
-            } else if (plant instanceof Lilypad) {
-                return "LL" + ": " + plant.getHealth();
-            } else if (plant instanceof WallNut) {
-                return "WN" + ": " + plant.getHealth();
+        if (plant instanceof Peashooter) {
+            return "PS" + ": " + plant.getHealth();
+        } else if (plant instanceof Sunflower) {
+            return "SF" + ": " + plant.getHealth();
+        } else if (plant instanceof Chomper) {
+            return "CH" + ": " + plant.getHealth();
+        } else if (plant instanceof SnowPea) {
+            return "SP" + ": " + plant.getHealth();
+        } else if (plant instanceof Squash) {
+            return "SQ" + ": " + plant.getHealth();
+        } else if (plant instanceof TwinSunflower) {
+            return "TS" + ": " + plant.getHealth();
+        } else if (plant instanceof TallNut) {
+            return "TN" + ": " + plant.getHealth();
+        } else if (plant instanceof Jalapeno) {
+            return "JP" + ": " + plant.getHealth();
+        } else if (plant instanceof Lilypad) {
+            // Jika di atasnya ada tanaman, ambil simbolnya
+            Plant plantOnTop = ((Lilypad) plant).getPlantOnTop();
+            if (plantOnTop != null) {
+                return getPlantSymbol(plantOnTop);
+            } else {
+                return "LL" + ": " + plant.getHealth(); // Jika tidak ada tanaman di atasnya, kembalikan simbol Lilypad
             }
+        } else if (plant instanceof WallNut) {
+            return "WN" + ": " + plant.getHealth();
         }
-
-        if (plant.getHealth() <= 0) {
-            return "   ";
-        }
-        
-        return null;
+        return "Pilih Tanamanmu: ";
     }
+    
 
     private String getZombieSymbol(Zombie zombie) {
         if (zombie instanceof BucketHeadZombie) {
@@ -505,6 +546,11 @@ public class Map {
                     System.out.println("Invalid plant type. Please choose a valid plant type from the deck.");
                     continue;
                 }
+
+                if (isGameOver()) {
+                    timer.cancel();
+                    sunManager.stopAllSunProduction();
+                }
                 
                 int i = scanner.nextInt();
                 int j = scanner.nextInt();
@@ -549,7 +595,6 @@ public class Map {
                 map.addPlant(plant, i, j);
             }
         });
-    
         inputThread.start();
         map.spawnZombies();
         map.moveZombies();

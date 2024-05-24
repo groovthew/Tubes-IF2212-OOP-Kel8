@@ -53,6 +53,11 @@ public class SunManager implements SunListener{
         return false;
     }
 
+    public void stopAllSunProduction() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'stopAllSunProduction'");
+    }
+
     // public static void main(String[] args) {
     //     SunManager sunManager = new SunManager();
 

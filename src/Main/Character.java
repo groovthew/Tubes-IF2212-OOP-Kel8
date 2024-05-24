@@ -26,7 +26,7 @@ public abstract class Character {
     //setter
     public void setHealth(int health){
         this.health = health;
-    }
+    } 
     public void setAttackSpeed(double attack_speed){
         this.attack_speed = attack_speed;
     }

@@ -1,15 +1,13 @@
 package Zombie;
 
 import Main.Character;
-import Map.Map;
+
 
 public abstract class Zombie extends Character {
     private int walking_speed;
     private boolean isAquatic;
     private boolean is_slowed;
-    private Map map;
     private double speed;
-    private int x,y;
 
     public Zombie(String name, int health, int attack_damage, int attack_speed){
         super(name, health, attack_damage, attack_speed);
