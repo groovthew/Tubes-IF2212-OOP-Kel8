@@ -336,7 +336,6 @@ public class Main {
                 System.out.println("Game Over! Balik ke menu atau keluar dari permainan ?");
                 System.out.println("1. Menu");
                 System.out.println("2. Exit");
-    
                 boolean validChoice = false;
                 while (!validChoice) {
                     String choice = scanner.nextLine();
