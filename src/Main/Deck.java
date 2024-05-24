@@ -103,7 +103,9 @@ public class Deck {
                 return false;
         }
     }
-    
+    public void clearDeck(){
+        deck.clear();
+    }
     public void displayDeck() {
         if (!deck.isEmpty()) {
             for (int i = 0; i < deck.size(); i++) {

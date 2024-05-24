@@ -358,11 +358,12 @@ public class Map {
     public void moveZombies() {
         Thread moveThread = new Thread(() -> {
             int elapsedTime = 0;
+    
             while (!gameOver()) {
                 if (elapsedTime > 100){
                     checkDayNightCycle();
                 }
-                if (elapsedTime % 10 == 0) {
+                if (elapsedTime % 10 == 0) {  // Gerakan zombie setiap 10 detik
                     for (int i = 0; i < tiles.length; i++) {
                         for (int j = 1; j < tiles[i].length; j++) {
                             List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
@@ -388,24 +389,26 @@ public class Map {
                             }
                         }
                     }
+    
                     zombieAttacking();
                     plantAttacking();
                     displayMap();
                 }
+    
+                try {
+                    Thread.sleep(1000);  // Tidur selama 1 detik
+                    elapsedTime += 1;  // Tambahkan elapsedTime setiap detik
+                } catch (InterruptedException e) {
+                    System.out.println("Zombie moving thread was interrupted.");
+                    Thread.currentThread().interrupt();
+                    return;
+                }
             }
-            try {
-                Thread.sleep(1000);  // Tidur selama 1 detik
-                elapsedTime += 1;  // Tambahkan elapsedTime setiap detik
-            } catch (InterruptedException e) {
-                System.out.println("Zombie moving thread was interrupted.");
-                Thread.currentThread().interrupt();
-                return;
-            }
-        
-            System.out.println("GAME OVER! ");
         });
+    
         moveThread.start();
     }
+    
 
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {

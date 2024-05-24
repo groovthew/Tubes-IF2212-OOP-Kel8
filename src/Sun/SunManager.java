@@ -45,7 +45,6 @@ public class SunManager implements SunListener{
                     System.out.println("Menanam " + plant.getClass().getSimpleName() + " dengan biaya " + cost);
                     return true;
                 } else {
-                    System.out.println("Tidak cukup matahari untuk menanam " + plant.getClass().getSimpleName());
                     return false;
                 }
             }

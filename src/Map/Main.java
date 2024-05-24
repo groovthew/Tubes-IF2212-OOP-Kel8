@@ -346,9 +346,10 @@ public class Main {
                     if (choice.equals("1")) {
                         validChoice = true;
                         exitGame = true;
+                        deck.clearDeck();
                     } else if (choice.equals("2")) {
-                        System.exit(0);
                         System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
+                        System.exit(0);
                     } else {
                         System.out.println("Invalid choice. Please choose again.");
                     }
