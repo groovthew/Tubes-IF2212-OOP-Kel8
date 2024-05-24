@@ -2,19 +2,14 @@ package Map;
 
 import java.util.Random;
 import java.util.Scanner;
-
 import Exceptions.CantBePlantedException;
 import Exceptions.CantSwapDeckException;
 import Exceptions.DeckIsEmptyException;
 import Exceptions.DeckNotFullException;
 import Tanaman.*;
 import Zombie.*;
-import Main.Deck;
-import Main.Inventory;
-import Main.PlantsList;
-import Main.ZombiesList;
+import Main.*;
 import Main.Help;
-import java.util.Scanner;
 import Sun.*;
 
 public class Main {
@@ -89,21 +84,21 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.println(green + "===========================GAME MENU============================" + reset);
+        System.out.println("===========================GAME MENU============================");
         System.out.println(yellow + "|             1. START             |       4. ZOMBIE LIST      |");
-        System.out.println("|             2. PLANT LIST        |          5. HELP          |");
+        System.out.println("|             2. PLANT LIST        |       5. HELP             |");
         System.out.println("|             3. EXIT              |                           |" + reset);
-        System.out.println(green + "================================================================" + reset);
+        System.out.println("================================================================");
         System.out.print(blue + "Enter your choice: " + reset);
     }
 
     public static void gameMenu() throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         while (true) {
-            System.out.println(green + "=============================GAME MENU==================================" + reset);
+            System.out.println("=============================GAME MENU==================================");
             System.out.println(yellow + "|   1. DISPLAY DECK    |   2. ADD PLANT TO DECK  |   3. REMOVE DECK    |");
             System.out.println("|   4. SWAP DECK       |   5. DISPLAY INVENTORY  |   6. SWAP INVENTORY |");
             System.out.println("|   7. BACK            |   8. START GAME         |                     |" + reset);
-            System.out.println(green + "========================================================================" + reset);
+            System.out.println("========================================================================");
             System.out.print(blue + "Enter your choice: " + reset);
     
             String managementChoice = scanner.nextLine();
@@ -197,30 +192,14 @@ public class Main {
     }
 
     public static void startGame(Scanner scanner) {
-        Random random = new Random();
         Map gameMap = new Map(6, 11, deck);
-        Tile tile = new Tile(false, false);
-
-        Thread zombieAdder = new Thread(() -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    // Simulate adding zombies every 5 seconds
-                    Thread.sleep(5000);
-                    tile.addZombie(new NormalZombie());
-                }
-            } catch (InterruptedException e) {
-                System.out.println("Zombie adding thread interrupted.");
-            }
-        });
-
-        zombieAdder.start();  // Start the zombie adding thread
-
+        //Tile tile = new Tile(false, false);
         System.out.println(blue + "ENTER COMMAND" + reset);
-            System.out.println(green + "==============================================" + reset);
+            System.out.println("==============================================");
             System.out.println(yellow + "|  1. PLAY  |   2. DISPLAY   |  3. BACK     |" + reset);
-            System.out.println( green+ "==============================================" + reset);
+            System.out.println("==============================================");
 
-        while (true) {
+        while (!gameMap.gameOver()) {
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 10000 && !scanner.hasNextLine()) {
                 try {
@@ -249,9 +228,9 @@ public class Main {
 
                 if (command.equalsIgnoreCase("2")) {
                     gameMap.displayMap();
-                    System.out.println(green + "==============================================" + reset);
+                    System.out.println("==============================================");
                     System.out.println(yellow + "|                    BACK                    |" + reset);
-                    System.out.println( green+ "==============================================" + reset);
+                    System.out.println("==============================================");
                     
                 }
 

@@ -100,4 +100,12 @@ public class Tile {
     public Lilypad getLilypad() {
         return lilypad;
     }
+
+    public boolean hasPlant() {
+        return plants != null;
+    }
+
+    public void removePlant() {
+        this.plants = null;
+    }
 }

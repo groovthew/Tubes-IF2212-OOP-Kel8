@@ -11,27 +11,21 @@ public class Chomper extends Plant {
     private Timer timer;
 
     public Chomper(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
-        super("Chomper", 200, 1000, 0, 150, 0, 10, false);
+        super("Chomper", 200, 1000, 0, 150, 0, 15, false);
         this.isEating = false;
         this.eatingCooldown = 20;
         this.timer = new Timer();
     }
 
-    public void instantKillZombie(Tile[][] tiles, int i, int j) {
-        if (isEating) {
-            return; 
-        }
-        if (j < tiles[i].length - 1 && !tiles[i][j + 1].getZombies().isEmpty()) {
-            tiles[i][j + 1].getZombies().clear();
-            isEating = true; 
+    public boolean isEating() {
+        return isEating;
+    }
 
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    isEating = false;
-                }
-            }, eatingCooldown * 1000);
-            System.out.println("Chomper attacked zombies on the right tile [" + i + "][" + (j + 1) + "] and is now on cooldown.");
-        }
+    public void setEating(boolean isEating) {
+        this.isEating = isEating;
+    }
+
+    public int getEatingCooldown() {
+        return eatingCooldown;
     }
 }
