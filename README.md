@@ -9,4 +9,7 @@
 | Matthew Nicholas Gunawan        | 18222058   |
 | Muhammad Kevinza Faiz           | 18222072   |
 
+#### Hello! Welcome To The World Of _'Michael VS Lalapan'_ 🙆🏻‍♂️
+### In here, you can explore any features from our game!
+Don't forget to clone our repo before starting the game xixi. Have Fun!🧏🏻 🧟
 
