@@ -1,7 +1,7 @@
-# MICHAEL VS LALAPAN
-## Git ini dibuat untuk memenuhi persyaratan Tugas Besar IF2212 Pemrograman Berorientasi Objek STI
+# 🌱 MICHAEL VS LALAPAN 🧟‍♂️
+### Git ini dibuat untuk memenuhi persyaratan Tugas Besar IF2212 Pemrograman Berorientasi Objek STI
 
-### Kelompok 8
+### Anggota Kelompok 8
 | Nama                            | NIM        |
 |---------------------------------|------------|
 | Mattheuw Suciadi Wijaya         | 18222048   |
