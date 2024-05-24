@@ -200,7 +200,7 @@ public class Map {
             int elapsedTime = 0;
 
             while (!gameOver()) {
-                if (elapsedTime >= 2 && elapsedTime <= 160 && getZombieCount() < 10) {
+                if (elapsedTime >= 20 && elapsedTime <= 160 && getZombieCount() < 10) {
                     int spawnColumn = tiles[0].length - 1;
 
                     for (int i = 0; i < tiles.length; i++) {
@@ -354,7 +354,7 @@ public class Map {
 
                     plantAttacking();
                     displayMap();
-                    Thread.sleep(1000);
+                    Thread.sleep(10000);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
