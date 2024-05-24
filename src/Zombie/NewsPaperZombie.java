@@ -22,14 +22,9 @@ public class NewsPaperZombie extends Zombie{
 
     public void angry() {
         if (this.getHealth() < 100){
-            System.out.println("News Paper Zombie is now angry");
+            isNewspaperDestroyed = true;
+            //System.out.println("News Paper Zombie is now angry");
             super.setAttackDamage(200);
         }
-    }
-
-    public static void main(String[] args) {
-        NewsPaperZombie nz = new NewsPaperZombie();
-        // Example of newspaper getting destroyed
-        nz.setNewspaperDestroyed(true);
     }
 }
