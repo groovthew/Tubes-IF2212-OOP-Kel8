@@ -211,8 +211,12 @@ public class Main {
             System.out.println(yellow + "====================================================================" + reset);
             System.out.println("Masukkan tipe Plant (PS, SF, CH, SP, SQ, TS, TN, JP, LL, WN) dan kordinatnya (i, j): ");
             
-            String input = scanner.nextLine().toUpperCase();
+            String input = scanner.nextLine().toUpperCase().trim();
             String[] parts = input.split(" ");
+            if (input.isEmpty()) {
+                System.out.println("Input tidak boleh kosong! Silakan masukkan tipe plant dan koordinatnya.");
+                continue;
+            }
             if (parts.length != 3) {
                 System.out.println("Salah format input! Contoh input (PS 1 1).");
                 continue;
@@ -286,7 +290,7 @@ public class Main {
             System.out.println("Threads interrupted: " + e.getMessage());
         }
     }
-    public static void startGame(Scanner scanner) {
+    public static void startGame(Scanner scanner) throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         Map gameMap = new Map(6, 11, deck);
         System.out.println(blue + "ENTER COMMAND" + reset);
             System.out.println("==============================================");
@@ -319,26 +323,24 @@ public class Main {
                 }
 
                 if (command.equalsIgnoreCase("3")){
-            
-                    break;
+                    gameMenu();
                 }
             }
         }
         System.out.println("Game Over! Balik ke menu atau keluar dari permainan ? ");
         System.out.println("1. Menu ");
         System.out.println("2. Keluar dari permainan ");
-        boolean validChoice = false;
-        while (!validChoice) {
-            String choice = scanner.nextLine();
-            if (choice.equals("1")) {
-                validChoice = true;
-                // exitgame = true;
-            } else if (choice.equals("2")) {
-                System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
-                System.exit(0);
-            } else {
-                System.out.println("Input salah, ulangi ! ");
-            }
+        
+        String choice = scanner.nextLine();
+        if (choice.equals("1")) {
+            //gameMenu();
+            // exitgame = true;
+        } else if (choice.equals("2")) {
+            System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
+            System.exit(0);
+        } else {
+            System.out.println("Input salah, ulangi ! ");
         }
+        
     }
 }
