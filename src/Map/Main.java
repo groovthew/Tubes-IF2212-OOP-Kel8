@@ -335,7 +335,6 @@ public class Main {
                 }
             }
             if (gameMap.gameOver()) {
-                //System.out.println("Game Over! Total Sun: " + SunManager.getTotalSun());
                 System.out.println("1. Menu");
                 System.out.println("2. Exit");
                 boolean validChoice = false;
@@ -353,6 +352,7 @@ public class Main {
                     }
                 }
             }
+            
         }
     }
 }

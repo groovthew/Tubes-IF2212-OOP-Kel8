@@ -9,6 +9,7 @@ import Strategy.PlantAttackStrategy;
 import Strategy.ZombieAttackStrategy;
 import Sun.ProduceSun;
 import Sun.SunManager;
+import Map.GameWin;
 
 public class Map {
     private Tile[][] tiles;
@@ -60,7 +61,11 @@ public class Map {
     }
     public void checkDayNightCycle() {
         stopSunProductionAtNight();
-        System.out.println("MODE MALAM ! ");
+        int nPrint = 0;
+        while (nPrint != 1){
+            System.out.println("MODE MALAM ! ");
+            nPrint++;
+        }
     }
     private void stopSunProductionAtNight() {
         // Iterate through all tiles and stop sun production for sunflowers and twin sunflowers at night
@@ -288,12 +293,20 @@ public class Map {
         if (zombiesReachedBase()) {
             return true;
         }
-        if (gameStarted && (System.currentTimeMillis() - startTime > 160000)) {
+        if (gameStarted) {
             if (getZombieCount() == 0) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void win(){
+        if (getZombieCount() == 0) {
+            GameWin printer = new GameWin();
+            printer.displayGameWin();
+            System.exit(0);
+        }
     }
     public int getZombieCount() {
         int count = 0;
@@ -362,6 +375,9 @@ public class Map {
             while (!gameOver()) {
                 if (elapsedTime > 100){
                     checkDayNightCycle();
+                }
+                if (elapsedTime > 160){
+                    win();
                 }
                 if (elapsedTime % 10 == 0) {  // Gerakan zombie setiap 10 detik
                     for (int i = 0; i < tiles.length; i++) {
