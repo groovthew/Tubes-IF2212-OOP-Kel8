@@ -35,7 +35,7 @@ public class PlantAttackStrategy implements AttackStrategy {
             if (plantOnTop != null) {
                 plant = plantOnTop;
             } else {
-                return; 
+                return; // If there's no plant on top, return without attacking
             }
         }
         
@@ -140,8 +140,8 @@ public class PlantAttackStrategy implements AttackStrategy {
             zombie.setSlowed(true);
             double originalSpeed = zombie.getSpeed();
             double originalAttackSpeed = zombie.getAttackSpeed();
-            zombie.setSpeed(originalSpeed * 0.5);
-            zombie.setAttackSpeed(originalAttackSpeed * 0.5);
+            zombie.setSpeed(originalSpeed * 2);
+            zombie.setAttackSpeed(originalAttackSpeed * 2);
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
