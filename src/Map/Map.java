@@ -7,6 +7,7 @@ import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
 import Strategy.ZombieAttackStrategy;
+import Sun.ProduceSun;
 import Sun.SunManager;
 
 public class Map {
@@ -56,6 +57,22 @@ public class Map {
 
     public void setTiles(Tile[][] tiles) {
         this.tiles = tiles;
+    }
+    public void checkDayNightCycle() {
+        stopSunProductionAtNight();
+        System.out.println("MODE MALAM ! ");
+    }
+    private void stopSunProductionAtNight() {
+        // Iterate through all tiles and stop sun production for sunflowers and twin sunflowers at night
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                for (Plant plant : tiles[i][j].getPlants()) {
+                    if (plant instanceof Sunflower || plant instanceof TwinSunflower) {
+                        ((ProduceSun)plant).stopProducingSun();
+                    }
+                }
+            }
+        }
     }
 
     public boolean getAdaPlant(Tile[][] tiles, int i, int j) {
@@ -339,9 +356,14 @@ public class Map {
     }
 
     public void moveZombies() {
-        new Thread(() -> {
-            try {
-                while (!gameOver()) {
+        Thread moveThread = new Thread(() -> {
+            int elapsedTime = 0;
+    
+            while (!gameOver()) {
+                if (elapsedTime > 100){
+                    checkDayNightCycle();
+                }
+                if (elapsedTime % 10 == 0) {  // Gerakan zombie setiap 10 detik
                     for (int i = 0; i < tiles.length; i++) {
                         for (int j = 1; j < tiles[i].length; j++) {
                             List<Zombie> zombiesToMove = new ArrayList<>(tiles[i][j].getZombies());
@@ -355,7 +377,6 @@ public class Map {
                                         if (zombie instanceof DolphinRiderZombie && !((DolphinRiderZombie) zombie).hasJumped()) {
                                             ((DolphinRiderZombie) zombie).jumpTile(tiles, i, j);
                                         }
-                                        zombieAttacking();
                                         if (plant.getHealth() <= 0) {
                                             tiles[i][j - 1].getZombies().add(zombie);
                                             tiles[i][j].getZombies().remove(zombie);
@@ -368,19 +389,27 @@ public class Map {
                             }
                         }
                     }
-
+    
+                    zombieAttacking();
                     plantAttacking();
                     displayMap();
-                    Thread.sleep(10000);
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+    
+                try {
+                    Thread.sleep(1000);  // Tidur selama 1 detik
+                    elapsedTime += 1;  // Tambahkan elapsedTime setiap detik
+                } catch (InterruptedException e) {
+                    System.out.println("Zombie moving thread was interrupted.");
+                    Thread.currentThread().interrupt();
+                    return;
+                }
             }
             System.out.println("GAME OVER! ");
             GameOver print = new GameOver();
             print.displayGameOver();
         }).start();
     }
+    
 
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {
