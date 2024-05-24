@@ -6,6 +6,7 @@ public class NewsPaperZombie extends Zombie{
     public NewsPaperZombie(){
         super("Newspaper Zombie", 200 , 100, 1);
         this.isNewspaperDestroyed = false;
+        angry();
     }
 
     public boolean isNewspaperDestroyed() {
@@ -20,8 +21,8 @@ public class NewsPaperZombie extends Zombie{
     }
 
     public void angry() {
-        System.out.println("News Paper Zombie is now angry and moving faster!");
         if (this.getHealth() < 100){
+            System.out.println("News Paper Zombie is now angry");
             super.setAttackDamage(200);
         }
     }

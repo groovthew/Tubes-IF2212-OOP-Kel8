@@ -39,7 +39,7 @@ public class PlantAttackStrategy implements AttackStrategy {
             }
         }
         
-        else if (plant instanceof Peashooter) {
+        if (plant instanceof Peashooter) {
             Peashooter peashooter = (Peashooter) plant;
             if (!peashooter.isCooldown()){
                 Zombie targetZombie = null;
