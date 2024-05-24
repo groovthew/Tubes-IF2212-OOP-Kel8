@@ -11,16 +11,13 @@ public class Sun implements ProduceSun{
     public Sun(int totalSun) {
         this.totalSun = totalSun;
     }
-
     public void setSunListener(SunListener listener) {
         this.listener = listener;
     }
-
     @Override
     public int getAmount() {
         return totalSun;
     }
-
     public void increaseSun() {
         totalSun += 25;
         if (listener != null) {
@@ -58,7 +55,7 @@ public class Sun implements ProduceSun{
             sunProductionThread.start();
         }
     }
-
+    
     @Override
     public void stopProducingSun() {
         makingSun = false;
