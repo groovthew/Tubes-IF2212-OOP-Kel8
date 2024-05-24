@@ -55,4 +55,13 @@ public class Plant extends Character {
     public boolean isLilypad() {
         return this instanceof Lilypad;
     }
+
+    public int getTotalHealth(Plant plantOnTop) {
+        int totalHealth = this.getHealth();
+        if (plantOnTop != null) {
+            totalHealth += plantOnTop.getHealth();
+        }
+        return totalHealth;
+    }
+    
 }

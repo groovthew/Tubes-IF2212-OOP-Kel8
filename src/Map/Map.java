@@ -3,6 +3,7 @@ package Map;
 import java.util.*;
 import Tanaman.*;
 import Zombie.*;
+import Main.Character;
 import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
@@ -15,6 +16,10 @@ public class Map {
     private List<Class<? extends Zombie>> zombieTypes;
     private boolean continueSpawning = true;
     private Deck deck;
+    private SunManager sunManager;
+    private Sun sun;
+    private Timer timer;
+    private boolean zombieReachedBase = true;
     private java.util.Map<String, Long> plantCooldowns;
     private java.util.Map<Plant, Zombie> plantTargetMap = new HashMap<>();
     static String red = "\u001B[31m";
@@ -28,6 +33,10 @@ public class Map {
     public Map(int x, int y, Deck deck) {
         tiles = new Tile[6][11];
         this.deck = deck;
+        this.sunManager = new SunManager();
+        this.timer = new Timer();
+        this.continueSpawning = true;
+        this.zombieReachedBase = false;
         setupTiles();
         initializeZombieTypes();
         initializeTiles();
@@ -109,6 +118,11 @@ public class Map {
                 if (canPlacePlant(plant, i, j)) {
                     tiles[i][j].addPlant(plant);
                     System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
+                    
+                    // Memeriksa apakah ada lilypad di tile ini
+                    if (tiles[i][j].hasLilypad()) {
+                        updateTileNameFromLilypad(tiles[i][j]);
+                    }
                     plant.startCooldown();
                     plantCooldowns.put(plantName, currentTime + (plant.getCooldown() * 1000));
                 } else {
@@ -171,10 +185,27 @@ public class Map {
     }
 
     public void updateTileNameFromLilypad(Tile tile) {
-        if (tile.hasLilypad() && tile.getLilypad().getPlantOnTop() != null) {
-            Plant plantOnTop = tile.getLilypad().getPlantOnTop();
-            int totalHealth = tile.getLilypad().totalHealth();
-            System.out.println("[" + getPlantSymbol(plantOnTop) + ": " + totalHealth + "] Total Health: " + totalHealth);
+        if (tile.hasLilypad()) {
+            Lilypad lilypad = tile.getLilypad();
+            Plant plantOnTop = lilypad.getPlantOnTop();
+            int totalHealth = lilypad.totalHealth();
+            String name;
+            if (plantOnTop != null) {
+                name = getPlantSymbol(plantOnTop);
+                totalHealth += plantOnTop.getHealth();
+            } else {
+                name = "LL"; 
+            }
+            
+            System.out.println("[" + name + ": " + totalHealth + "] Total Health: " + totalHealth);
+        }
+    }
+
+    public void plantPeashooter(int row, int col) {
+        int cost = 100; // Harga Peashooter
+        Plant peashooter = new Peashooter(null, cost, cost, cost, cost, cost, cost); // Buat instance Peashooter
+        if (sunManager.plant(peashooter, cost)) {
+            // Logika untuk menempatkan Peashooter di peta pada posisi (row, col)
         }
     }
 
@@ -252,6 +283,16 @@ public class Map {
         }
         return count;
     }
+
+    private void gameOver() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'gameOver'");
+    }
+
+    private boolean isGameOver() {
+        return zombieReachedBase;
+    }
+    
 
     public Zombie createZombie(Class<? extends Zombie> zombieClass) {
         try {
@@ -377,36 +418,36 @@ public class Map {
     }
 
     private String getPlantSymbol(Plant plant) {
-        if (plant.getHealth() > 0) {
-            if (plant instanceof Peashooter) {
-                return "PS" + ": " + plant.getHealth();
-            } else if (plant instanceof Sunflower) {
-                return "SF" + ": " + plant.getHealth();
-            } else if (plant instanceof Chomper) {
-                return "CH" + ": " + plant.getHealth();
-            } else if (plant instanceof SnowPea) {
-                return "SP" + ": " + plant.getHealth();
-            } else if (plant instanceof Squash) {
-                return "SQ" + ": " + plant.getHealth();
-            } else if (plant instanceof TwinSunflower) {
-                return "TS" + ": " + plant.getHealth();
-            } else if (plant instanceof TallNut) {
-                return "TN" + ": " + plant.getHealth();
-            } else if (plant instanceof Jalapeno) {
-                return "JP" + ": " + plant.getHealth();
-            } else if (plant instanceof Lilypad) {
-                return "LL" + ": " + plant.getHealth();
-            } else if (plant instanceof WallNut) {
-                return "WN" + ": " + plant.getHealth();
+        if (plant instanceof Peashooter) {
+            return "PS" + ": " + plant.getHealth();
+        } else if (plant instanceof Sunflower) {
+            return "SF" + ": " + plant.getHealth();
+        } else if (plant instanceof Chomper) {
+            return "CH" + ": " + plant.getHealth();
+        } else if (plant instanceof SnowPea) {
+            return "SP" + ": " + plant.getHealth();
+        } else if (plant instanceof Squash) {
+            return "SQ" + ": " + plant.getHealth();
+        } else if (plant instanceof TwinSunflower) {
+            return "TS" + ": " + plant.getHealth();
+        } else if (plant instanceof TallNut) {
+            return "TN" + ": " + plant.getHealth();
+        } else if (plant instanceof Jalapeno) {
+            return "JP" + ": " + plant.getHealth();
+        } else if (plant instanceof Lilypad) {
+            // Jika di atasnya ada tanaman, ambil simbolnya
+            Plant plantOnTop = ((Lilypad) plant).getPlantOnTop();
+            if (plantOnTop != null) {
+                return getPlantSymbol(plantOnTop);
+            } else {
+                return "LL" + ": " + plant.getHealth(); // Jika tidak ada tanaman di atasnya, kembalikan simbol Lilypad
             }
+        } else if (plant instanceof WallNut) {
+            return "WN" + ": " + plant.getHealth();
         }
-
-        if (plant.getHealth() <= 0) {
-            return "   ";
-        }
-
-        return null;
+        return "Pilih Tanamanmu: ";
     }
+    
 
     private String getZombieSymbol(Zombie zombie) {
         if (zombie instanceof BucketHeadZombie) {

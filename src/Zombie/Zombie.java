@@ -2,11 +2,12 @@ package Zombie;
 
 import Main.Character;
 
+
 public class Zombie extends Character {
     private boolean isAquatic;
     private boolean is_slowed;
     private double speed;
-    private boolean isCooldown = false;
+    private int x,y;
 
     public Zombie(String name, int health, int attack_damage, int attack_speed){
         super(name, health, attack_damage, 1);
