@@ -377,6 +377,8 @@ public class Map {
                 Thread.currentThread().interrupt();
             }
             System.out.println("GAME OVER! ");
+            GameOver print = new GameOver();
+            print.displayGameOver();
         }).start();
     }
 

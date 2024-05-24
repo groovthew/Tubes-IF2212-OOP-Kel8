@@ -335,8 +335,6 @@ public class Main {
             }
             if (gameMap.gameOver()) {
                 //System.out.println("Game Over! Total Sun: " + SunManager.getTotalSun());
-                GameOver printer = new GameOver();
-                printer.displayGameOver();
                 System.out.println("1. Menu");
                 System.out.println("2. Exit");
     
