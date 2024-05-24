@@ -12,6 +12,7 @@ public class Tile {
     private boolean isWater;
     private boolean isSpawnArea;
     private Lilypad lilypad;
+    int totalHealth = 0;
 
     public Tile(boolean isWater, boolean isSpawnArea) {
         this.isWater = isWater;
@@ -53,7 +54,6 @@ public class Tile {
 
     public void updateTileName() {
         StringBuilder tileName = new StringBuilder();
-        int totalHealth = 0;
     
         // Periksa apakah ada lilypad dan tanaman di atasnya
         if (hasLilypad() && lilypad.getPlantOnTop() != null) {
