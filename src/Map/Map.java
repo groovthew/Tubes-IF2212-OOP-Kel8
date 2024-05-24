@@ -122,6 +122,22 @@ public class Map {
         }
     }
 
+    public synchronized void removePlant(int i, int j) {
+        if (!isValidPosition(i, j)) {
+            System.out.println("Waduh gak bisa diremove di situ, coba tempat lainn!!");
+            return;
+        }
+
+        Tile tile = tiles[i][j];
+        if (!tile.hasPlant()) {
+            System.out.println("No plant to remove at position [" + i + "][" + j + "].");
+            return;
+        }
+
+        tile.removePlant();
+        System.out.println("Plant removed from [" + i +"][" + j + "].");
+    }
+
     private boolean isValidPosition(int i, int j) {
         return (i >= 0 && i < tiles.length) && (j >= 0 && j < tiles[i].length);
     }
@@ -431,6 +447,18 @@ public class Map {
 
                 String plantType = scanner.next().toUpperCase();
 
+                if (plantType.equals("RP")) {
+                    try {
+                        int i = scanner.nextInt();
+                        int j = scanner.nextInt();
+                        removePlant(i, j);
+                    } catch (Exception e) {
+                        System.out.println("Waduh gak bisa remove di situ. Pilih koordinat lainn!");
+                        scanner.nextLine(); 
+                    }
+                    continue;
+                }
+    
                 if (!deck.isPlantMatchDeck(plantType)) {
                     System.out.println("Invalid plant type. Please choose a valid plant type from the deck.");
                     continue;
