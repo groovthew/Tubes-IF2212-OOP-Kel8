@@ -7,7 +7,7 @@ public class Zombie extends Character {
     private boolean isAquatic;
     private boolean is_slowed;
     private double speed;
-    private int x,y;
+    private boolean isCooldown = false;
 
     public Zombie(String name, int health, int attack_damage, int attack_speed){
         super(name, health, attack_damage, 1);
