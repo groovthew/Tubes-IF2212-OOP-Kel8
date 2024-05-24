@@ -1,17 +1,14 @@
 package Tanaman;
 
-
-
 import Sun.ProduceSun;
-import Sun.Sun;
 import Sun.SunListener;
 
-public class Sunflower extends Plant implements ProduceSun{
+public class Sunflower extends Plant implements ProduceSun {
     private int sunTotal;
     private boolean makingSun;
     private SunListener listener;
 
-    public Sunflower(String name, int health, int attack_damage, int attacks_speed, int cost, int range, int cooldown) {
+    public Sunflower(String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
         super("Sunflower", 100, 0, 0, 50, 0, 10, false);
         this.sunTotal = 0;
     }
@@ -20,39 +17,51 @@ public class Sunflower extends Plant implements ProduceSun{
         this.listener = listener;
     }
 
-    public void increaseSun(){
-        sunTotal += 25;
-        makingSun = true;
+    @Override
+    public void increaseSun() {
+        sunTotal += 1;
         if (listener != null) {
             listener.onSunProduced();
         }
     }
 
     @Override
-    public int getAmount(){
+    public boolean reduceSun(int cost) {
+        if (sunTotal >= cost) {
+            sunTotal -= cost;
+            if (listener != null) {
+                listener.onSunProduced();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int getAmount() {
         return sunTotal;
     }
 
     @Override
-    public void startProducingSun(){
-        Thread thread = new Thread(() -> {
-            while (makingSun) {
-                try {
-                    Thread.sleep(3000);
-                    synchronized (this) {
+    public void startProducingSun() {
+        if (!makingSun) {
+            makingSun = true;
+            new Thread(() -> {
+                while (makingSun) {
+                    try {
+                        Thread.sleep(3000);
                         increaseSun();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        makingSun = true;
-        thread.start();
+            }).start();
+        }
     }
 
     @Override
-    public void stopProducingSun(){
+    public void stopProducingSun() {
         makingSun = false;
     }
 }

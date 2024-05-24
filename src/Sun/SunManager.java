@@ -2,16 +2,17 @@ package Sun;
 
 import java.util.ArrayList;
 import java.util.List;
-import Tanaman.*;
+import Tanaman.Plant;
+import Tanaman.Sunflower;
+import Tanaman.TwinSunflower;
 
-
-public class SunManager implements SunListener{
+public class SunManager implements SunListener {
     private List<ProduceSun> producers;
     private int totalSun;
 
     public SunManager() {
         producers = new ArrayList<>();
-        totalSun = 0;
+        totalSun = 50; // Memulai dengan 50 sun
     }
 
     public void addProducer(ProduceSun producer) {
@@ -19,14 +20,17 @@ public class SunManager implements SunListener{
             ((Sun) producer).setSunListener(this);
         } else if (producer instanceof Sunflower) {
             ((Sunflower) producer).setSunListener(this);
+        } else if (producer instanceof TwinSunflower) {
+            ((TwinSunflower) producer).setSunListener(this);
         }
         producers.add(producer);
+        producer.startProducingSun();
     }
 
     @Override
     public void onSunProduced() {
         totalSun = getTotalSun();
-        System.out.println("Total Sun: " + totalSun);
+        
     }
 
     public int getTotalSun() {
@@ -38,38 +42,37 @@ public class SunManager implements SunListener{
     }
 
     public boolean plant(Plant plant, int cost) {
-        for (ProduceSun producer : producers) {
-            if (producer instanceof Sun) {
-                Sun sun = (Sun) producer;
-                if (sun.reduceSun(cost)) {
-                    System.out.println("Menanam " + plant.getClass().getSimpleName() + " dengan biaya " + cost);
-                    return true;
-                } else {
-                    System.out.println("Tidak cukup matahari untuk menanam " + plant.getClass().getSimpleName());
-                    return false;
-                }
-            }
-        }
-        return false;
+        return reduceSun(cost);
     }
+    
 
     public void stopAllSunProduction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stopAllSunProduction'");
+        for (ProduceSun producer : producers) {
+            producer.stopProducingSun();
+        }
     }
 
-    // public static void main(String[] args) {
-    //     SunManager sunManager = new SunManager();
+    public boolean reduceSun(int cost) {
+        if (totalSun >= cost) {
+            totalSun -= cost;
+            System.out.println("Sun berkurang sebanyak: " + cost + ", Total Sun sekarang: " + totalSun);
+            return true;
+        } else {
+            System.out.println("Tidak cukup matahari. Total Sun: " + totalSun);
+            return false;
+        }
+    }
+    
 
-    //     Sun sun = new Sun(0);
-    //     Sunflower sunflower = new Sunflower(null, 0, 0, 0, 0, 0, 0);
+    public static void main(String[] args) {
+        SunManager sunManager = new SunManager();
 
-    //     sunManager.addProducer(sun);
-    //     sunManager.addProducer(sunflower);
+        Sun sun = new Sun(50);
+        Sunflower sunflower = new Sunflower(null, 0, 0, 0, 0, 0, 0);
+        TwinSunflower twinSunflower = new TwinSunflower(null, 0, 0, 0, 0, 0, 0);
 
-    //     sun.startProducingSun();
-    //     sunflower.startProducingSun();
-    // }
+        sunManager.addProducer(sun);
+        sunManager.addProducer(sunflower);
+        sunManager.addProducer(twinSunflower);
+    }
 }
-
-

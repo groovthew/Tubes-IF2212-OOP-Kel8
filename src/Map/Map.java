@@ -7,6 +7,7 @@ import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
 import Strategy.ZombieAttackStrategy;
+import Sun.SunManager;
 
 public class Map {
     private Tile[][] tiles;
@@ -24,6 +25,7 @@ public class Map {
     static String reset = "\u001B[0m";
     private long startTime;
     private boolean gameStarted = false;
+    public SunManager sunManager;
 
     public Map(int x, int y, Deck deck) {
         tiles = new Tile[6][11];
@@ -34,6 +36,7 @@ public class Map {
         initializeZombieTypes();
         initializeTiles();
         plantCooldowns = new HashMap<>();
+        this.sunManager = new SunManager(); // Tambahkan inisialisasi SunManager
     }
 
     private void initializeTiles() {
@@ -99,25 +102,35 @@ public class Map {
 
     public synchronized void addPlant(Plant plant, int i, int j) {
         long currentTime = System.currentTimeMillis();
-        String plantName = plant.getName();//
-
+        String plantName = plant.getName();
+    
         if (plantCooldowns.containsKey(plantName) && currentTime < plantCooldowns.get(plantName)) {
             System.out.println(red + plantName + " masih cooldown selama " + ((plantCooldowns.get(plantName) - currentTime) / 1000) + "s" + reset);
             return;
         }
-
+    
         if (deck.isPlantInDeck(plant.getName())) {
             if (isValidPosition(i, j)) {
                 if (canPlacePlant(plant, i, j)) {
-                    tiles[i][j].addPlant(plant);
-                    System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
-                    
-                    // Memeriksa apakah ada lilypad di tile ini
-                    if (tiles[i][j].hasLilypad()) {
-                        updateTileNameFromLilypad(tiles[i][j]);
+                    if (sunManager.plant(plant, plant.getCost())) { // Cek sun sebelum menanam
+                        tiles[i][j].addPlant(plant);
+                        if (plant instanceof Sunflower) {
+                            sunManager.addProducer((Sunflower) plant);
+                            ((Sunflower) plant).startProducingSun();
+                        } else if (plant instanceof TwinSunflower) {
+                            sunManager.addProducer((TwinSunflower) plant);
+                            ((TwinSunflower) plant).startProducingSun();
+                        }
+                        System.out.println(plant.getName() + " berhasil diplant di [" + i + "][" + j + "]");
+                        
+                        if (tiles[i][j].hasLilypad()) {
+                            updateTileNameFromLilypad(tiles[i][j]);
+                        }
+                        plant.startCooldown();
+                        plantCooldowns.put(plantName, currentTime + (plant.getCooldown() * 1000));
+                    } else {
+                        System.out.println("Tidak cukup matahari untuk menanam " + plant.getClass().getSimpleName());
                     }
-                    plant.startCooldown();
-                    plantCooldowns.put(plantName, currentTime + (plant.getCooldown() * 1000));
                 } else {
                     System.out.println("Waduh gak bisa diplant di situ, coba tempat lainn!!");
                 }
@@ -128,6 +141,7 @@ public class Map {
             System.out.println("Tanaman " + plant.getName() + " tidak ada di deck!");
         }
     }
+    
 
     public synchronized void removePlant(int i, int j) {
         Tile tile = tiles[i][j];

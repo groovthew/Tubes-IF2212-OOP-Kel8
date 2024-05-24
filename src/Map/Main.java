@@ -21,6 +21,7 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Deck deck = new Deck();
     private static Inventory inventory = Inventory.getInstance();
+    private Map map;
 
     public static void main(String[] args) throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         Menu printer = new Menu();
@@ -192,19 +193,14 @@ public class Main {
     public static void initiateMap(Map map) {
         Thread spawnThread = new Thread(map::spawnZombies);
         Thread moveThread = new Thread(map::moveZombies);
-
+    
         spawnThread.start();
         moveThread.start();
-        SunManager sunManager = new SunManager();
-
-        // Create instances of Sun, Sunflower, and SunShroom
-        Sun sun = new Sun(0);
-
-        // Add producers to SunManager
-        sunManager.addProducer(sun);
-
-        // Start producing sun
+    
+        Sun sun = new Sun(50);
+        map.sunManager.addProducer(sun);
         sun.startProducingSun();
+    
         while (!map.gameOver()) {
             System.out.println(yellow + "============================== DECK ================================" + reset);
             deck.displayDeck();
@@ -212,7 +208,7 @@ public class Main {
             System.out.println("Masukkan tipe Plant (PS, SF, CH, SP, SQ, TS, TN, JP, LL, WN) dan kordinatnya (i, j): ");
             System.out.println("Input RP i j untuk menghapus tanaman di posisi i j");
             System.out.println("");
-            
+    
             String input = scanner.nextLine().toUpperCase().trim();
             String[] parts = input.split(" ");
             if (input.isEmpty()) {
@@ -235,7 +231,7 @@ public class Main {
                 map.removePlant(i, j);
                 continue;
             }
-            if (!deck.isPlantMatchDeck(plantType)){
+            if (!deck.isPlantMatchDeck(plantType)) {
                 System.out.println("Tidak ada tanaman itu di deck! ");
                 continue;
             }
@@ -279,15 +275,14 @@ public class Main {
                 System.out.println("Waduh gabisa nanam di posisi : (" + i + ", " + j + ")");
                 continue;
             }
-
+    
             if (!map.canPlacePlant(plant, i, j)) {
                 System.out.println("Tidak bisa menanam plant " + plant.getClass().getSimpleName() + " di (" + i + ", " + j + ")");
                 continue;
             }
             map.addPlant(plant, i, j);
-            //map.displayMap();
         }
-        //sun.stopProducingSun();
+    
         try {
             spawnThread.join();
             moveThread.join();
@@ -295,6 +290,7 @@ public class Main {
             System.out.println("Threads interrupted: " + e.getMessage());
         }
     }
+    
     public static void startGame(Scanner scanner) {
         boolean exitGame = false;
         while (!exitGame) {

@@ -2,22 +2,26 @@ package Sun;
 
 import java.util.Random;
 
-public class Sun implements ProduceSun{
+public class Sun implements ProduceSun {
     private int totalSun;
     private boolean makingSun;
     private Thread sunProductionThread;
     private SunListener listener;
-    
+
     public Sun(int totalSun) {
         this.totalSun = totalSun;
     }
+
     public void setSunListener(SunListener listener) {
         this.listener = listener;
     }
+
     @Override
     public int getAmount() {
         return totalSun;
     }
+
+    @Override
     public void increaseSun() {
         totalSun += 25;
         if (listener != null) {
@@ -25,6 +29,7 @@ public class Sun implements ProduceSun{
         }
     }
 
+    @Override
     public boolean reduceSun(int cost) {
         if (totalSun >= cost) {
             totalSun -= cost;
@@ -55,11 +60,10 @@ public class Sun implements ProduceSun{
             sunProductionThread.start();
         }
     }
-    
+
     @Override
     public void stopProducingSun() {
         makingSun = false;
         sunProductionThread.interrupt();
     }
 }
-

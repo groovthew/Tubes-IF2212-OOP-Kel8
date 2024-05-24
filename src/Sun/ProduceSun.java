@@ -5,4 +5,5 @@ public interface ProduceSun {
     int getAmount();
     void startProducingSun();
     void stopProducingSun();
+    boolean reduceSun(int cost);
 }
