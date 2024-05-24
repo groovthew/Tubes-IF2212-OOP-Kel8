@@ -1,8 +1,7 @@
 package Tanaman;
 
-import Map.Tile;
 import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class Chomper extends Plant {
     private boolean isEating; // Untuk menandai apakah Chomper sedang makan atau tidak
