@@ -35,11 +35,11 @@ public class PlantAttackStrategy implements AttackStrategy {
             if (plantOnTop != null) {
                 plant = plantOnTop;
             } else {
-                return; // If there's no plant on top, return without attacking
+                return; 
             }
         }
         
-        if (plant instanceof Peashooter) {
+        else if (plant instanceof Peashooter) {
             Peashooter peashooter = (Peashooter) plant;
             if (!peashooter.isCooldown()){
                 Zombie targetZombie = null;
@@ -61,7 +61,34 @@ public class PlantAttackStrategy implements AttackStrategy {
                     }
                 }, peashooter.getShootingCooldown() * 1000);
             }
-        } else if (plant instanceof Chomper) {
+        } 
+        
+        else if (plant instanceof SnowPea) {
+            SnowPea snowPea = (SnowPea) plant;
+            if (!snowPea.isCooldown()){
+                Zombie targetZombie = null;
+            for (int j = col; j < tiles[row].length; j++) {
+                if (!tiles[row][j].getZombies().isEmpty()) {
+                    targetZombie = tiles[row][j].getZombies().get(0);
+                    targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
+                    if (targetZombie.getHealth() <= 0) {
+                        tiles[row][j].getZombies().remove(targetZombie);
+                    } else {
+                        applySlowEffect(targetZombie);
+                    }
+                    break;
+                }
+            }
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    snowPea.setCooldown(false);
+                }
+            }, snowPea.getShootingCooldown() * 1000);
+            }
+        } 
+        
+        else if (plant instanceof Chomper) {
             Chomper chomper = (Chomper) plant;
             if (!chomper.isEating()) {
                 if (col < tiles[row].length - 1 && !tiles[row][col + 1].getZombies().isEmpty()) {
@@ -77,21 +104,9 @@ public class PlantAttackStrategy implements AttackStrategy {
                     System.out.println("Chomper attacked zombies on the right tile [" + row + "][" + (col + 1) + "] and is now on cooldown.");
                 }
             }
-        } else if (plant instanceof SnowPea) {
-            Zombie targetZombie = null;
-            for (int j = col; j < tiles[row].length; j++) {
-                if (!tiles[row][j].getZombies().isEmpty()) {
-                    targetZombie = tiles[row][j].getZombies().get(0);
-                    targetZombie.setHealth(targetZombie.getHealth() - plant.getAttackDamage());
-                    if (targetZombie.getHealth() <= 0) {
-                        tiles[row][j].getZombies().remove(targetZombie);
-                    } else {
-                        applySlowEffect(targetZombie);
-                    }
-                    break;
-                }
-            }
-        } else if (plant instanceof Squash) {
+        } 
+        
+        else if (plant instanceof Squash) {
             Squash squash = (Squash) plant;
             if (col > 0 && !tiles[row][col - 1].getZombies().isEmpty()) {
                 tiles[row][col - 1].getZombies().clear();
@@ -107,7 +122,9 @@ public class PlantAttackStrategy implements AttackStrategy {
                 tiles[row][col].getZombies().clear();
                 tiles[row][col].getPlants().remove(squash);
             }
-        } else if (plant instanceof Jalapeno) {
+        } 
+        
+        else if (plant instanceof Jalapeno) {
             Jalapeno jalapeno = (Jalapeno) plant;
             for (int j = 0; j < tiles[row].length; j++) {
                 if (!tiles[row][j].getZombies().isEmpty()) {

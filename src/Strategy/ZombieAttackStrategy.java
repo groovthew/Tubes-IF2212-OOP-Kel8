@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import Map.Tile;
 import Zombie.Zombie;
 import Tanaman.Plant;
+import Tanaman.SnowPea;
 
 public class ZombieAttackStrategy implements AttackStrategy {
     private Tile[][] tiles;
@@ -27,6 +28,9 @@ public class ZombieAttackStrategy implements AttackStrategy {
         if (!zombie.isCooldown()){    
             if (col > 0 && !tiles[row][col - 1].getPlants().isEmpty()) {
                 Plant plant = tiles[row][col - 1].getPlants().get(0);
+                if (plant instanceof SnowPea){
+                    
+                }
                 plant.setHealth(plant.getHealth() - zombie.getAttackDamage());
                 if (plant.getHealth() <= 0) {
                     tiles[row][col - 1].getPlants().remove(plant);

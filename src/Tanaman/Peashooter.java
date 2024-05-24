@@ -4,8 +4,8 @@ import java.util.Timer;
 
 
 public class Peashooter extends Plant {
-    private boolean isCooldown; // Untuk menandai apakah Chomper sedang makan atau tidak
-    private int shootingCooldown; // Waktu cooldown setelah Chomper makan
+    private boolean isCooldown;
+    private int shootingCooldown; 
     private Timer timer;
 
     public Peashooter (String name, int health, int attack_damage, int attack_speed, int cost, int range, int cooldown) {
