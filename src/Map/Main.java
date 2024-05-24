@@ -20,7 +20,7 @@ public class Main {
 
     private static Scanner scanner = new Scanner(System.in);
     private static Deck deck = new Deck();
-    private static Inventory inventory = new Inventory();
+    private static Inventory inventory = Inventory.getInstance();
 
     public static void main(String[] args) throws DeckIsEmptyException, DeckNotFullException, CantSwapDeckException {
         Menu printer = new Menu();

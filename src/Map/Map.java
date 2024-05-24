@@ -7,7 +7,6 @@ import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
 import Strategy.ZombieAttackStrategy;
-import Sun.Sun;
 
 public class Map {
     private Tile[][] tiles;
@@ -214,7 +213,7 @@ public class Map {
                                 continue;
                             }
 
-                            Zombie zombie = createZombie(zombieClass);
+                            Zombie zombie = runZombie(zombieClass);
                             tiles[i][spawnColumn].addZombie(zombie);
 
                             // Attack handling
@@ -267,13 +266,8 @@ public class Map {
         }
         return count;
     }
-
-    private boolean isGameOver() {
-        return zombieReachedBase;
-    }
     
-
-    public Zombie createZombie(Class<? extends Zombie> zombieClass) {
+    public Zombie runZombie(Class<? extends Zombie> zombieClass) {
         try {
             return zombieClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
@@ -281,6 +275,7 @@ public class Map {
             return null;
         }
     }
+
     private void initializeZombieTypes() {
         zombieTypes = new ArrayList<>();
         zombieTypes.add(BucketHeadZombie.class);
@@ -294,6 +289,7 @@ public class Map {
         zombieTypes.add(ScreenDoorZombie.class);
         zombieTypes.add(YetiZombie.class);
     }
+
     public Zombie createZombie(String type) {
         switch (type) {
             case "BucketHead":
@@ -363,36 +359,6 @@ public class Map {
         }).start();
     }
 
-    public void displayMap() {
-        System.out.println();
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                String tileContent = "   ";
-                if (!tiles[i][j].getZombies().isEmpty()) {
-                    Zombie firstZombie = tiles[i][j].getZombies().get(0);
-                    tileContent = getZombieSymbol(firstZombie);
-                } else if (!tiles[i][j].getPlants().isEmpty()) {
-                    Plant firstPlant = tiles[i][j].getPlants().get(0);
-                    tileContent = getPlantSymbol(firstPlant);
-                }
-
-                String color;
-                if (j == 0 || j == 10) {
-                    color = red;
-                } else if (i == 0 || i == 1 || i == 4 || i == 5) {
-                    color = green;
-                } else if (i == 2 || i == 3) {
-                    color = blue;
-                } else {
-                    color = reset;
-                }
-
-                System.out.print(color + String.format("[ %8s ]", tileContent) + reset);
-            }
-            System.out.println();
-        }
-    }
-
     private String getPlantSymbol(Plant plant) {
         if (plant instanceof Peashooter) {
             return "PS" + ": " + plant.getHealth();
@@ -424,7 +390,6 @@ public class Map {
         return "Pilih Tanamanmu: ";
     }
     
-
     private String getZombieSymbol(Zombie zombie) {
         if (zombie instanceof BucketHeadZombie) {
             return "BH" + ": " + zombie.getHealth();
@@ -449,33 +414,35 @@ public class Map {
         }
         return null;
     }
-    private boolean isPlantCodeValid(String plantCode) {
-        return deck.isPlantInDeck(getPlantNameFromCode(plantCode));
-    }
-    private String getPlantNameFromCode(String plantCode) {
-        switch (plantCode) {
-            case "PS":
-                return "Peashooter";
-            case "SF":
-                return "Sunflower";
-            case "CH":
-                return "Chomper";
-            case "SP":
-                return "Snow Pea";
-            case "SQ":
-                return "Squash";
-            case "TS":
-                return "Twin Sunflower";
-            case "TN":
-                return "Tall Nut";
-            case "JP":
-                return "Jalapeno";
-            case "LL":
-                return "Lilypad";
-            case "WN":
-                return "Wall-nut";
-            default:
-                return "";
+
+    public void displayMap() {
+        System.out.println();
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                String tileContent = "   ";
+                if (!tiles[i][j].getZombies().isEmpty()) {
+                    Zombie firstZombie = tiles[i][j].getZombies().get(0);
+                    tileContent = getZombieSymbol(firstZombie);
+                } else if (!tiles[i][j].getPlants().isEmpty()) {
+                    Plant firstPlant = tiles[i][j].getPlants().get(0);
+                    tileContent = getPlantSymbol(firstPlant);
+                }
+
+                String color;
+                if (j == 0 || j == 10) {
+                    color = red;
+                } else if (i == 0 || i == 1 || i == 4 || i == 5) {
+                    color = green;
+                } else if (i == 2 || i == 3) {
+                    color = blue;
+                } else {
+                    color = reset;
+                }
+
+                System.out.print(color + String.format("[ %8s ]", tileContent) + reset);
+            }
+            System.out.println();
         }
     }
+
 }

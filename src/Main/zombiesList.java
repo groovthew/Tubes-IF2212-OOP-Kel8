@@ -57,17 +57,12 @@ public class ZombiesList {
         printZombiesDetails(yetiZombie);
         System.out.println(yellow + "================================================================" + reset);
     }
-
-
+    
     public void printZombiesDetails(Zombie zombie) {
         System.out.println(green + "Name: " + reset + zombie.getName());
         System.out.println(green + "Health: " + reset + zombie.getHealth());
         System.out.println(green + "Attack Damage: " + reset + zombie.getAttackDamage());
         System.out.println(green + "Attack Speed: " + reset + zombie.getAttackSpeed());
         System.out.println(" ");
-    }
-
-    public static void main(String[] args) {
-        new ZombiesList();
     }
 }

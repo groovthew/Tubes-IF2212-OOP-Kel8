@@ -1,7 +1,7 @@
 package Exceptions;
 
-public class DeckIsFull extends Exception {
-    public DeckIsFull() {
+public class DeckIsFullException extends Exception {
+    public DeckIsFullException() {
         super("Deck penuh! Tidak dapat menambahkan tanaman baru.");
     }
 }

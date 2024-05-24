@@ -3,11 +3,6 @@ package Main;
 import java.util.Scanner;
 
 public class Help {
-    
-    public static void main(String[] args) {
-        displayHelp();
-    }
-
     public static void displayHelp() {
         String green = "\u001B[32m";  // Kode ANSI untuk warna hijau
         String yellow = "\033[33m";   // Kode ANSI untuk warna kuning
