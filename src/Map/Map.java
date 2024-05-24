@@ -3,7 +3,6 @@ package Map;
 import java.util.*;
 import Tanaman.*;
 import Zombie.*;
-import Main.Character;
 import Main.Deck;
 import Strategy.AttackStrategy;
 import Strategy.PlantAttackStrategy;
@@ -194,14 +193,6 @@ public class Map {
             
             System.out.println("[" + name + ": " + totalHealth + "] Total Health: " + totalHealth);
         }
-    }
-
-    public void plantPeashooter(int row, int col) {
-        int cost = 100; // Harga Peashooter
-        Plant peashooter = new Peashooter(null, cost, cost, cost, cost, cost, cost); // Buat instance Peashooter
-        // if (sunManager.plant(peashooter, cost)) {
-        //     // Logika untuk menempatkan Peashooter di peta pada posisi (row, col)
-        // }
     }
 
     public void spawnZombies() {
