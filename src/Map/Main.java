@@ -333,7 +333,7 @@ public class Main {
         
         String choice = scanner.nextLine();
         if (choice.equals("1")) {
-            //gameMenu();
+            gameMenu();
             // exitgame = true;
         } else if (choice.equals("2")) {
             System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
