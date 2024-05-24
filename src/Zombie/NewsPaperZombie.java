@@ -1,12 +1,11 @@
 package Zombie;
 
-public class NewsPaperZombie extends Zombie{
+public class NewsPaperZombie extends Zombie {
     private boolean isNewspaperDestroyed;
-    
-    public NewsPaperZombie(){
-        super("Newspaper Zombie", 200 , 100, 1);
+
+    public NewsPaperZombie() {
+        super("Newspaper Zombie", 200, 100, 1);
         this.isNewspaperDestroyed = false;
-        angry();
     }
 
     public boolean isNewspaperDestroyed() {
@@ -20,11 +19,18 @@ public class NewsPaperZombie extends Zombie{
         }
     }
 
+    @Override
+    public void setHealth(int health) {
+        super.setHealth(health);
+        if (health <= 100 && !isNewspaperDestroyed) {
+            setNewspaperDestroyed(true);
+        }
+    }
+
     public void angry() {
-        if (this.getHealth() < 100){
-            isNewspaperDestroyed = true;
-            //System.out.println("News Paper Zombie is now angry");
-            super.setAttackDamage(200);
+        if (getHealth() <= 100) {
+            setAttackDamage(200);
+            System.out.println("NewsPaperZombie marah karena korannya hancur, dia bertambah damage menjadi 200!!");
         }
     }
 }

@@ -35,7 +35,7 @@ public class PlantAttackStrategy implements AttackStrategy {
             if (plantOnTop != null) {
                 plant = plantOnTop;
             } else {
-                return; // If there's no plant on top, return without attacking
+                return;
             }
         }
         
@@ -101,7 +101,7 @@ public class PlantAttackStrategy implements AttackStrategy {
                             chomper.setEating(false);
                         }
                     }, chomper.getEatingCooldown() * 1000);
-                    System.out.println("Chomper attacked zombies on the right tile [" + row + "][" + (col + 1) + "] and is now on cooldown.");
+                    System.out.println("Chomper memakan zombie di [" + row + "][" + (col + 1) + "] dan sekarang lagi puasa sebentar, sabar ya");
                 }
             }
         } 
