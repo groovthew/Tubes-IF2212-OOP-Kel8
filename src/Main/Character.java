@@ -30,4 +30,7 @@ public abstract class Character {
     public void setAttackSpeed(double attack_speed){
         this.attack_speed = attack_speed;
     }
+    public void setAttackDamage(int attack_damage){
+        this.attack_damage = attack_damage;
+    }
 }

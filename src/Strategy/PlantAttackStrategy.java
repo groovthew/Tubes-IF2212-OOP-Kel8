@@ -140,8 +140,8 @@ public class PlantAttackStrategy implements AttackStrategy {
             zombie.setSlowed(true);
             double originalSpeed = zombie.getSpeed();
             double originalAttackSpeed = zombie.getAttackSpeed();
-            zombie.setSpeed(originalSpeed * 2);
-            zombie.setAttackSpeed(originalAttackSpeed * 2);
+            zombie.setSpeed(originalSpeed + originalAttackSpeed * 0.5);
+            zombie.setAttackSpeed(originalAttackSpeed + originalAttackSpeed * 0.5);
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
