@@ -42,7 +42,7 @@ public class Main {
                     new PlantsList();
                     break;
                 case "5":
-                    Help.displayHelp();;
+                    Help.displayHelp();
                     break;
                 case "3":
                     System.out.println(green + "=================" + reset + yellow + " Exiting game. Goodbye!" + reset + green+ "==================" + reset);
