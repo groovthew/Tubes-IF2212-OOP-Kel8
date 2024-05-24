@@ -100,7 +100,7 @@ public class Map {
 
     public synchronized void addPlant(Plant plant, int i, int j) {
         long currentTime = System.currentTimeMillis();
-        String plantName = plant.getName();
+        String plantName = plant.getName();//
 
         if (plantCooldowns.containsKey(plantName) && currentTime < plantCooldowns.get(plantName)) {
             System.out.println(plantName + " masih cooldown selama " + ((plantCooldowns.get(plantName) - currentTime) / 1000) + "s");
