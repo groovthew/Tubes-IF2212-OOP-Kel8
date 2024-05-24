@@ -26,7 +26,7 @@ public class SunManager implements SunListener {
             ((TwinSunflower) producer).setSunListener(this);
         }
         producers.add(producer);
-        producer.startProducingSun(null);
+        producer.startProducingSun();
     }
 
     @Override
